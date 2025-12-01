@@ -1,9 +1,5 @@
-sqlite3 moi_research.db
-
-
-
-Get-Content schema.sql | sqlite3 moi_research.db
-
-
-
-sqlite3 moi_research.db < schema.sql
+Flask==3.0.0
+Werkzeug==3.0.1
+Jinja2==3.1.3
+itsdangerous==2.1.2
+click==8.1.7
