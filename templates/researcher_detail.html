@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% set sector_map = {
+"prisons": "المديرية العامة للسجون",
+"psd": "الأمن العام",
+"civildef": "الدفاع المدني",
+"passports": "المديرية العامة للجوازات",
+"borderguard": "المديرية العامة لحرس الحدود",
+"gdnc": "المديرية العامة لمكافحة المخدرات",
+"fsf": "قوات أمن المنشآت",
+"fsp": "القوات الخاصة للأمن والحماية",
+"environment-sec": "القوات الخاصة للأمن البيئي",
+"ahwal": "الأحوال المدنية",
+"kfsc": "كلية الملك فهد الأمنية",
+"clubs": "أندية منسوبي وزارة الداخلية",
+"911": "المركز الوطني للعمليات الأمنية",
+"med-services": "الخدمات الطبية بوزارة الداخلية",
+"diwan": "ديوان وزارة الداخلية",
+"nic": "مركز المعلومات الوطني"
+} %}
+
+{% block content %}
+<section class="detail-wrapper">
+  <!-- عنوان البحث + تاقات -->
+  <header class="detail-header">
+    <div class="detail-main">
+      <h1 id="detailTitle" class="detail-title">
+        {{ item["title"] }}
+      </h1>
+
+      <p id="detailShort" class="detail-short">
+        {{ item["short"] or "" }}
+      </p>
+
+      <div class="detail-tags">
+        {# النوع بالعربي مع نفس كلاس badge-type #}
+        {% set kind = item["kind"] %}
+        {% if kind == "Project" %}
+        {% set kind_label = "مشروع" %}
+        {% set kind_key = "project" %}
+        {% elif kind == "Innovation" %}
+        {% set kind_label = "ابتكار" %}
+        {% set kind_key = "innovation" %}
+        {% else %}
+        {% set kind_label = "بحث" %}
+        {% set kind_key = "research" %}
+        {% endif %}
+
+        <span id="detailTypeTag" class="badge badge-type badge-type-{{ kind_key }}">
+          {{ kind_label }}
+        </span>
+
+        {# درجة السرية #}
+        {% if item["confidentiality"] == "conf" %}
+        <span id="detailConfTag" class="badge badge-conf">
+          سري
+        </span>
+        {% else %}
+        <span id="detailConfTag" class="badge badge-public">
+          عام
+        </span>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <!-- معلومات البحث الأساسية -->
+  <section class="detail-meta">
+    <div>
+      <i class="bi bi-building"></i>
+      <span class="label">القطاع:</span>
+      <span id="detailSector">
+        {{ sector_map.get(item["sector"], item["sector"] or "-") }}
+      </span>
+
+    </div>
+    <div>
+      <i class="bi bi-calendar3"></i>
+      <span class="label">السنة:</span>
+      <span id="detailYear">{{ item["year"] or "-" }}</span>
+    </div>
+    <div>
+      <i class="bi bi-diagram-3"></i>
+      <span class="label">المجال:</span>
+      <span id="detailField">{{ item["field"] or "-" }}</span>
+    </div>
+    <div>
+      <i class="bi bi-journal-text"></i>
+      <span class="label">جهة النشر:</span>
+      <span id="detailPublisher">{{ item["publisher"] or "-" }}</span>
+    </div>
+  </section>
+
+  <!-- الباحثون -->
+  <section class="detail-authors">
+    <h2 class="section-title">
+      <i class="bi bi-people"></i>
+      بيانات الباحثين
+    </h2>
+
+    <div id="detailAuthors" class="detail-authors-list">
+      {% if authors %}
+      {% for a in authors %}
+      <article class="author-card">
+        <div class="author-avatar">
+          {% if a["avatar_file"] %}
+          <img src="/uploads/avatars/{{ a['avatar_file'] }}" alt="صورة {{ a['name_ar'] or a['name_en'] }}">
+          {% else %}
+          <div class="avatar-placeholder">
+            <i class="bi bi-person-circle"></i>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="author-body">
+          <div class="author-header-row">
+            <h3 class="author-name">
+              {{ a["name_ar"] or a["name_en"] }}
+            </h3>
+            {% if loop.first %}
+            <span class="badge badge-author-role">الباحث الرئيسي</span>
+            {% else %}
+            <span class="badge badge-author-role badge-author-co">
+              باحث مشارك
+            </span>
+            {% endif %}
+          </div>
+
+          {% if a["rank_title"] %}
+          <p class="author-rank">{{ a["rank_title"] }}</p>
+          {% endif %}
+
+          <p class="author-meta">
+            {% if a["sector"] %}
+            <span>
+              <i class="bi bi-building"></i>
+              {{ sector_map.get(a["sector"], a["sector"] or "-") }}
+            </span>
+            {% endif %}
+            {% if a["org_unit"] %}
+            <span>
+              <i class="bi bi-diagram-3"></i>
+              {{ a["org_unit"] }}
+            </span>
+            {% endif %}
+          </p>
+
+          <p class="author-rank">
+            {% if a["email"] %}
+            <span>
+              <i class="bi bi-envelope"></i>
+              {{ a["email"] }}
+            </span>
+            {% endif %}
+            {% if a["phone"] %}
+            <span>
+              <i class="bi bi-phone"></i>
+              {{ a["phone"] }}
+            </span>
+            {% endif %}
+          </p>
+        </div>
+      </article>
+
+      {% endfor %}
+      {% else %}
+      <p style="color:var(--muted);">
+        لا توجد بيانات باحثين.
+      </p>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- الملخص النصي -->
+  <section class="detail-summary">
+    <h2 class="section-title">
+      <i class="bi bi-align-start"></i>
+      ملخص البحث
+    </h2>
+    <p id="detailSummary" class="detail-summary-text">
+      {{ item["abstract"] or "لم يتم إدخال ملخص للبحث." }}
+    </p>
+
+  </section>
+
+  <!-- الملخص الصوتي (نفس واجهة detail.html) -->
+  <section class="detail-audio">
+    <h2 class="section-title">
+      <i class="bi bi-soundwave"></i>
+      ملخص صوتي
+    </h2>
+    <div class="audio-summary-card">
+      <div class="audio-icon">
+        <i class="bi bi-mic-fill"></i>
+      </div>
+      <div class="audio-text">
+        <div class="audio-title">
+          استمع إلى ملخص البحث في حوالي ٣ دقائق
+        </div>
+        <div class="audio-meta">
+          تم إنشاء هذا الملخص الصوتي باستخدام تقنيات الذكاء الاصطناعي وتحويل النص إلى كلام،
+          لتقديم شرح مبسّط وسريع لمحتوى البحث في مدة لا تتجاوز ٣ دقائق.
+        </div>
+      </div>
+      <button class="audio-btn" type="button">
+        <i class="bi bi-play-fill"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- QR + الروابط -->
+  <section class="detail-access">
+    <div class="qr-block">
+      <div id="qrcode"></div>
+      <small>امسح رمز QR لفتح صفحة البحث أو مشاركة الرابط.</small>
+    </div>
+
+    <div class="detail-links">
+      <h2 class="section-title">
+        <i class="bi bi-link-45deg"></i>
+        الملفات والروابط
+      </h2>
+      <div id="detailLinks" class="detail-links-list">
+        {% if item["link_url"] %}
+        <a href="{{ item['link_url'] }}" target="_blank" class="detail-link">
+          <i class="bi bi-box-arrow-up-right"></i>
+          رابط البحث / المشروع
+        </a>
+        {% endif %}
+
+        {% if item["file_name"] %}
+        <a href="{{ url_for('uploaded_research', filename=item['file_name']) }}" target="_blank" class="detail-link">
+          <i class="bi bi-paperclip"></i>
+          تحميل الملف المرفق
+        </a>
+        {% endif %}
+
+        {% if not item["link_url"] and not item["file_name"] %}
+        <p style="color:var(--muted);">
+          لا توجد ملفات أو روابط مرفقة.
+        </p>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // توليد QR بنفس فكرة detail.js لكن بدون MOCK
+  document.addEventListener("DOMContentLoaded", function () {
+    var qrEl = document.getElementById("qrcode");
+    if (qrEl && window.QRCode) {
+      qrEl.innerHTML = "";
+      new QRCode(qrEl, {
+        text: window.location.href,
+        width: 140,
+        height: 140
+      });
+    }
+  });
+</script>
+{% endblock %}

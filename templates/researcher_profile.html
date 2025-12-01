@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}الملف الشخصي{% endblock %}
+
+{% block content %}
+<div class="submission-page" style="max-width: 900px;padding-top:40px;">
+
+    <div class="submission-card" style="padding-top:20px; padding-bottom:18px;">
+
+        <!-- هيدر البروفايل: الصورة فوق العنوان -->
+        <div class="submission-header" style="text-align:center; margin-bottom:18px;">
+
+            <div class="researcher-avatar" style="margin:0 auto 10px;">
+                {% if user.avatar_file %}
+                <img src="{{ url_for('uploaded_avatar', filename=user.avatar_file) }}" alt="صورة الباحث">
+                {% else %}
+                <span class="avatar-initials">
+                    {{ (user.name_ar or 'ب')[:1] }}
+                </span>
+                {% endif %}
+            </div>
+
+            <h1 class="submission-title" style="margin-bottom:4px;">
+                الملف الشخصي
+            </h1>
+            <!-- <p class="submission-subtitle" style="margin:0;">
+        حدّث بياناتك الأساسية، وسيتم استخدامها كمصدر لمعلومات الباحث في الأبحاث والمشاريع بمنصة معرفة.
+      </p> -->
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+
+            <!-- عنوان فرعي داخل الكرت -->
+            <div class="section-title" style="margin-bottom:10px;">
+                <span>
+                    <i class="bi bi-person-badge" style="margin-left:4px;"></i>
+                    بيانات الباحث الأساسية
+                </span>
+            </div>
+
+            <!-- الاسم -->
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="name_ar">الاسم الثلاثي (بالعربي) *</label>
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-person-lines-fill input-icon"></i>
+                        <input type="text" id="name_ar" name="name_ar" class="form-control input-with-icon" required
+                            value="{{ user.name_ar or '' }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="name_en">الاسم الثلاثي (بالإنجليزي)</label>
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-person input-icon"></i>
+                        <input type="text" id="name_en" name="name_en" class="form-control input-with-icon"
+                            value="{{ user.name_en or '' }}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- البريد والهوية -->
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="email">البريد الإلكتروني الرسمي *</label>
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-envelope input-icon"></i>
+                        <input type="email" id="email" name="email" class="form-control input-with-icon" required
+                            value="{{ user.email or '' }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="national_id">رقم الهوية</label>
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-credit-card-2-front input-icon"></i>
+                        <input type="text" id="national_id" name="national_id" class="form-control input-with-icon"
+                            value="{{ user.national_id or '' }}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- القطاع والوحدة -->
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="sector">القطاع التابع له *</label>
+
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-building input-icon"></i>
+
+                        <select id="sector" name="sector" class="form-control input-with-icon" required>
+                            <option value="">اختر القطاع</option>
+
+                            <!-- ─────── قطاعات وزارة الداخلية ─────── -->
+                            <optgroup label="قطاعات وزارة الداخلية">
+
+                                <option value="prisons" {% if user.sector=='prisons' %}selected{% endif %}>المديرية
+                                    العامة للسجون</option>
+                                <option value="psd" {% if user.sector=='psd' %}selected{% endif %}>الأمن العام</option>
+                                <option value="civildef" {% if user.sector=='civildef' %}selected{% endif %}>الدفاع
+                                    المدني</option>
+                                <option value="passports" {% if user.sector=='passports' %}selected{% endif %}>المديرية
+                                    العامة للجوازات</option>
+                                <option value="borderguard" {% if user.sector=='borderguard' %}selected{% endif %}>
+                                    المديرية العامة لحرس الحدود</option>
+                                <option value="gdnc" {% if user.sector=='gdnc' %}selected{% endif %}>المديرية العامة
+                                    لمكافحة المخدرات</option>
+                                <option value="fsf" {% if user.sector=='fsf' %}selected{% endif %}>قوات أمن المنشآت
+                                </option>
+                                <option value="fsp" {% if user.sector=='fsp' %}selected{% endif %}>القوات الخاصة للأمن
+                                    والحماية</option>
+                                <option value="environment-sec" {% if user.sector=='environment-sec' %}selected{% endif
+                                    %}>القوات الخاصة للأمن البيئي</option>
+                                <option value="ahwal" {% if user.sector=='ahwal' %}selected{% endif %}>الأحوال المدنية
+                                </option>
+                                <option value="kfsc" {% if user.sector=='kfsc' %}selected{% endif %}>كلية الملك فهد
+                                    الأمنية</option>
+                                <option value="mujahideen" {% if user.sector=='mujahideen' %}selected{% endif %}>الإدارة
+                                    العامة للمجاهدين</option>
+                                <option value="clubs" {% if user.sector=='clubs' %}selected{% endif %}>أندية منسوبي
+                                    وزارة الداخلية</option>
+                                <option value="911" {% if user.sector=='911' %}selected{% endif %}>المركز الوطني
+                                    للعمليات الأمنية</option>
+                                <option value="med-services" {% if user.sector=='med-services' %}selected{% endif %}>
+                                    الإدارة العامة للخدمات الطبية</option>
+                                <option value="diwan" {% if user.sector=='diwan' %}selected{% endif %}>ديوان وزارة
+                                    الداخلية</option>
+                                <option value="nic" {% if user.sector=='nic' %}selected{% endif %}>مركز المعلومات الوطني
+                                </option>
+
+                            </optgroup>
+
+                            <!-- ─────── إمارات المناطق ─────── -->
+                            <optgroup label="إمارات المناطق">
+
+                                <option value="em_riyadh" {% if user.sector=='em_riyadh' %}selected{% endif %}>إمارة
+                                    منطقة الرياض</option>
+                                <option value="em_makkah" {% if user.sector=='em_makkah' %}selected{% endif %}>إمارة
+                                    منطقة مكة المكرمة</option>
+                                <option value="em_madinah" {% if user.sector=='em_madinah' %}selected{% endif %}>إمارة
+                                    منطقة المدينة المنورة</option>
+                                <option value="em_qassim" {% if user.sector=='em_qassim' %}selected{% endif %}>إمارة
+                                    منطقة القصيم</option>
+                                <option value="em_eastern" {% if user.sector=='em_eastern' %}selected{% endif %}>إمارة
+                                    المنطقة الشرقية</option>
+                                <option value="em_aseer" {% if user.sector=='em_aseer' %}selected{% endif %}>إمارة منطقة
+                                    عسير</option>
+                                <option value="em_tabuk" {% if user.sector=='em_tabuk' %}selected{% endif %}>إمارة منطقة
+                                    تبوك</option>
+                                <option value="em_hail" {% if user.sector=='em_hail' %}selected{% endif %}>إمارة منطقة
+                                    حائل</option>
+                                <option value="em_northern" {% if user.sector=='em_northern' %}selected{% endif %}>إمارة
+                                    منطقة الحدود الشمالية</option>
+                                <option value="em_jazan" {% if user.sector=='em_jazan' %}selected{% endif %}>إمارة منطقة
+                                    جازان</option>
+                                <option value="em_najran" {% if user.sector=='em_najran' %}selected{% endif %}>إمارة
+                                    منطقة نجران</option>
+                                <option value="em_bahah" {% if user.sector=='em_bahah' %}selected{% endif %}>إمارة منطقة
+                                    الباحة</option>
+                                <option value="em_jouf" {% if user.sector=='em_jouf' %}selected{% endif %}>إمارة منطقة
+                                    الجوف</option>
+
+                            </optgroup>
+
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="form-label" for="org_unit">الإدارة / الوحدة</label>
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-diagram-3 input-icon"></i>
+                        <input type="text" id="org_unit" name="org_unit" class="form-control input-with-icon"
+                            value="{{ user.org_unit or '' }}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- المسمى ورقم التواصل -->
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="rank_title">
+                        الرتبة / المرتبة / المسمى الوظيفي
+                    </label>
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-mortarboard input-icon"></i>
+                        <input type="text" id="rank_title" name="rank_title" class="form-control input-with-icon"
+                            value="{{ user.rank_title or '' }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="phone">رقم التواصل</label>
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-phone input-icon"></i>
+                        <input type="text" id="phone" name="phone" class="form-control input-with-icon"
+                            value="{{ user.phone or '' }}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- كلمة المرور والصورة -->
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="password">كلمة مرور جديدة (اختياري)</label>
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-shield-lock input-icon"></i>
+                        <input type="password" id="password" name="password" class="form-control input-with-icon"
+                            placeholder="اتركه فارغًا للإبقاء على الحالية">
+                    </div>
+                    <span class="field-hint">
+                        لن يتم تغيير كلمة المرور ما لم تقم بإدخال قيمة جديدة.
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="avatar">
+                        <i class="bi bi-person-circle" style="margin-left:4px;"></i>
+                        الصورة الشخصية
+                    </label>
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-image input-icon"></i>
+                        <input type="file" id="avatar" name="avatar" class="form-control file-input input-with-icon"
+                            accept="image/*">
+                    </div>
+                    {% if user.avatar_file %}
+                    <span class="field-hint">
+                        الصورة الحالية:
+                        <a href="{{ url_for('uploaded_avatar', filename=user.avatar_file) }}" target="_blank">
+                            عرض الصورة
+                        </a>
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="submission-actions">
+                <a href="{{ url_for('researcher_dashboard') }}" class="btn-ghost">
+                    <i class="bi bi-arrow-right"></i>
+                    العودة للوحة التحكم
+                </a>
+                <button type="submit" class="btn-primary">
+                    <i class="bi bi-check-circle"></i>
+                    حفظ التعديلات
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="detail-wrapper">
+  <!-- عنوان البحث + تاقات -->
+  <header class="detail-header">
+    <div class="detail-main">
+      <h1 id="detailTitle" class="detail-title">عنوان البحث / المشروع</h1>
+      <p id="detailShort" class="detail-short">
+        وصف مختصر للبحث في سطر واحد…
+      </p>
+
+      <div class="detail-tags">
+        <span id="detailTypeTag" class="badge badge-type">بحث</span>
+        <span id="detailConfTag" class="badge badge-public">عام</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- معلومات البحث الأساسية -->
+  <section class="detail-meta">
+    <div>
+      <i class="bi bi-building"></i>
+      <span class="label">القطاع:</span>
+      <span id="detailSector">-</span>
+    </div>
+    <div>
+      <i class="bi bi-calendar3"></i>
+      <span class="label">السنة:</span>
+      <span id="detailYear">-</span>
+    </div>
+    <div>
+      <i class="bi bi-diagram-3"></i>
+      <span class="label">المجال:</span>
+      <span id="detailField">-</span>
+    </div>
+    <div>
+      <i class="bi bi-journal-text"></i>
+      <span class="label">جهة النشر:</span>
+      <span id="detailPublisher">-</span>
+    </div>
+  </section>
+
+  <!-- الباحثون -->
+  <section class="detail-authors">
+    <h2 class="section-title">
+      <i class="bi bi-people"></i>
+      بيانات الباحثين
+    </h2>
+    <div id="detailAuthors" class="detail-authors-list">
+      <!-- تعبئة تلقائية من JS -->
+    </div>
+  </section>
+
+  <!-- الملخص النصي -->
+  <section class="detail-summary">
+    <h2 class="section-title">
+      <i class="bi bi-align-start"></i>
+      ملخص البحث
+    </h2>
+    <p id="detailSummary" class="detail-summary-text">
+      سيتم تعبئة ملخص البحث تلقائيًا من البيانات…
+    </p>
+  </section>
+
+  <!-- الملخص الصوتي (واجهة فقط للفكرة) -->
+  <section class="detail-audio">
+    <h2 class="section-title">
+      <i class="bi bi-soundwave"></i>
+      ملخص صوتي
+    </h2>
+    <div class="audio-summary-card">
+      <div class="audio-icon">
+        <i class="bi bi-mic-fill"></i>
+      </div>
+      <div class="audio-text">
+        <div class="audio-title">استمع إلى ملخص البحث في حوالي ٣ دقائق</div>
+        <div class="audio-meta">
+          تم إنشاء هذا الملخص الصوتي باستخدام تقنيات الذكاء الاصطناعي وتحويل النص إلى كلام،
+          لتقديم شرح مبسّط وسريع لمحتوى البحث في مدة لا تتجاوز ٣ دقائق.
+        </div>
+
+      </div>
+      <button class="audio-btn" type="button">
+        <i class="bi bi-play-fill"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- QR + الروابط -->
+  <section class="detail-access">
+    <div class="qr-block">
+      <div id="qrcode"></div>
+      <small>امسح رمز QR لفتح صفحة البحث أو مشاركة الرابط.</small>
+    </div>
+    <div class="detail-links">
+      <h2 class="section-title">
+        <i class="bi bi-link-45deg"></i>
+        الملفات والروابط
+      </h2>
+      <div id="detailLinks" class="detail-links-list">
+        <!-- تعبئة تلقائية من JS -->
+      </div>
+    </div>
+  </section>
+  
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.PAGE = { id: {{ item_id }} };
+</script>
+<script src="{{ url_for('static', filename='js/detail.js') }}" defer></script>
+{% endblock %}
