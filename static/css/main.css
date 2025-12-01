@@ -1731,4 +1731,186 @@ body.hero-ready .hint {
       0 0 14px rgba(22, 163, 74, 0.18);
   }
 }
+/* =========================
+   تحسينات الاستجابة (PC / iPad / جوال)
+   ضيفي هذا المقطع في آخر الملف
+   ========================= */
+
+/* شاشات أقل من 1200px (لابتوبات متوسطة + آيباد أفقي) */
+@media (max-width: 1200px) {
+  .hero {
+    height: auto;
+    min-height: calc(100vh - 110px); /* ما ينقص كثير على الأجهزة المتوسطة */
+  }
+
+  .hero-canvas-wrap {
+    height: auto;
+    min-height: calc(100vh - 160px);
+    padding: 24px 32px;
+  }
+
+  .detail-wrapper,
+  .dashboard,
+  .submission-page,
+  .researcher-wrapper,
+  .sector-wrapper {
+    padding-inline: 20px;
+  }
+}
+
+/* شاشات أقل من 992px (آيباد رأسي + أغلب التابلت) */
+@media (max-width: 992px) {
+  /* الهيدر يرتّب نفسه فوق بعض بدل صف واحد */
+  .app-header,
+  .kiosk-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    height: auto;
+    padding: 10px 16px;
+  }
+
+  .header-title-block {
+    order: 3;
+    text-align: right;
+    padding: 0;
+    margin-top: 4px;
+  }
+
+  .header-title {
+    font-size: 22px;
+  }
+
+  .header-subtitle {
+    font-size: 13px;
+  }
+
+  .hero-canvas-wrap {
+    min-height: calc(100vh - 140px);
+    padding: 20px 18px;
+    border-radius: 0;
+  }
+
+  .center-node {
+    width: 170px;
+    height: 170px;
+  }
+
+  .moi-badge {
+    font-size: 18px;
+    padding: 14px 20px;
+    gap: 10px;
+    transform: translateY(-10px);
+  }
+
+  .moi-badge .brand-logo {
+    width: 72px;
+    height: 72px;
+  }
+
+  .dashboard,
+  .submission-page {
+    padding: 20px 18px 32px;
+  }
+}
+
+/* شاشات أقل من 768px (جوالات كبيرة + بعض الآيبادات الصغيرة) */
+@media (max-width: 768px) {
+  html,
+  body {
+    height: auto;
+  }
+
+  .hero {
+    height: auto;
+    min-height: calc(100vh - 120px);
+  }
+
+  .hero-canvas-wrap {
+    padding: 20px 12px;
+    min-height: calc(100vh - 150px);
+  }
+
+  .center-node {
+    width: 150px;
+    height: 150px;
+  }
+
+  .hint {
+    font-size: 12px;
+    bottom: 10px;
+  }
+
+  /* الحاويات العامة */
+  .sector-wrapper,
+  .researcher-wrapper,
+  .detail-wrapper,
+  .dashboard,
+  .submission-page {
+    padding: 20px 14px 32px;
+  }
+
+  /* نماذج الإضافة */
+  .submission-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .form-grid-2,
+  .form-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* جدول الباحثين */
+  .researcher-table th,
+  .researcher-table td {
+    padding-inline: 8px;
+    font-size: 0.82rem;
+  }
+
+  /* الفوتر المثبّت – تقليل ارتفاعه على الجوال */
+  .app-footer-inner {
+    padding: 6px 10px 8px;
+  }
+
+  .app-footer-line {
+    font-size: 0.8rem;
+  }
+}
+
+/* شاشات صغيرة جداً (أغلب الجوالات) */
+@media (max-width: 480px) {
+  .header-logos img {
+    height: 52px;
+  }
+
+  .header-title {
+    font-size: 20px;
+  }
+
+  .moi-badge {
+    flex-direction: column;
+    text-align: center;
+    font-size: 16px;
+    padding: 10px 14px;
+  }
+
+  .center-node {
+    width: 135px;
+    height: 135px;
+  }
+
+  .card {
+    max-width: 100%;
+  }
+
+  .app-footer-inner {
+    padding-inline: 8px;
+  }
+
+  .app-footer-line {
+    font-size: 0.78rem;
+  }
+}
+
 
