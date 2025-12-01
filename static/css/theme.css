@@ -1,0 +1,1209 @@
+/* =========================
+   المتغيرات العامة + الأساسيات
+   ========================= */
+
+:root {
+  --bg: #e1e9e5;
+  --fg: #111827;
+  --muted: #6b7280;
+  --primary: #0b7a41;
+  /* أخضر الوزارة */
+  --accent: #16a34a;
+  /* أخضر أفتح للتوهج */
+  --card: #ffffff;
+  --border-soft: #e1e9e5;
+  --border-strong: #e1e9e5;
+  --glow: 0 0 16px rgba(22, 163, 74, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  overflow-x: hidden;
+  /* منع السكول الأفقي */
+}
+
+body {
+  font-family: "Tajawal", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--fg);
+}
+
+/* =========================
+   صفحة الهبوط / منصة معرفة
+   ========================= */
+
+/* خلفية خاصة لصفحة الهبوط */
+body.about-body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 0% 0%, #eaf2e0, transparent 55%),
+    radial-gradient(circle at 100% 100%, #eaf2e0, transparent 30%),
+    #e7f0ea;
+}
+
+/* الحاوية الأساسية */
+.about-shell {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 60px 16px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* دوائر خفيفة في الخلفية */
+.about-orbit {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(40px);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* الإطار الأبيض الرئيسي */
+.about-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1500px;
+  /* توسيع الإطار */
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 28px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.25);
+  padding: 24px 40px 30px;
+}
+
+/* الشعارات في أعلى الإطار */
+.about-logos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.about-logos .logos-left,
+.about-logos .logos-right {
+  display: flex;
+  align-items: center;
+}
+
+.about-logos img {
+  height: 120px;
+}
+
+/* بادج صغيرة (إن احتجتها) */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  padding: 4px 12px;
+}
+
+.pill-badge {
+  background: rgba(37, 99, 235, 0.07);
+  color: #1d4ed8;
+}
+
+/* الهيرو (النص الرئيسي) */
+.about-hero {
+  display: flex;
+  justify-content: center;
+  /* توسيط المحتوى */
+  text-align: center;
+}
+
+/* كتلة النص داخل الهيرو */
+.hero-text {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* العنوان الرئيسي */
+.about-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 5px;
+  line-height: 1.35;
+}
+
+.about-title span {
+  color: #0b7a41;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/* الشارة تحت العنوان */
+.about-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(11, 122, 65, 0.08);
+  color: #0b7a41;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+.about-badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #16a34a;
+  box-shadow: 0 0 0 5px rgba(22, 163, 74, 0.25);
+}
+
+/* الوصف */
+.about-subtitle {
+  font-size: 0.98rem;
+  color: #6b7280;
+  max-width: 620px;
+  margin: 16px auto 24px;
+}
+
+/* الأزرار */
+.btn-primary,
+.btn-secondary,
+.btn-tertiary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--accent);
+}
+
+.btn-secondary {
+  background: #fff;
+  border: 1px solid var(--border-soft);
+  color: var(--fg);
+}
+
+.btn-tertiary {
+  background: transparent;
+  color: var(--muted);
+}
+
+/* زر شبح عام */
+.btn-ghost {
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  color: var(--fg);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.btn-ghost:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* زر تحذيري خاص (بدل ما نغيّر شكل كل btn-ghost) */
+.btn-ghost-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 6px 12px;
+  border: 1px dashed #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.about-btn {
+  font-size: 0.98rem;
+  padding-inline: 28px;
+}
+
+.about-secondary {
+  font-size: 0.9rem;
+}
+
+/* قسم الأهداف في صفحة عن معرفة */
+.about-goals {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.about-goals-header {
+  text-align: right;
+  margin-bottom: 18px;
+}
+
+.about-goals-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 6px;
+}
+
+.about-goals-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+/* شبكة كروت الأهداف */
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.goal-card {
+  background: #f9fafb;
+  border-radius: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.goal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(148, 163, 184, 0.45);
+  border-color: rgba(11, 122, 65, 0.6);
+}
+
+.goal-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11, 122, 65, 0.08);
+  color: #0b7a41;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.goal-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.goal-text {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin: 0;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* قسم "لمحة سريعة" + "كيف تعمل المنصة" */
+.about-quick {
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+.quick-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+
+.quick-header p {
+  margin: 0 0 14px;
+  font-size: 0.86rem;
+  color: #6b7280;
+}
+
+/* شبكة المربعات */
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.quick-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #f9fafb;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.quick-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(148, 163, 184, 0.45);
+  border-color: rgba(11, 122, 65, 0.6);
+}
+
+.quick-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11, 122, 65, 0.1);
+  color: #0b7a41;
+  font-size: 1.1rem;
+}
+
+.quick-body span {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.quick-body label {
+  font-size: 0.82rem;
+  color: #6b7280;
+}
+
+/* عناصر خطوات الاستخدام (لو استُخدمت منفصلة) */
+.about-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #f9fafb;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.step:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(148, 163, 184, 0.45);
+  border-color: rgba(11, 122, 65, 0.6);
+}
+
+.step-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11, 122, 65, 0.1);
+  color: #0b7a41;
+  font-size: 1.1rem;
+}
+
+.step-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.step-text {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin: 0;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* استجابة صفحة الهبوط */
+@media (max-width: 992px) {
+  .about-shell {
+    padding: 26px 10px;
+  }
+
+  .about-frame {
+    padding-inline: 18px;
+  }
+
+  .about-hero {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .about-logos img {
+    height: 48px;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-title {
+    font-size: 2.1rem;
+  }
+
+  .about-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .goals-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+
+/* === ضبط ارتفاع صفحة الهبوط وتقليل الفراغات === */
+
+/* أقلل البادينق من فوق وتحت عشان الكرت يطلع أعلى */
+/* ==== تقليص ارتفاع كرت صفحة about بدون ما نخرب التصميم ==== */
+
+/* نقلل الفراغ حول الكرت */
+.about-shell {
+  padding: 30px 16px 24px;  /* بدل 60px 16px 40px */
+}
+
+/* نقلل البادينق داخل الكرت الأبيض نفسه */
+.about-frame {
+  padding: 16px 32px 20px;  /* بدل 24px 40px 30px */
+}
+
+/* نصغّر الشعارات شوي عشان ما تاخذ ارتفاع كبير */
+.about-logos img {
+  height: 90px;  /* بدل 120px */
+}
+
+/* نقلل الفراغ فوق الأهداف */
+.about-goals {
+  margin-top: 20px;
+  padding-top: 12px;
+}
+
+/* نقلل الفراغ بين الأقسام تحت */
+.about-quick {
+  margin-top: 14px;
+  margin-bottom: 0;
+}
+
+/* نصغّر المسافات في النص تحت العنوان */
+.about-subtitle {
+  margin: 12px auto 10px;
+}
+
+/* نقلل الفراغ تحت الأزرار */
+.about-actions {
+  margin-bottom: 0;
+}
+
+
+/* index.html */
+/* دخول ناعم للهيرو عند تحميل الصفحة */
+.hero-canvas-wrap,
+.hint {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+body.hero-ready .hero-canvas-wrap,
+body.hero-ready .hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* خلفية بنمط وزارة الداخلية مع حركة خفيفة */
+  background: radial-gradient(circle at 50% 35%, #f2f5f3 0%, #e3ece7 60%, #dde7e1 100%);
+  background-size: 140% 140%;
+  animation: heroBgDrift 22s ease-in-out infinite alternate;
+}
+
+@keyframes heroBgDrift {
+  0% {
+    background-position: 50% 30%;
+  }
+
+  50% {
+    background-position: 48% 40%;
+  }
+
+  100% {
+    background-position: 52% 35%;
+  }
+}
+
+.center-node {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+  animation: centerPulse 6s ease-in-out infinite;
+}
+
+.center-node img {
+  max-width: 80%;
+  max-height: 80%;
+}
+
+@keyframes centerPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+  }
+
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+  }
+}
+
+.hero-orbit-node {
+  position: absolute;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 12px 24px rgba(15, 23, 42, 0.14),
+    0 0 18px rgba(22, 163, 74, 0.20);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  /* توهج خفيف مستمر */
+  animation: nodeGlow 7s ease-in-out infinite;
+}
+
+.hero-orbit-node img {
+  max-width: 78%;
+  max-height: 78%;
+}
+
+.hero-orbit-node:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+}
+
+@keyframes nodeGlow {
+  0% {
+    box-shadow:
+      0 10px 22px rgba(15, 23, 42, 0.13),
+      0 0 14px rgba(22, 163, 74, 0.18);
+  }
+
+  50% {
+    box-shadow:
+      0 14px 28px rgba(15, 23, 42, 0.18),
+      0 0 20px rgba(22, 163, 74, 0.30);
+  }
+
+  100% {
+    box-shadow:
+      0 10px 22px rgba(15, 23, 42, 0.13),
+      0 0 14px rgba(22, 163, 74, 0.18);
+  }
+}
+
+.hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* بوابة الباحثين */
+/* حقل مع أيقونة داخلية */
+.input-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon-wrap .input-icon {
+  position: absolute;
+  inset-inline-start: 10px;
+  /* يمين في RTL، يسار في LTR */
+  font-size: 1rem;
+  color: var(--primary);
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* نخلي الـ input يميل شوي عن الأيقونة */
+.input-icon-wrap .input-with-icon {
+  padding-inline-start: 32px;
+  /* مساحة للأيقونة من الداخل */
+}
+
+/* لو صار لخبطة في RTL */
+html[dir="rtl"] .input-icon-wrap .input-icon {
+  inset-inline-start: auto;
+  inset-inline-end: 10px;
+}
+
+html[dir="rtl"] .input-icon-wrap .input-with-icon {
+  padding-inline-start: 10px;
+  padding-inline-end: 32px;
+}
+
+/* رأس لوحة الباحث */
+.researcher-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+/* كتلة (الصورة + النص) */
+.researcher-header-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* صورة الباحث / الآفاتار */
+.researcher-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--border-soft);
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.researcher-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-initials {
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--primary);
+}
+
+/* أزرار الهيدر */
+.researcher-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* حجم أصغر لنفس ستايل الأزرار */
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+/* زر الخروج نخليه أهدأ */
+.btn-logout {
+  color: var(--muted);
+}
+
+.btn-logout i {
+  font-size: 1rem;
+}
+
+.btn-logout:hover {
+  color: #b91c1c;
+}
+
+.btn-circle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: #ffffff;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  color: var(--fg);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.btn-circle i {
+  font-size: 1rem;
+  opacity: .9;
+}
+
+.btn-circle:hover {
+  background: #f8fafc;
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* زر عام دائري */
+.btn-circle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: #ffffff;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  color: var(--fg);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.btn-circle i {
+  font-size: 1rem;
+  opacity: .9;
+}
+
+/* ===== زر تسجيل الخروج (لون مختلف) ===== */
+
+.btn-logout {
+  border-color: #fcdada !important;
+  /* إطار وردي خفيف */
+  background: #fff5f5 !important;
+  /* خلفية وردية باهتة */
+  color: #b91c1c !important;
+  /* نص أحمر */
+}
+
+.btn-logout i {
+  color: #b91c1c !important;
+}
+
+.btn-logout:hover {
+  background: #ffe5e5 !important;
+  border-color: #f9bcbc !important;
+  color: #991b1b !important;
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.15);
+}
+
+/* =======================================================
+   صفحة تسجيل دخول الباحثين – login.html
+   ======================================================= */
+
+   body.login-body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 0% 0%, #eaf2e0, transparent 55%),
+    radial-gradient(circle at 100% 100%, #eaf2e0, transparent 30%),
+    #e7f0ea;
+}
+
+/* الحاوية الأساسية */
+.login-shell {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 60px 16px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* دوائر خفيفة في الخلفية */
+.login-orbit {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(40px);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* الإطار الأبيض الرئيسي */
+.login-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1500px;
+  /* توسيع الإطار */
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 28px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.25);
+  padding: 24px 40px 30px;
+}
+
+/* الشعارات في أعلى الإطار */
+.login-logos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-logos .logos-left,
+.login-logos .logos-right {
+  display: flex;
+  align-items: center;
+}
+
+.login-logos img {
+  height: 120px;
+}
+
+/* الإطار الأبيض */
+.login-frame {
+  max-width: 760px;
+  max-height: 760px;
+  width: 100%;
+  border-radius: 28px;
+  padding: 50px 36px 34px;
+  background: #ffffff;
+  margin: auto;
+}
+
+/* الشعارات */
+.login-logos {
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.login-logos .logos-right img:first-child {
+  height: 84px;
+}
+
+.login-logos .logos-right img:last-child {
+  height: 94px;
+}
+
+.login-logos .logos-left img {
+  height: 84px;
+}
+
+/* كتلة النص */
+
+.login-hero-text {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.login-hero-text {
+  max-width: 500px;
+  margin: -22px auto 0;
+  text-align: center;
+}
+
+/* العنوان */
+/* العنوان الرئيسي */
+.login-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 5px;
+  line-height: 1.35;
+}
+
+.login-title span {
+  color: #0b7a41;
+}
+.login-title {
+  font-size: 2.25rem;
+  margin: 0px 0 10px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.login-title-nowrap {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin-top: 6px;
+}
+
+/* الشارة */
+.login-badge-login,
+.login-hero .badge-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  background: rgba(11, 122, 65, 0.06);
+  color: #0b7a41;
+  font-size: 0.82rem;
+}
+
+.login-badge-login span,
+.badge-login span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #16a34a;
+}
+
+/* وصف الصفحة */
+.login-subtitle {
+  font-size: 0.98rem;
+  color: #6b7280;
+  max-width: 620px;
+  margin: 16px auto 24px;
+}
+
+.login-subtitle {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  color: #6b7280;
+  line-height: 1.7;
+}
+
+/* صندوق تسجيل الدخول */
+.login-box {
+  background: #f9fafb;
+  border-radius: 22px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  padding: 24px 22px 20px;
+  text-align: right;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+}
+
+/* عنوان الصندوق */
+.login-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.login-header-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.login-header-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0f2f1;
+  color: #0b7a41;
+  font-size: 1.25rem;
+}
+
+/* الحقول */
+.login-form .form-group {
+  margin-bottom: 14px;
+}
+
+.login-form .form-label {
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  display: inline-block;
+}
+
+.login-form .form-control {
+  height: 42px;
+  font-size: 0.95rem;
+}
+
+/* الروابط والأسفل */
+.login-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.login-forgot {
+  font-size: 0.82rem;
+  color: #6b7280;
+  text-decoration: none;
+}
+
+.login-submit.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 22px;
+  font-size: 0.95rem;
+  border-radius: 999px;
+  font-family:'Tajawal', sans-serif !important;
+}
+
+/* تحسين بسيط للصفحة على الشاشات الصغيرة */
+@media (max-width: 640px) {
+  .login-frame {
+    padding: 22px 20px;
+  }
+
+  .login-title {
+    font-size: 2rem;
+  }
+
+  .login-submit.btn-primary {
+    padding: 8px 18px;
+  }
+}
+
+
+
+/* =========================
+   صفحة الهبوط الجديدة
+   ========================= */
+
+/* نخفي المنيو في صفحة الهبوط */
+.landing-page .app-nav {
+  display: none;
+}
+
+/* نخلي الهيدر أخف شوي لأن ما فيه منيو */
+.landing-page .kiosk-header {
+  justify-content: center;
+  text-align: center;
+}
+
+.landing-page .header-logos {
+  gap: 16px;
+}
+
+.landing-page .app-main {
+  padding-top: 0;
+}
+
+/* الهيرو في صفحة الهبوط */
+.landing-hero {
+  min-height: calc(100vh - 220px); /* بعد طرح الهيدر والفوتر تقريباً */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px 40px;
+}
+
+.landing-hero-inner {
+  text-align: center;
+  max-width: 520px;
+}
+
+/* دائرة الشعار */
+.landing-logo-circle {
+  width: 290px;
+  height: 290px;
+  margin: 0 auto 18px;
+  border-radius: 999px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+}
+
+.landing-logo-circle img {
+  max-width: 80%;
+  max-height: 80%;
+}
+
+/* العنوان والنص */
+.landing-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 8px 0 4px;
+}
+
+.landing-title span {
+  color: var(--primary);
+}
+
+.landing-subtitle {
+  font-size: 1rem;
+  color: #4b5563;
+  margin: 0 0 8px;
+}
+
+.landing-text {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0 0 22px;
+  line-height: 1.7;
+}
+
+/* الأزرار */
+.landing-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.landing-main-btn {
+  padding-inline: 28px;
+  font-size: 0.95rem;
+}
+
+.landing-secondary-link {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.landing-secondary-link:hover {
+  color: var(--primary);
+}
