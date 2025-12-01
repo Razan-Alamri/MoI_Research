@@ -1,0 +1,9 @@
+sqlite3 moi_research.db
+
+
+
+Get-Content schema.sql | sqlite3 moi_research.db
+
+
+
+sqlite3 moi_research.db < schema.sql
