@@ -62,8 +62,14 @@ body {
 }
 
 .header-logos img {
-  height: 70px;
+  height: 90px;
   object-fit: contain;
+}
+
+/* المقاس الخاص بشعار برنامج تطوير الوزارة فقط */
+.header-logos img.logo-dev {
+  height: 90px;
+  /* عدلي الرقم اللي يناسبك */
 }
 
 /* كتلة العنوان */
@@ -532,7 +538,7 @@ body {
 }
 
 /* الوصول / QR */
-.access {
+/* .access {
   display: flex;
   gap: 24px;
   margin-top: 14px;
@@ -552,7 +558,7 @@ body {
   color: var(--primary);
   text-decoration: none;
   border-bottom: 1px dotted rgba(15, 118, 110, 0.6);
-}
+} */
 
 /* لوحة الإحصاءات */
 .dashboard .row {
@@ -721,12 +727,12 @@ body {
 
 .detail-wrapper {
   max-width: 1280px;
-  /* كان 1100 */
   margin: 0 auto;
-  padding: 32px 20px 40px;
+  padding: 12px 20px 56px;
+  /* زيادة بسيطة عشان ما يغطّي الفوتر */
 }
 
-/* أعرض  على الشاشات الكبيرة */
+/* أعرض على الشاشات الكبيرة */
 @media (min-width: 1440px) {
   .detail-wrapper {
     max-width: 1400px;
@@ -734,7 +740,7 @@ body {
 }
 
 .detail-header {
-  margin-bottom: 12px;
+  margin-bottom: 0;
 }
 
 .detail-title {
@@ -747,7 +753,7 @@ body {
 
 .detail-short {
   text-align: center;
-  margin: 0 0 10px;
+  margin: 0 0 5px;
   font-size: 0.95rem;
   color: var(--muted);
 }
@@ -758,6 +764,7 @@ body {
   gap: 8px;
 }
 
+/* البادجات العامة */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -807,7 +814,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 10px;
-  margin: 12px 0 24px;
+  margin: 12px 0 1px;
   padding: 12px 14px;
   border-radius: 12px;
   background: #ffffff;
@@ -834,7 +841,7 @@ body {
   gap: 6px;
   font-size: 1rem;
   font-weight: 700;
-  margin: 24px 0 10px;
+  margin: 14px 0 10px;
 }
 
 /* الباحثون */
@@ -889,7 +896,7 @@ body {
   font-size: 0.9rem;
 }
 
-/* الملخص */
+/* الملخص النصي */
 .detail-summary-text {
   padding: 14px;
   border-radius: 12px;
@@ -949,92 +956,141 @@ body {
   font-size: 1.1rem;
 }
 
-/* QR + روابط */
+/* ===== قسم الوصول والملفات في صفحة التفاصيل ===== */
 .detail-access {
-  margin-top: 26px;
+  margin-top: 20px;
+  margin-bottom: 18px;
   display: grid;
-  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
-  gap: 18px;
-  align-items: flex-start;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* مربعين متقاربين بالحجم */
+  gap: 16px;
+  align-items: stretch;
 }
 
-.qr-block {
-  text-align: center;
-  padding: 12px;
-  border-radius: 12px;
+/* كارت عام (QR + الملفات) */
+.detail-card {
+  border-radius: 14px;
   background: #ffffff;
   border: 1px solid var(--border-soft);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* عنوان القسم داخل الكرت */
+.detail-card .section-title {
+  margin: 4px 0 8px;
+}
+
+/* بطاقة الـ QR */
+.qr-block {
+  text-align: center;
+}
+
+.qr-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* تقريباً وسط الكرت عموديًا */
+  gap: 8px;
+}
+
+.qr-inner #qrcode {
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-inner #qrcode img,
+.qr-inner #qrcode canvas {
+  display: block;
 }
 
 .qr-block small {
   display: block;
-  margin-top: 8px;
+  margin-top: 4px;
   font-size: 0.8rem;
   color: var(--muted);
 }
 
-.detail-links-list {
-  padding: 10px 0;
+/* كرت الملفات والروابط */
+.detail-files-card .detail-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
 }
 
-.detail-link-item {
+/* صف رابط / تمويل – نفس الشكل بالضبط */
+.detail-link-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 0;
-  border-bottom: 1px dashed var(--border-soft);
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  /* عشان ما يصير ستايل زر مختلف */
 }
 
-.detail-link-item:last-child {
-  border-bottom: none;
+.detail-link-row:hover {
+  background: #f9fafb;
+  border-color: rgba(11, 122, 65, 0.55);
+  transform: translateY(-1px);
 }
 
 .detail-link-icon {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 999px;
-  background: #ecfdf5;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #16a34a;
+  background: rgba(11, 122, 65, 0.08);
+  color: var(--primary);
+  flex-shrink: 0;
 }
 
-.detail-link-kind {
-  font-size: 0.75rem;
+.detail-link-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detail-link-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.detail-link-meta {
+  font-size: 0.8rem;
   color: var(--muted);
 }
 
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border-radius: 999px;
-  padding: 6px 12px;
-  border: 1px dashed #fecaca;
-  background: #fef2f2;
+/* ملاحظة إذا البحث سري */
+.detail-note-conf {
+  margin-top: 10px;
+  font-size: 0.8rem;
   color: #b91c1c;
-  font-size: 0.85rem;
-  cursor: pointer;
+  background: #fef2f2;
+  border-radius: 10px;
+  padding: 6px 8px;
 }
 
-.muted {
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-/* استجابة للجوال */
-@media (max-width: 768px) {
-  .detail-wrapper {
-    padding: 20px 12px 32px;
-  }
-
-  .detail-title {
-    font-size: 1.4rem;
-  }
-
+/* استجابة للشاشات المتوسطة والصغيرة */
+@media (max-width: 900px) {
   .detail-access {
     grid-template-columns: 1fr;
+    /* كرت فوق كرت */
   }
 }
 
@@ -1452,7 +1508,8 @@ body {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 4px;
+  margin-top: 0px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
@@ -1507,7 +1564,8 @@ body {
 
 .app-footer {
   position: fixed;
-  inset-inline: 0;      /* يمين + يسار */
+  inset-inline: 0;
+  /* يمين + يسار */
   bottom: 0;
   z-index: 40;
   background: rgba(255, 255, 255, 0.96);
@@ -1630,6 +1688,7 @@ body.hero-ready .hint {
   opacity: 1;
   transform: translateY(0);
 }
+
 .hero-canvas-wrap {
   position: relative;
   width: 100%;
@@ -1644,13 +1703,16 @@ body.hero-ready .hint {
   background-size: 140% 140%;
   animation: heroBgDrift 22s ease-in-out infinite alternate;
 }
+
 @keyframes heroBgDrift {
   0% {
     background-position: 50% 30%;
   }
+
   50% {
     background-position: 48% 40%;
   }
+
   100% {
     background-position: 52% 35%;
   }
@@ -1679,10 +1741,12 @@ body.hero-ready .hint {
     transform: scale(1);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
   }
+
   50% {
     transform: scale(1.03);
     box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
   }
+
   100% {
     transform: scale(1);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
@@ -1710,27 +1774,32 @@ body.hero-ready .hint {
   max-width: 78%;
   max-height: 78%;
 }
+
 .hero-orbit-node:hover {
   transform: translateY(-4px) scale(1.03);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
 }
+
 @keyframes nodeGlow {
   0% {
     box-shadow:
       0 10px 22px rgba(15, 23, 42, 0.13),
       0 0 14px rgba(22, 163, 74, 0.18);
   }
+
   50% {
     box-shadow:
       0 14px 28px rgba(15, 23, 42, 0.18),
       0 0 20px rgba(22, 163, 74, 0.30);
   }
+
   100% {
     box-shadow:
       0 10px 22px rgba(15, 23, 42, 0.13),
       0 0 14px rgba(22, 163, 74, 0.18);
   }
 }
+
 /* =========================
    تحسينات الاستجابة (PC / iPad / جوال)
    ضيفي هذا المقطع في آخر الملف
@@ -1740,7 +1809,8 @@ body.hero-ready .hint {
 @media (max-width: 1200px) {
   .hero {
     height: auto;
-    min-height: calc(100vh - 110px); /* ما ينقص كثير على الأجهزة المتوسطة */
+    min-height: calc(100vh - 110px);
+    /* ما ينقص كثير على الأجهزة المتوسطة */
   }
 
   .hero-canvas-wrap {
@@ -1760,6 +1830,7 @@ body.hero-ready .hint {
 
 /* شاشات أقل من 992px (آيباد رأسي + أغلب التابلت) */
 @media (max-width: 992px) {
+
   /* الهيدر يرتّب نفسه فوق بعض بدل صف واحد */
   .app-header,
   .kiosk-header {
@@ -1816,6 +1887,7 @@ body.hero-ready .hint {
 
 /* شاشات أقل من 768px (جوالات كبيرة + بعض الآيبادات الصغيرة) */
 @media (max-width: 768px) {
+
   html,
   body {
     height: auto;
@@ -1913,4 +1985,61 @@ body.hero-ready .hint {
   }
 }
 
+/* شاشات 1600px فما فوق — توسيع المحتوى */
+@media (min-width: 1600px) {
 
+  .submission-page,
+  .detail-wrapper,
+  .dashboard,
+  .researcher-wrapper,
+  .sector-wrapper {
+    max-width: 1600px;
+  }
+}
+
+/* شاشات 2000px فما فوق (تلفزيون) */
+@media (min-width: 2000px) {
+
+  .submission-page,
+  .detail-wrapper,
+  .dashboard,
+  .researcher-wrapper,
+  .sector-wrapper {
+    max-width: 1900px;
+  }
+
+  .card {
+    max-width: 420px;
+  }
+}
+
+@media (max-height: 750px) {
+  .hero-canvas-wrap {
+    min-height: 500px !important;
+    padding: 10px 10px !important;
+  }
+
+  .moi-badge {
+    transform: scale(0.85);
+  }
+
+  .center-node {
+    transform: scale(0.85);
+  }
+}
+
+@media (max-height: 750px) {
+  .submission-page {
+    padding-top: 10px;
+  }
+
+  .submission-card {
+    padding: 16px !important;
+  }
+}
+
+@media (min-width: 2400px) {
+  .card {
+    transform: scale(1.15);
+  }
+}
