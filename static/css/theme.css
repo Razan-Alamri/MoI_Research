@@ -1207,3 +1207,240 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
 .landing-secondary-link:hover {
   color: var(--primary);
 }
+/* =======================================
+   تحسين الاستجابة لكل الصفحات (PC / iPad / جوال)
+   ضعي هذا في آخر الملف
+   ======================================= */
+
+/* شاشات أقل من 1200px (لابتوبات متوسطة + آيباد أفقي) */
+@media (max-width: 1200px) {
+  /* صفحة عن معرفة */
+  .about-shell {
+    padding: 36px 16px 26px;
+  }
+  .about-frame {
+    max-width: 1100px;
+    padding: 18px 28px 20px;
+  }
+  .about-logos img {
+    height: 80px;
+  }
+
+  /* الهيرو الدائري (index) */
+  .hero-canvas-wrap {
+    height: auto;
+    min-height: calc(100vh - 160px);
+    padding-inline: 24px;
+  }
+
+  /* صفحة دخول الباحثين */
+  .login-shell {
+    padding: 40px 16px 26px;
+  }
+  .login-frame {
+    max-width: 640px;
+    padding: 32px 28px 26px;
+  }
+
+  /* صفحة الهبوط الجديدة */
+  .landing-hero {
+    min-height: calc(100vh - 220px);
+    padding: 24px 16px 32px;
+  }
+  .landing-logo-circle {
+    width: 260px;
+    height: 260px;
+  }
+}
+
+/* شاشات أقل من 992px (آيباد رأسي + أغلب التابلت) */
+@media (max-width: 992px) {
+  /* about */
+  .about-shell {
+    padding: 26px 10px 22px;
+  }
+  .about-frame {
+    max-width: 900px;
+    padding: 16px 20px 18px;
+  }
+  .about-logos {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .about-logos img {
+    height: 60px;
+  }
+  .about-title {
+    font-size: 2.1rem;
+  }
+
+  /* الهيرو الدائري */
+  .hero-canvas-wrap {
+    min-height: calc(100vh - 150px);
+    padding: 18px 18px;
+  }
+  .center-node {
+    width: 170px;
+    height: 170px;
+  }
+
+  /* login */
+  .login-shell {
+    padding: 30px 12px 22px;
+  }
+  .login-frame {
+    max-width: 580px;
+    padding: 26px 22px 22px;
+  }
+  .login-logos .logos-right img:first-child,
+  .login-logos .logos-right img:last-child,
+  .login-logos .logos-left img {
+    height: 64px;
+  }
+  .login-title {
+    font-size: 2rem;
+  }
+
+  /* landing */
+  .landing-hero {
+    padding: 26px 14px 32px;
+  }
+  .landing-logo-circle {
+    width: 230px;
+    height: 230px;
+  }
+  .landing-title {
+    font-size: 2rem;
+  }
+}
+
+/* شاشات أقل من 768px (جوالات كبيرة + بعض الآيبادات الصغيرة) */
+@media (max-width: 768px) {
+  html,
+  body {
+    height: auto;
+  }
+
+  /* about */
+  .about-frame {
+    padding: 14px 16px 18px;
+    border-radius: 22px;
+  }
+  .about-logos {
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  .about-logos img {
+    height: 52px;
+  }
+  .about-subtitle {
+    margin: 10px auto 8px;
+  }
+  .goals-grid,
+  .quick-grid,
+  .about-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* hero index */
+  .hero-canvas-wrap {
+    padding: 18px 10px;
+    min-height: calc(100vh - 140px);
+  }
+  .center-node {
+    width: 150px;
+    height: 150px;
+  }
+  .hint {
+    font-size: 12px;
+    bottom: 10px;
+  }
+
+  /* login */
+  .login-frame {
+    padding: 22px 18px 20px;
+    border-radius: 22px;
+  }
+  .login-logos {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .login-logos .logos-right img:first-child,
+  .login-logos .logos-right img:last-child,
+  .login-logos .logos-left img {
+    height: 54px;
+  }
+  .login-subtitle {
+    font-size: 0.9rem;
+  }
+  .login-box {
+    padding: 18px 16px 16px;
+  }
+
+  /* landing */
+  .landing-hero {
+    min-height: calc(100vh - 190px);
+    padding: 22px 10px 30px;
+  }
+  .landing-logo-circle {
+    width: 210px;
+    height: 210px;
+    margin-bottom: 14px;
+  }
+  .landing-title {
+    font-size: 1.8rem;
+  }
+  .landing-text {
+    font-size: 0.9rem;
+    margin-bottom: 18px;
+  }
+}
+
+/* شاشات صغيرة جداً (≤ 480px – أغلب الجوالات) */
+@media (max-width: 480px) {
+  /* about */
+  .about-shell {
+    padding: 18px 8px 18px;
+  }
+  .about-frame {
+    padding: 14px 12px 16px;
+  }
+  .about-title {
+    font-size: 1.8rem;
+  }
+
+  /* hero index */
+  .center-node {
+    width: 135px;
+    height: 135px;
+  }
+
+  /* login */
+  .login-frame {
+    padding: 18px 14px 16px;
+  }
+  .login-title {
+    font-size: 1.7rem;
+  }
+  .login-header-title {
+    font-size: 0.95rem;
+  }
+
+  /* landing */
+  .landing-logo-circle {
+    width: 180px;
+    height: 180px;
+  }
+  .landing-title {
+    font-size: 1.6rem;
+  }
+  .landing-actions {
+    gap: 6px;
+  }
+  .landing-main-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
