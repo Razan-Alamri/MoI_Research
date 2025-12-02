@@ -805,5 +805,12 @@ def uploaded_avatar(filename):
 
 # ===================== تشغيل التطبيق =====================
 
+import os
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Render يرسل PORT
+    app.run(
+        host="0.0.0.0",  # مهم عشان يكون ظاهر خارج الحاوية
+        port=port,
+        debug=False      # الأفضل إطفاء debug في الإنتاج
+    )
