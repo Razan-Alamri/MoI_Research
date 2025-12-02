@@ -80,7 +80,7 @@ body.about-body {
   border-radius: 28px;
   border: 1px solid rgba(148, 163, 184, 0.35);
   box-shadow: 0 28px 70px rgba(15, 23, 42, 0.25);
-  padding: 24px 40px 30px;
+  padding: 24px 30px 30px;
 }
 
 /* الشعارات في أعلى الإطار */
@@ -1207,6 +1207,7 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
 .landing-secondary-link:hover {
   color: var(--primary);
 }
+
 /* =======================================
    تحسين الاستجابة لكل الصفحات (PC / iPad / جوال)
    ضعي هذا في آخر الملف
@@ -1444,3 +1445,114 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
   }
 }
 
+/* =======================================================
+   تحسين الشاشات العريضة جداً (4K / TV)
+   ======================================================= */
+
+/* شاشات أعرض من 1600px */
+@media (min-width: 1600px) {
+  /* نوسّع الإطارات عشان ما يكون المحتوى صغير وسط الشاشة */
+  .about-frame,
+  .login-frame {
+    max-width: 1200px;
+  }
+
+  .landing-hero-inner {
+    max-width: 640px;
+  }
+
+  .landing-logo-circle {
+    width: 320px;
+    height: 320px;
+  }
+}
+
+/* شاشات أعرض من 2000px (تلفزيون وغيره) */
+@media (min-width: 2000px) {
+  .about-frame,
+  .login-frame {
+    max-width: 1400px;
+  }
+
+  .landing-hero-inner {
+    max-width: 720px;
+  }
+
+  .landing-logo-circle {
+    width: 360px;
+    height: 360px;
+  }
+
+  /* نخلي الهيرو أقل “فراغ” */
+  .landing-hero {
+    min-height: calc(100vh - 260px);
+  }
+}
+
+/* =======================================================
+   تحسين الأجهزة ذات الارتفاع القصير (مثل بعض اللابتوبات)
+   ======================================================= */
+
+/* أي شاشة ارتفاعها أقل من ~ 750px (ThinkPad, لابتوبات صغيرة) */
+@media (max-height: 750px) {
+  /* صفحة عن معرفة */
+  .about-shell {
+    padding-top: 18px;
+    padding-bottom: 16px;
+  }
+
+  .about-frame {
+    padding-top: 12px;
+    padding-bottom: 14px;
+  }
+
+  .about-logos img {
+    height: 70px;
+  }
+
+  /* صفحة الدخول */
+  .login-shell {
+    padding-top: 22px;
+    padding-bottom: 16px;
+  }
+
+  .login-frame {
+    padding-top: 18px;
+    padding-bottom: 16px;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+  }
+
+  /* الهيرو الدائري */
+  .hero-canvas-wrap {
+    min-height: 480px;
+    padding-block: 12px;
+  }
+
+  .center-node {
+    width: 150px;
+    height: 150px;
+  }
+
+  /* صفحة الهبوط */
+  .landing-hero {
+    min-height: calc(100vh - 220px);
+    padding-top: 18px;
+    padding-bottom: 20px;
+  }
+
+  .landing-logo-circle {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+/* لو كانت الشاشة قصيرة وعريضة (لابتوب) نضغط البادينق أكثر */
+@media (max-height: 750px) and (min-width: 1024px) {
+  .about-shell,
+  .login-shell,
+  .landing-hero {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+}
