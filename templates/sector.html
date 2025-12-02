@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="sector-wrapper">
+
+  <!-- رأس القطاع -->
+  <section class="sector-header">
+    <div class="sector-logo" id="sectorLogo"></div>
+
+    <div class="sector-title-block">
+      <h1 id="sectorName">المديرية العامة للسجون</h1>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpis">
+      <div class="kpi">
+        <div class="kpi-icon">
+          <i class="bi bi-collection"></i>
+        </div>
+        <div class="kpi-body">
+          <span id="kpiTotal">0</span>
+          <label>إجمالي المبادرات</label>
+        </div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-icon">
+          <i class="bi bi-journal-text"></i>
+        </div>
+        <div class="kpi-body">
+          <span id="kpiResearch">0</span>
+          <label>أبحاث</label>
+        </div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-icon">
+          <i class="bi bi-kanban"></i>
+        </div>
+        <div class="kpi-body">
+          <span id="kpiProject">0</span>
+          <label>مشاريع</label>
+        </div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-icon">
+          <i class="bi bi-lightbulb"></i>
+        </div>
+        <div class="kpi-body">
+          <span id="kpiInnovation">0</span>
+          <label>ابتكارات</label>
+        </div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-icon">
+          <i class="bi bi-people"></i>
+        </div>
+        <div class="kpi-body">
+          <span id="kpiAuthors">0</span>
+          <label>عدد الباحثين</label>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- الفلاتر -->
+  <section class="filters">
+    <div class="filter-group">
+      <i class="bi bi-layers filter-icon"></i>
+      <select id="filterType">
+        <option value="">النوع (الكل)</option>
+        <option value="Research">أبحاث</option>
+        <option value="Project">مشاريع</option>
+        <option value="Innovation">ابتكارات</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <i class="bi bi-calendar3 filter-icon"></i>
+      <select id="filterYear">
+        <option value="">السنة (الكل)</option>
+        <option>2023</option>
+        <option>2024</option>
+        <option>2025</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <i class="bi bi-shield-lock filter-icon"></i>
+      <select id="filterConf">
+        <option value="">السرية (الكل)</option>
+        <option value="public">عام</option>
+        <option value="conf">سري</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <i class="bi bi-grid-3x3-gap filter-icon"></i>
+      <select id="filterField">
+        <option value="">المجال (الكل)</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- البطاقات -->
+  <section class="cards" id="cardsWrap">
+    <!-- تُملأ من sector.js -->
+  </section>
+
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.PAGE = { slug: "{{ slug }}" };
+</script>
+<script src="{{ url_for('static', filename='js/sector.js') }}" defer></script>
+{% endblock %}

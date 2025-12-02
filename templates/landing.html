@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}منصة معرفة - البوابة البحثية{% endblock %}
+{% block body_class %}landing-page{% endblock %}
+
+{% block content %}
+<section class="landing-hero">
+  <div class="landing-hero-inner">
+
+    <div class="landing-logo-circle">
+      <img src="{{ url_for('static', filename='img/sectors/logo_dev_program.png') }}" alt="شعار وزارة الداخلية">
+    </div>
+
+    <h1 class="landing-title">
+      <span>منصة معرفة</span>
+    </h1>
+
+    <p class="landing-subtitle">
+      البوابة الذكية للمعرفة البحثية بوزارة الداخلية
+    </p>
+
+    <p class="landing-text">
+      مساحة موحّدة لإدارة وإبراز الأبحاث والمشاريع والابتكارات في قطاعات الوزارة.
+    </p>
+
+    <div class="landing-actions">
+      <a href="{{ url_for('start') }}" class="btn-primary landing-main-btn">
+        ابدأ الاستعراض
+        <i class="bi bi-arrow-left-circle"></i>
+      </a>
+
+      <!-- <a href="{{ url_for('researcher_index') }}" class="landing-secondary-link">
+        دخول الباحثين
+      </a> -->
+    </div>
+
+  </div>
+</section>
+{% endblock %}

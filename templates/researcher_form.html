@@ -1,0 +1,553 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="submission-page">
+
+  <div class="submission-header">
+    <h1 class="submission-title">إضافة بحث / مشروع / ابتكار جديد</h1>
+    <p class="submission-subtitle">
+      الرجاء تعبئة الحقول بدقّة، حيث سيتم استخدام البيانات في بناء بطاقة البحث في منصة معرفة.
+    </p>
+  </div>
+
+  <form class="submission-layout" id="researcherForm" method="post" action="{{ url_for('researcher_new') }}"
+    enctype="multipart/form-data">
+
+    {# {{ csrf_token() }} لو كنتِ تستخدمين Flask-WTF خليها #}
+
+    <!--  أولاً: معلومات البحث / المشروع -->
+    <section class="submission-card card">
+      <div class="section-title">
+        <span><i class="bi bi-journal-text" style="margin-left:4px;"></i> أولاً:</span>
+        معلومات البحث / المشروع
+      </div>
+
+      <!-- العنوان -->
+      <div class="form-group">
+        <label for="title" class="form-label">العنوان *</label>
+        <div class="input-icon-wrap">
+          <i class="bi bi-journal-text input-icon"></i>
+          <input type="text" id="title" name="title" class="form-control input-with-icon" required maxlength="250"
+            placeholder="مثال: نموذج ذكاء اصطناعي للتنبؤ بمؤشر العود للسجناء">
+        </div>
+      </div>
+
+      <!-- الوصف المختصر -->
+      <div class="form-group">
+        <label for="short_desc" class="form-label">الوصف المختصر *</label>
+        <div class="input-icon-wrap">
+          <i class="bi bi-card-text input-icon"></i>
+          <input type="text" id="short_desc" name="short_desc" class="form-control input-with-icon" required
+            maxlength="220" placeholder="وصف موجز يوضح فكرة البحث أو المشروع في سطر واحد">
+        </div>
+        <small id="shortCounter" class="field-hint">0 / 220 حرف</small>
+      </div>
+
+      <!-- الملخص -->
+      <div class="form-group">
+        <label for="abstract" class="form-label">الملخص (150–250 كلمة تقريباً) *</label>
+        <div class="input-icon-wrap">
+          <i class="bi bi-file-richtext input-icon"></i>
+          <textarea id="abstract" name="abstract" class="form-control textarea input-with-icon" rows="6" required
+            placeholder="اكتب ملخصاً واضحاً يشرح الهدف، المنهجية، وأهم النتائج المتوقعة."></textarea>
+        </div>
+        <small id="abstractCounter" class="field-hint">0 حرف</small>
+      </div>
+
+      <div class="form-grid-3">
+        <!-- النوع -->
+        <div class="form-group">
+          <label for="kind" class="form-label">النوع *</label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-layers input-icon"></i>
+            <select id="kind" name="kind" class="form-control input-with-icon" required>
+              <option value="">اختر النوع</option>
+              <option value="Research">بحث</option>
+              <option value="Project">مشروع</option>
+              <option value="Innovation">ابتكار</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- السنة -->
+        <div class="form-group">
+          <label for="year" class="form-label">السنة *</label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-calendar3 input-icon"></i>
+            <select id="year" name="year" class="form-control input-with-icon" required>
+              <option value="">اختر السنة</option>
+              {% for y in range(2022, 2031) %}
+              <option value="{{ y }}">{{ y }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <!-- درجة السرية -->
+        <div class="form-group">
+          <label for="conf" class="form-label">درجة السرية *</label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-shield-lock input-icon"></i>
+            <select id="conf" name="conf" class="form-control input-with-icon" required>
+              <option value="public">عام</option>
+              <option value="conf">سري</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-grid-3">
+        <!-- المجال -->
+        <div class="form-group">
+          <label for="field" class="form-label">المجال *</label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-cpu input-icon"></i>
+            <select id="field" name="field" class="form-control input-with-icon" required>
+              <option value="">اختر المجال</option>
+              <option>ذكاء اصطناعي</option>
+              <option>أمن سيبراني</option>
+              <option>أنظمة معلومات</option>
+              <option>تحليلات تشغيلية</option>
+              <option>رؤية حاسوبية</option>
+              <option>روبوتات</option>
+              <option>درونز</option>
+              <option>استشعار عن بعد</option>
+              <option>تجربة المستخدم</option>
+              <option>أنظمة معلومات صحية</option>
+              <option>منصات بيانات</option>
+              <option>تحول رقمي</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- القطاع المنفّذ -->
+        <div class="form-group">
+          <label for="sector" class="form-label">القطاع المنفّذ *</label>
+
+          <div class="input-icon-wrap">
+            <i class="bi bi-building input-icon"></i>
+
+            <select id="sector" name="sector" class="form-control input-with-icon" required>
+              <option value="">اختر القطاع</option>
+
+              <!-- ─────── قطاعات وزارة الداخلية ─────── -->
+              <optgroup label="قطاعات وزارة الداخلية">
+                <option value="prisons">المديرية العامة للسجون</option>
+                <option value="psd">الأمن العام</option>
+                <option value="civildef">الدفاع المدني</option>
+                <option value="passports">المديرية العامة للجوازات</option>
+                <option value="borderguard">المديرية العامة لحرس الحدود</option>
+                <option value="gdnc">المديرية العامة لمكافحة المخدرات</option>
+                <option value="fsf">قوات أمن المنشآت</option>
+                <option value="fsp">القوات الخاصة للأمن والحماية</option>
+                <option value="environment-sec">القوات الخاصة للأمن البيئي</option>
+                <option value="ahwal">الأحوال المدنية</option>
+                <option value="kfsc">كلية الملك فهد الأمنية</option>
+                <option value="mujahideen">الإدارة العامة للمجاهدين</option>
+                <option value="clubs">أندية منسوبي وزارة الداخلية</option>
+                <option value="911">المركز الوطني للعمليات الأمنية</option>
+                <option value="med-services">الإدارة العامة للخدمات الطبية</option>
+                <option value="diwan">ديوان وزارة الداخلية</option>
+                <option value="nic">مركز المعلومات الوطني</option>
+              </optgroup>
+
+              <!-- ─────── إمارات المناطق ─────── -->
+              <optgroup label="إمارات المناطق">
+                <option value="em_riyadh">إمارة منطقة الرياض</option>
+                <option value="em_makkah">إمارة منطقة مكة المكرمة</option>
+                <option value="em_madinah">إمارة منطقة المدينة المنورة</option>
+                <option value="em_qassim">إمارة منطقة القصيم</option>
+                <option value="em_eastern">إمارة المنطقة الشرقية</option>
+                <option value="em_aseer">إمارة منطقة عسير</option>
+                <option value="em_tabuk">إمارة منطقة تبوك</option>
+                <option value="em_hail">إمارة منطقة حائل</option>
+                <option value="em_northern">إمارة منطقة الحدود الشمالية</option>
+                <option value="em_jazan">إمارة منطقة جازان</option>
+                <option value="em_najran">إمارة منطقة نجران</option>
+                <option value="em_bahah">إمارة منطقة الباحة</option>
+                <option value="em_jouf">إمارة منطقة الجوف</option>
+              </optgroup>
+
+            </select>
+          </div>
+        </div>
+
+
+        <!-- جهة النشر -->
+        <div class="form-group">
+          <label for="publisher" class="form-label">جهة النشر / الجهة الراعية (إن وجدت)</label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-megaphone input-icon"></i>
+            <input type="text" id="publisher" name="publisher" class="form-control input-with-icon"
+              placeholder="مثال: مجلة الأمن والحياة، مؤتمر الدفاع العالمي ...">
+          </div>
+        </div>
+      </div>
+
+      <!-- الرابط -->
+      <div class="form-group">
+        <label for="link" class="form-label">رابط البحث / المشروع (اختياري)</label>
+        <div class="input-icon-wrap">
+          <i class="bi bi-link-45deg input-icon"></i>
+          <input type="url" id="link" name="link" class="form-control input-with-icon"
+            placeholder="https://example.com/paper-or-project">
+        </div>
+      </div>
+
+      <!-- رفع الملف -->
+      <div class="form-group">
+        <label class="form-label">
+          <i class="bi bi-cloud-arrow-up" style="margin-left:4px;"></i>
+          رفع نسخة من البحث / المشروع (PDF أو ملف داعم)
+        </label>
+        <div class="input-icon-wrap">
+          <i class="bi bi-file-earmark-arrow-up input-icon"></i>
+          <input type="file" id="file_upload" name="file_upload" class="form-control file-input input-with-icon"
+            accept=".pdf,.doc,.docx,.ppt,.pptx">
+        </div>
+        <small class="field-hint">
+          يمكن إرفاق رابط، أو رفع ملف، أو كلاهما حسب المتوفر.
+        </small>
+      </div>
+    </section>
+
+    <!--  ثانياً: معلومات الباحثين -->
+    <section class="submission-card card">
+      <div class="section-title">
+        <span><i class="bi bi-people-fill" style="margin-left:4px;"></i> ثانياً:</span>
+        معلومات الباحثين
+      </div>
+
+      <!--  الباحث الرئيسي -->
+      <div class="author-main-block" style="margin-bottom: 18px;">
+        <div class="form-label"
+          style="font-weight:700; margin-bottom:8px; color:var(--primary); display:flex; align-items:center; gap:6px;">
+          <i class="bi bi-person-badge"></i>
+          الباحث الرئيسي
+        </div>
+
+        <div class="form-group">
+          <label for="author_name_ar" class="form-label">الاسم الثلاثي (بالعربي) *</label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-person-lines-fill input-icon"></i>
+            <input type="text" id="author_name_ar" name="author_name_ar" class="form-control input-with-icon" required
+              placeholder="مثال: حمد سعود الذيابي">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="author_name_en" class="form-label">الاسم الثلاثي (بالإنجليزي) *</label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-person input-icon"></i>
+            <input type="text" id="author_name_en" name="author_name_en" class="form-control input-with-icon" required
+              placeholder="مثال: Hamad Saud Al-thiabi">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="author_rank" class="form-label">
+            الرتبة / المرتبة / المسمى الوظيفي *
+          </label>
+          <div class="input-icon-wrap">
+            <i class="bi bi-award input-icon"></i>
+            <input type="text" id="author_rank" name="author_rank" class="form-control input-with-icon" required
+              placeholder="مثال: مهندس تعلم عميق، باحث أمني، أستاذ مشارك ...">
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="author_sector" class="form-label">القطاع التابع له *</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-building input-icon"></i>
+
+              <select id="author_sector" name="author_sector" class="form-control input-with-icon" required>
+                <option value="">اختر القطاع</option>
+
+                <!-- ─────── قطاعات وزارة الداخلية ─────── -->
+                <optgroup label="قطاعات وزارة الداخلية">
+                  <option value="prisons">المديرية العامة للسجون</option>
+                  <option value="psd">الأمن العام</option>
+                  <option value="civildef">الدفاع المدني</option>
+                  <option value="passports">المديرية العامة للجوازات</option>
+                  <option value="borderguard">المديرية العامة لحرس الحدود</option>
+                  <option value="gdnc">المديرية العامة لمكافحة المخدرات</option>
+                  <option value="fsf">قوات أمن المنشآت</option>
+                  <option value="fsp">القوات الخاصة للأمن والحماية</option>
+                  <option value="environment-sec">القوات الخاصة للأمن البيئي</option>
+                  <option value="ahwal">الأحوال المدنية</option>
+                  <option value="kfsc">كلية الملك فهد الأمنية</option>
+                  <option value="mujahideen">الإدارة العامة للمجاهدين</option>
+                  <option value="clubs">أندية منسوبي وزارة الداخلية</option>
+                  <option value="911">المركز الوطني للعمليات الأمنية</option>
+                  <option value="med-services">الإدارة العامة للخدمات الطبية</option>
+                  <option value="diwan">ديوان وزارة الداخلية</option>
+                  <option value="nic">مركز المعلومات الوطني</option>
+                </optgroup>
+
+                <!-- ─────── إمارات المناطق ─────── -->
+                <optgroup label="إمارات المناطق">
+                  <option value="em_riyadh">إمارة منطقة الرياض</option>
+                  <option value="em_makkah">إمارة منطقة مكة المكرمة</option>
+                  <option value="em_madinah">إمارة منطقة المدينة المنورة</option>
+                  <option value="em_qassim">إمارة منطقة القصيم</option>
+                  <option value="em_eastern">إمارة المنطقة الشرقية</option>
+                  <option value="em_aseer">إمارة منطقة عسير</option>
+                  <option value="em_tabuk">إمارة منطقة تبوك</option>
+                  <option value="em_hail">إمارة منطقة حائل</option>
+                  <option value="em_northern">إمارة منطقة الحدود الشمالية</option>
+                  <option value="em_jazan">إمارة منطقة جازان</option>
+                  <option value="em_najran">إمارة منطقة نجران</option>
+                  <option value="em_bahah">إمارة منطقة الباحة</option>
+                  <option value="em_jouf">إمارة منطقة الجوف</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="author_dept" class="form-label">الإدارة / الوحدة</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-diagram-3 input-icon"></i>
+              <input type="text" id="author_dept" name="author_dept" class="form-control input-with-icon"
+                placeholder="مثال: إدارة الذكاء الاصطناعي، إدارة تقنية المعلومات ...">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="author_email" class="form-label">البريد الإلكتروني الرسمي *</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-envelope-at input-icon"></i>
+              <input type="email" id="author_email" name="author_email" class="form-control input-with-icon" required
+                placeholder="name@moi.gov.sa">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="author_phone" class="form-label">رقم التواصل</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-telephone input-icon"></i>
+              <input type="tel" id="author_phone" name="author_phone" class="form-control input-with-icon"
+                placeholder="05xxxxxxxx">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="author_gender" class="form-label">الجنس *</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-gender-ambiguous input-icon"></i>
+              <select id="author_gender" name="author_gender" class="form-control input-with-icon" required>
+                <option value="male">ذكر</option>
+                <option value="female">أنثى</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <i class="bi bi-person-circle" style="margin-left:4px;"></i>
+              صورة شخصية (اختياري)
+            </label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-image input-icon"></i>
+              <input type="file" id="author_photo" name="author_photo" class="form-control file-input input-with-icon"
+                accept="image/*">
+            </div>
+            <small class="field-hint">
+              في حال عدم رفع صورة، سيظهر رمز أيقونة افتراضية (للرجال أو النساء).
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <hr style="margin: 10px 0 14px; border-color:#e5e7eb;">
+
+      <!--  الباحثون المشاركون -->
+      <div class="form-label" style="font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+        <i class="bi bi-people"></i>
+        الباحثون المشاركون (اختياري)
+      </div>
+
+      <div id="authorsContainer"></div>
+
+      <button type="button" id="addAuthorBtn" class="btn-primary" style="margin-top: 10px;">
+        <i class="bi bi-person-plus"></i>
+        إضافة باحث مشارك
+      </button>
+
+      <!-- قالب الباحث المشارك -->
+      <template id="authorTemplate">
+        <div class="author-item" style="border-top:1px solid #e5e7eb; padding-top:12px; margin-top:14px;">
+
+          <div class="form-label"
+            style="font-weight:600; margin-bottom:6px; color:var(--muted); display:flex; align-items:center; gap:6px;">
+            <i class="bi bi-person-plus"></i>
+            باحث مشارك
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">الاسم الثلاثي (بالعربي) *</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-person-lines-fill input-icon"></i>
+              <input type="text" class="form-control input-with-icon" name="__NAME__[name_ar]" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">الاسم الثلاثي (بالإنجليزي) *</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-person input-icon"></i>
+              <input type="text" class="form-control input-with-icon" name="__NAME__[name_en]" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">الرتبة / المرتبة / المسمى الوظيفي *</label>
+            <div class="input-icon-wrap">
+              <i class="bi bi-award input-icon"></i>
+              <input type="text" class="form-control input-with-icon" name="__NAME__[rank]" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">القطاع التابع له *</label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-building input-icon"></i>
+
+                <select class="form-control input-with-icon" name="__NAME__[sector]" required>
+                  <option value="">اختر القطاع</option>
+
+                  <!-- ─────── قطاعات وزارة الداخلية ─────── -->
+                  <optgroup label="قطاعات وزارة الداخلية">
+                    <option value="prisons">المديرية العامة للسجون</option>
+                    <option value="psd">الأمن العام</option>
+                    <option value="civildef">الدفاع المدني</option>
+                    <option value="passports">المديرية العامة للجوازات</option>
+                    <option value="borderguard">المديرية العامة لحرس الحدود</option>
+                    <option value="gdnc">المديرية العامة لمكافحة المخدرات</option>
+                    <option value="fsf">قوات أمن المنشآت</option>
+                    <option value="fsp">القوات الخاصة للأمن والحماية</option>
+                    <option value="environment-sec">القوات الخاصة للأمن البيئي</option>
+                    <option value="ahwal">الأحوال المدنية</option>
+                    <option value="kfsc">كلية الملك فهد الأمنية</option>
+                    <option value="mujahideen">الإدارة العامة للمجاهدين</option>
+                    <option value="clubs">أندية منسوبي وزارة الداخلية</option>
+                    <option value="911">المركز الوطني للعمليات الأمنية</option>
+                    <option value="med-services">الإدارة العامة للخدمات الطبية</option>
+                    <option value="diwan">ديوان وزارة الداخلية</option>
+                    <option value="nic">مركز المعلومات الوطني</option>
+                  </optgroup>
+
+                  <!-- ─────── إمارات المناطق ─────── -->
+                  <optgroup label="إمارات المناطق">
+                    <option value="em_riyadh">إمارة منطقة الرياض</option>
+                    <option value="em_makkah">إمارة منطقة مكة المكرمة</option>
+                    <option value="em_madinah">إمارة منطقة المدينة المنورة</option>
+                    <option value="em_qassim">إمارة منطقة القصيم</option>
+                    <option value="em_eastern">إمارة المنطقة الشرقية</option>
+                    <option value="em_aseer">إمارة منطقة عسير</option>
+                    <option value="em_tabuk">إمارة منطقة تبوك</option>
+                    <option value="em_hail">إمارة منطقة حائل</option>
+                    <option value="em_northern">إمارة منطقة الحدود الشمالية</option>
+                    <option value="em_jazan">إمارة منطقة جازان</option>
+                    <option value="em_najran">إمارة منطقة نجران</option>
+                    <option value="em_bahah">إمارة منطقة الباحة</option>
+                    <option value="em_jouf">إمارة منطقة الجوف</option>
+                  </optgroup>
+
+                  <!-- جهات أخرى -->
+                  <option value="other">جهة خارجية</option>
+
+                </select>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label class="form-label">الإدارة / الوحدة</label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-diagram-3 input-icon"></i>
+                <input type="text" class="form-control input-with-icon" name="__NAME__[dept]">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-icon-wrap">
+              <i class="bi bi-building-add input-icon"></i>
+              <input type="text" class="form-control external-sector input-with-icon" name="__NAME__[external_sector]"
+                placeholder="اكتب اسم الجهة الخارجية" style="margin-top:6px; display:none;">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">البريد الإلكتروني *</label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-envelope-at input-icon"></i>
+                <input type="email" class="form-control input-with-icon" name="__NAME__[email]" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">رقم التواصل</label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-telephone input-icon"></i>
+                <input type="tel" class="form-control input-with-icon" name="__NAME__[phone]">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">الجنس *</label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-gender-ambiguous input-icon"></i>
+                <select class="form-control input-with-icon" name="__NAME__[gender]" required>
+                  <option value="male">ذكر</option>
+                  <option value="female">أنثى</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">صورة شخصية (اختياري)</label>
+              <div class="input-icon-wrap">
+                <i class="bi bi-image input-icon"></i>
+                <input type="file" class="form-control file-input input-with-icon" name="__NAME__[photo]"
+                  accept="image/*">
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn-ghost removeAuthorBtn" style="margin-top:4px;">
+            <i class="bi bi-x-circle"></i>
+            إزالة هذا الباحث
+          </button>
+        </div>
+      </template>
+
+    </section>
+
+    <div class="submission-actions">
+      <a href="{{ url_for('researcher_index') }}" class="btn-ghost">
+        إلغاء والعودة
+      </a>
+      <button type="submit" class="btn-primary">
+        <i class="bi bi-check-circle"></i>
+        حفظ البيانات
+      </button>
+    </div>
+
+  </form>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/researcher_form.js') }}" defer></script>
+{% endblock %}

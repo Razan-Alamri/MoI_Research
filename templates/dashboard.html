@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="dashboard">
+
+  <h1 class="dash-title">لوحة الإحصاءات العامة للأبحاث والمشاريع</h1>
+
+  <!-- فلاتر الداشبورد -->
+  <section class="dash-filters">
+    <div class="filter-group">
+      <i class="bi bi-geo-alt filter-icon"></i>
+      <select id="dashSectorFilter">
+        <option value="">كل القطاعات</option>
+        {% for s in [] %}{% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <i class="bi bi-grid-3x3-gap filter-icon"></i>
+      <select id="dashFieldFilter">
+        <option value="">كل المجالات</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- KPIs -->
+  <div class="row dash-kpi-row">
+    <div class="card kpi-big">
+      <div class="kpi-big-icon">
+        <i class="bi bi-collection"></i>
+      </div>
+      <div class="kpi-big-body">
+        <span id="sumTotal">0</span>
+        <label>إجمالي المبادرات</label>
+      </div>
+    </div>
+
+    <div class="card kpi-big">
+      <div class="kpi-big-icon">
+        <i class="bi bi-journal-text"></i>
+      </div>
+      <div class="kpi-big-body">
+        <span id="sumResearch">0</span>
+        <label>أبحاث</label>
+      </div>
+    </div>
+
+    <div class="card kpi-big">
+      <div class="kpi-big-icon">
+        <i class="bi bi-kanban"></i>
+      </div>
+      <div class="kpi-big-body">
+        <span id="sumProject">0</span>
+        <label>مشاريع</label>
+      </div>
+    </div>
+
+    <div class="card kpi-big">
+      <div class="kpi-big-icon">
+        <i class="bi bi-lightbulb"></i>
+      </div>
+      <div class="kpi-big-body">
+        <span id="sumInnovation">0</span>
+        <label>ابتكارات</label>
+      </div>
+    </div>
+
+    <div class="card kpi-big">
+      <div class="kpi-big-icon">
+        <i class="bi bi-people"></i>
+      </div>
+      <div class="kpi-big-body">
+        <span id="sumAuthors">0</span>
+        <label>عدد الباحثين</label>
+      </div>
+    </div>
+
+    <!-- عدد مرات الضغط على زر ابدأ -->
+    <div class="card kpi-big">
+      <div class="kpi-big-icon">
+        <i class="bi bi-play-circle"></i>
+      </div>
+      <div class="kpi-big-body">
+        <span>{{ start_clicks }}</span>
+        <label>عدد زوار المنصة</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- الرسوم البيانية -->
+  <div class="row charts">
+    <div class="chart-card chart-sector">
+      <h3>التوزيع حسب القطاع</h3>
+      <canvas id="chartBySector"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>التوزيع حسب السنة</h3>
+      <canvas id="chartByYear"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>التوزيع حسب المجال</h3>
+      <canvas id="chartByField"></canvas>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
+{% endblock %}

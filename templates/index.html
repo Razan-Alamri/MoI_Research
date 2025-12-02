@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="hero-canvas-wrap">
+    <canvas id="hero3d"></canvas>
+    <div class="hero-center">
+      <div id="moi-center-node" class="center-node">
+        <img src="{{ url_for('static', filename='img/logo_moi.png') }}" alt="شعار الوزارة">
+      </div>
+
+      <div class="ticker" id="kpiTicker">
+        <!-- يتم تعبئتها تلقائياً -->
+      </div>
+    </div>
+
+  </div>
+  <div class="hint">اضغط على أيقونة القطاع للتنقل</div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
+{% endblock %}
