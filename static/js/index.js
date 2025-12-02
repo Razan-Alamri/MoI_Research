@@ -6,8 +6,7 @@
   const canvas = document.getElementById("hero3d");
   if (canvas) canvas.style.display = "none";
 
-  const NODE_SIZE = 100;   // حجم جميع الشعارات
-  const CENTER_SIZE = 160; // حجم شعار الوزارة
+  const CENTER_SIZE = 160;
 
   const emirates = sectors.filter(s => s.slug.startsWith("em_"));
   const core = sectors.filter(s => !s.slug.startsWith("em_"));
@@ -17,16 +16,29 @@
   const middleCore = core.slice(innerCoreCount);
 
   function layout() {
+    // امسح كل العقد القديمة
     wrap.querySelectorAll(".hero-orbit-node").forEach(el => el.remove());
 
     const rect = wrap.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
 
+    // 🔹 حجم النود حسب العرض
+    let NODE_SIZE;
+    if (width >= 1200) {
+      NODE_SIZE = 100; // دسكتوب — زي القديم
+    } else if (width <= 480) {
+      NODE_SIZE = 68;
+    } else if (width <= 768) {
+      NODE_SIZE = 80;
+    } else {
+      NODE_SIZE = 90;
+    }
+
     const cx = width / 2;
     const cy = height * 0.49;
 
-    // شعار الوزارة
+    // شعار الوزارة في الوسط
     const centerNode = document.getElementById("moi-center-node");
     if (centerNode) {
       centerNode.style.width = CENTER_SIZE + "px";
@@ -41,17 +53,10 @@
     const distLeft = cx;
     const distRight = width - cx;
 
-    const maxRadius = Math.min(distTop, distBottom, distLeft, distRight)
-      - (NODE_SIZE / 2) - padding;
+    const maxRadius =
+      Math.min(distTop, distBottom, distLeft, distRight) - (NODE_SIZE / 2) - padding;
 
-    const ringGap = NODE_SIZE * 1.5;
-
-    const R_OUTER = maxRadius;
-    const R_MID = R_OUTER - ringGap;
-
-    const minInner = (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 7;
-    let R_INNER = R_MID - ringGap;
-    if (R_INNER < minInner) R_INNER = minInner;
+    if (maxRadius <= 0) return;
 
     function drawRing(ring, radiusX, radiusY, offsetRad) {
       const n = ring.length;
@@ -85,27 +90,71 @@
       });
     }
 
-    // الحلقة الداخلية – دائرة كاملة
+    // =========================
+    // 1) وضع الدسكتوب (زي القديم)
+    // =========================
+    if (width >= 1200) {
+      const ringGap = NODE_SIZE * 1.5;
+
+      const R_OUTER = maxRadius;                 // الحلقة الخارجية
+      const R_MID = R_OUTER - ringGap;           // الوسطى
+      let R_INNER = R_MID - ringGap;             // الداخلية
+
+      const minInner = (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 7;
+      if (R_INNER < minInner) R_INNER = minInner;
+
+      // الداخلية – دائرة كاملة
+      drawRing(innerCore, R_INNER, R_INNER, -Math.PI / 2);
+
+      // الوسطى – بيضاوية خفيفة زي ما كانت
+      if (middleCore.length) {
+        const offsetMid = -Math.PI / 2 + (Math.PI / middleCore.length);
+        const middleRadiusY = R_MID * 1.65;
+        const middleRadiusX = R_MID * 1.68;
+        drawRing(middleCore, middleRadiusX, middleRadiusY, offsetMid);
+      }
+
+      // الخارجية – الإمارات
+      if (emirates.length) {
+        const outerRadiusX = R_OUTER * 1.28;
+        const outerRadiusY = R_OUTER * 1.07;
+        drawRing(emirates, outerRadiusX, outerRadiusY, -Math.PI / 2);
+      }
+
+      return; // نطلع من الفنكشن هنا — ما نطبق وضع الموبايل
+    }
+
+    // =========================
+    // 2) وضع الشاشات الأصغر (آيباد + جوال)
+    // =========================
+
+    const R_OUTER = maxRadius * 0.96;
+    const R_MID = R_OUTER * 0.72;
+
+    const minInner = (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 8;
+    let R_INNER = R_MID * 0.55;
+    if (R_INNER < minInner) R_INNER = minInner;
+
+    // الداخلية
     drawRing(innerCore, R_INNER, R_INNER, -Math.PI / 2);
 
-    // الحلقة الوسطى
+    // الوسطى
     if (middleCore.length) {
       const offsetMid = -Math.PI / 2 + (Math.PI / middleCore.length);
-      const middleRadiusY = R_MID * 1.65;
-      const middleRadiusX = R_MID * 1.68;
+      const middleRadiusX = R_MID * 0.98;
+      const middleRadiusY = R_MID * 0.9;
       drawRing(middleCore, middleRadiusX, middleRadiusY, offsetMid);
     }
 
-    // الحلقة الخارجية – إمارات المناطق
-    const outerRadiusX = R_OUTER * 1.28;
-    const outerRadiusY = R_OUTER * 1.07;
+    // الخارجية – الإمارات
     if (emirates.length) {
+      const outerRadiusX = R_OUTER * 0.98;
+      const outerRadiusY = R_OUTER * 0.9;
       drawRing(emirates, outerRadiusX, outerRadiusY, -Math.PI / 2);
     }
   }
 
   layout();
-
   document.body.classList.add("hero-ready");
 
   window.addEventListener("resize", () => {
