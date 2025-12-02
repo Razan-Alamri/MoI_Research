@@ -6,8 +6,8 @@
   const canvas = document.getElementById("hero3d");
   if (canvas) canvas.style.display = "none";
 
-  const NODE_SIZE = 110;   // حجم جميع الشعارات
-  const CENTER_SIZE = 190; // حجم شعار الوزارة
+  const NODE_SIZE = 100;   // حجم جميع الشعارات
+  const CENTER_SIZE = 160; // حجم شعار الوزارة
 
   const emirates = sectors.filter(s => s.slug.startsWith("em_"));
   const core = sectors.filter(s => !s.slug.startsWith("em_"));
@@ -88,29 +88,24 @@
     // الحلقة الداخلية – دائرة كاملة
     drawRing(innerCore, R_INNER, R_INNER, -Math.PI / 2);
 
-    // الحلقة الوسطى – بيضاوية ولكن موزونة (الحل النهائي)
+    // الحلقة الوسطى
     if (middleCore.length) {
       const offsetMid = -Math.PI / 2 + (Math.PI / middleCore.length);
-
-      const middleRadiusY = R_MID * 1.95;  // موزون عموديًا
-      const middleRadiusX = R_MID * 1.98;  // موزون أفقيًا
-
+      const middleRadiusY = R_MID * 1.65;
+      const middleRadiusX = R_MID * 1.68;
       drawRing(middleCore, middleRadiusX, middleRadiusY, offsetMid);
     }
 
-    // الحلقة الخارجية – أوسع (إمارات المناطق)
-    const outerRadiusX = R_OUTER * 1.48;
+    // الحلقة الخارجية – إمارات المناطق
+    const outerRadiusX = R_OUTER * 1.28;
     const outerRadiusY = R_OUTER * 1.07;
-
     if (emirates.length) {
       drawRing(emirates, outerRadiusX, outerRadiusY, -Math.PI / 2);
     }
-
   }
 
   layout();
 
-  // 🔹 تفعيل انيميشن الدخول الناعم بعد تجهيز اللوحة
   document.body.classList.add("hero-ready");
 
   window.addEventListener("resize", () => {
