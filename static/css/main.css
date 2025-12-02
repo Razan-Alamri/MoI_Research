@@ -2043,3 +2043,57 @@ body.hero-ready .hint {
     transform: scale(1.15);
   }
 }
+
+/* =========================
+   تصحيح العنوان في الهيدر للجوال والآيباد
+   ========================= */
+
+/* آيباد + تابلت */
+@media (max-width: 992px) {
+  .kiosk-header,
+  .app-header {
+    align-items: center;
+    text-align: center;
+  }
+
+  .header-logos {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .header-title-block {
+    order: 2;                 /* كان 3 – نخليه في النص بين الشعارات */
+    flex: 0 0 auto;
+    text-align: center;
+    margin-top: 2px;
+    padding: 0 8px;
+  }
+
+  .header-title {
+    font-size: 20px;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  .header-subtitle {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+/* الجوال الصغير */
+@media (max-width: 640px) {
+  .header-title-block {
+    padding: 0 4px;
+  }
+
+  .header-title {
+    font-size: 18px;
+  }
+
+  .header-subtitle {
+    font-size: 12px;
+  }
+}
+
+
