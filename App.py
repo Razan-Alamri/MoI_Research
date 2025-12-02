@@ -3,6 +3,7 @@ import sqlite3
 import re
 from collections import defaultdict
 from functools import wraps
+import uuid
 
 from flask import (
     Flask, g, render_template, request,
@@ -55,9 +56,10 @@ def allowed_file(filename, allowed_ext):
     return ext in allowed_ext
 
 
+
 def save_uploaded_file(file_storage, upload_dir, allowed_ext):
     """
-    يرجّع اسم الملف المحفوظ أو None لو ما فيه رفع / امتداد غير مسموح.
+    يرجّع اسم الملف المحفوظ (مع الحفاظ على الامتداد) أو None لو ما فيه رفع / امتداد غير مسموح.
     """
     if not file_storage or not file_storage.filename:
         return None
@@ -66,12 +68,18 @@ def save_uploaded_file(file_storage, upload_dir, allowed_ext):
         return None
 
     filename = secure_filename(file_storage.filename)
-    base, ext = os.path.splitext(filename)
-    # رقم بسيط لتمييز الاسم
-    final_name = f"{base}_{int(os.path.getmtime(__file__))}{ext}"
+
+    # لو تبغين نفس الاسم تمامًا بدون أي تغيير (مع خطر استبدال الملفات) استخدمي هذا:
+    # final_name = filename
+
+    # أو: نضيف prefix صغير عشان نضمن عدم التكرار + نحافظ على الاسم والامتداد
+    unique = uuid.uuid4().hex[:8]
+    final_name = f"{unique}_{filename}"
+
     full_path = os.path.join(upload_dir, final_name)
     file_storage.save(full_path)
     return final_name
+
 
 
 def get_metric(key, default=0):
@@ -120,7 +128,7 @@ def login_required(view_func):
 # صفحة الهبوط الرئيسية /
 @app.route("/")
 def landing():
-    start_clicks = get_metric("about_start_clicks", 0)
+    start_clicks = get_metric("start_clicks", 0)
     return render_template("landing.html", start_clicks=start_clicks)
 
 
@@ -133,13 +141,14 @@ def index():
 # زر "ابدأ" في صفحة الهبوط
 @app.route("/start")
 def start():
-    increment_metric("about_start_clicks", 1)
+    increment_metric("start_clicks", 1)
     return redirect(url_for("index"))
 
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    start_clicks = get_metric("start_clicks", 0)
+    return render_template("about.html", start_clicks=start_clicks)
 
 
 @app.route("/sector/<slug>")
@@ -154,7 +163,7 @@ def detail(item_id):
 
 @app.route("/dashboard")
 def dashboard():
-    start_clicks = get_metric("about_start_clicks", 0)
+    start_clicks = get_metric("start_clicks", 0)
     return render_template("dashboard.html", start_clicks=start_clicks)
 
 # ===================== Auth Routes للباحثين =====================
@@ -796,10 +805,5 @@ def uploaded_avatar(filename):
 
 # ===================== تشغيل التطبيق =====================
 
-import os
-
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Render يعطيك متغير PORT
-    app.run(host="0.0.0.0", port=port)
-
-
+    app.run(debug=True)
