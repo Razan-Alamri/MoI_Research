@@ -2096,4 +2096,54 @@ body.hero-ready .hint {
   }
 }
 
+/* =========================
+   تصحيح الهيدر على الآيباد / التابلت
+   ========================= */
+
+@media (min-width: 768px) and (max-width: 1200px) {
+
+  .kiosk-header,
+  .app-header {
+    flex-wrap: wrap;              /* يسمح ينزل العنوان تحت الشعارات */
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 18px;
+    row-gap: 6px;
+  }
+
+  .header-logos {
+    flex: 0 0 100%;               /* سطر كامل للشعارات */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-logos img {
+    max-height: 70px;             /* تصغير بسيط عشان ما يزاحم العنوان */
+    height: auto;
+  }
+
+  .header-title-block {
+    flex: 0 0 100%;               /* سطر مستقل للعنوان */
+    order: 2;
+    text-align: center;
+    margin-top: 4px;
+    padding: 0 12px;
+  }
+
+  .header-title {
+    font-size: 22px;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  .header-subtitle {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 2px;
+  }
+}
+
+
 
