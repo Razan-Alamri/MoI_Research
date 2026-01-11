@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>{{ title if title else "منصة الأبحاث" }}</title>
+    <title>{{ title if title else "منصة معرفة" }}</title>
 
     <!-- خطوط وأساسيات -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,159 +31,159 @@
         // بيانات عامة وهمية للاختبار
         window.MOCK = {
             sectors: [{
-                    id: 1,
-                    name: "المديرية العامة للسجون",
-                    slug: "prisons",
-                    logo: "{{ url_for('static', filename='img/sectors/prisons.png') }}"
-                }, {
-                    id: 2,
-                    name: "الأمن العام",
-                    slug: "psd",
-                    logo: "{{ url_for('static', filename='img/sectors/psd.png') }}"
-                }, {
-                    id: 3,
-                    name: "الدفاع المدني",
-                    slug: "civildef",
-                    logo: "{{ url_for('static', filename='img/sectors/civildef.png') }}"
-                }, {
-                    id: 4,
-                    name: "المديرية العامة للجوازات",
-                    slug: "passports",
-                    logo: "{{ url_for('static', filename='img/sectors/passports.png') }}"
-                }, {
-                    id: 5,
-                    name: "المديرية العامة لحرس الحدود",
-                    slug: "borderguard",
-                    logo: "{{ url_for('static', filename='img/sectors/borderguard.png') }}"
-                }, {
-                    id: 6,
-                    name: "المديرية العامة لمكافحة المخدرات",
-                    slug: "gdnc",
-                    logo: "{{ url_for('static', filename='img/sectors/gdnc.png') }}"
-                }, {
-                    id: 7,
-                    name: "قوات أمن المنشآت",
-                    slug: "fsf",
-                    logo: "{{ url_for('static', filename='img/sectors/fsf.png') }}"
-                }, {
-                    id: 8,
-                    name: "القوات الخاصة للأمن والحماية",
-                    slug: "fsp",
-                    logo: "{{ url_for('static', filename='img/sectors/fsp.png') }}"
-                }, {
-                    id: 9,
-                    name: "القوات الخاصة للأمن البيئي",
-                    slug: "environment-sec",
-                    logo: "{{ url_for('static', filename='img/sectors/environment-sec.png') }}"
-                }, {
-                    id: 10,
-                    name: "الأحوال المدنية",
-                    slug: "ahwal",
-                    logo: "{{ url_for('static', filename='img/sectors/ahwal.png') }}"
-                }, {
-                    id: 11,
-                    name: "كلية الملك فهد الأمنية",
-                    slug: "kfsc",
-                    logo: "{{ url_for('static', filename='img/sectors/kfsc.png') }}"
-                }, {
-                    id: 12,
-                    name: "الإدارة العامة للمجاهدين",
-                    slug: "mujahideen",
-                    logo: "{{ url_for('static', filename='img/sectors/mujahideen.png') }}"
-                }, {
-                    id: 13,
-                    name: "الإدارة العامة لأندية منسوبي وزارة الداخلية",
-                    slug: "clubs",
-                    logo: "{{ url_for('static', filename='img/sectors/clubs.png') }}"
-                }, {
-                    id: 14,
-                    name: "المركز الوطني للعمليات الأمنية",
-                    slug: "911",
-                    logo: "{{ url_for('static', filename='img/sectors/911.png') }}"
-                }, {
-                    id: 15,
-                    name: "الإدارة العامة للخدمات الطبية",
-                    slug: "med-services",
-                    logo: "{{ url_for('static', filename='img/sectors/med-services.png') }}"
-                }, {
-                    id: 16,
-                    name: "ديوان وزارة الداخلية",
-                    slug: "diwan",
-                    logo: "{{ url_for('static', filename='img/sectors/moi.png') }}"
-                }, {
-                    id: 17,
-                    name: "مركز المعلومات الوطني",
-                    slug: "nic",
-                    logo: "{{ url_for('static', filename='img/sectors/nic.png') }}"
-                },
+                id: 1,
+                name: "المديرية العامة للسجون",
+                slug: "prisons",
+                logo: "{{ url_for('static', filename='img/sectors/prisons.png') }}"
+            }, {
+                id: 2,
+                name: "الأمن العام",
+                slug: "psd",
+                logo: "{{ url_for('static', filename='img/sectors/psd.png') }}"
+            }, {
+                id: 3,
+                name: "الدفاع المدني",
+                slug: "civildef",
+                logo: "{{ url_for('static', filename='img/sectors/civildef.png') }}"
+            }, {
+                id: 4,
+                name: "المديرية العامة للجوازات",
+                slug: "passports",
+                logo: "{{ url_for('static', filename='img/sectors/passports.png') }}"
+            }, {
+                id: 5,
+                name: "المديرية العامة لحرس الحدود",
+                slug: "borderguard",
+                logo: "{{ url_for('static', filename='img/sectors/borderguard.png') }}"
+            }, {
+                id: 6,
+                name: "المديرية العامة لمكافحة المخدرات",
+                slug: "gdnc",
+                logo: "{{ url_for('static', filename='img/sectors/gdnc.png') }}"
+            }, {
+                id: 7,
+                name: "قوات أمن المنشآت",
+                slug: "fsf",
+                logo: "{{ url_for('static', filename='img/sectors/fsf.png') }}"
+            }, {
+                id: 8,
+                name: "القوات الخاصة للأمن والحماية",
+                slug: "fsp",
+                logo: "{{ url_for('static', filename='img/sectors/fsp.png') }}"
+            }, {
+                id: 9,
+                name: "القوات الخاصة للأمن البيئي",
+                slug: "environment-sec",
+                logo: "{{ url_for('static', filename='img/sectors/environment-sec.png') }}"
+            }, {
+                id: 10,
+                name: "الأحوال المدنية",
+                slug: "ahwal",
+                logo: "{{ url_for('static', filename='img/sectors/ahwal.png') }}"
+            }, {
+                id: 11,
+                name: "كلية الملك فهد الأمنية",
+                slug: "kfsc",
+                logo: "{{ url_for('static', filename='img/sectors/kfsc.png') }}"
+            }, {
+                id: 12,
+                name: "الإدارة العامة للمجاهدين",
+                slug: "mujahideen",
+                logo: "{{ url_for('static', filename='img/sectors/mujahideen.png') }}"
+            }, {
+                id: 13,
+                name: "الإدارة العامة لأندية منسوبي وزارة الداخلية",
+                slug: "clubs",
+                logo: "{{ url_for('static', filename='img/sectors/clubs.png') }}"
+            }, {
+                id: 14,
+                name: "المركز الوطني للعمليات الأمنية",
+                slug: "911",
+                logo: "{{ url_for('static', filename='img/sectors/911.png') }}"
+            }, {
+                id: 15,
+                name: "الإدارة العامة للخدمات الطبية",
+                slug: "med-services",
+                logo: "{{ url_for('static', filename='img/sectors/med-services.png') }}"
+            }, {
+                id: 16,
+                name: "ديوان وزارة الداخلية",
+                slug: "diwan",
+                logo: "{{ url_for('static', filename='img/sectors/moi.png') }}"
+            }, {
+                id: 17,
+                name: "مركز المعلومات الوطني",
+                slug: "nic",
+                logo: "{{ url_for('static', filename='img/sectors/nic.png') }}"
+            },
 
-                // ───────── إمارات المناطق ─────────
-                {
-                    id: 101,
-                    name: "إمارة منطقة الرياض",
-                    slug: "em_riyadh",
-                    logo: "{{ url_for('static', filename='img/sectors/em_riyadh.png') }}"
-                }, {
-                    id: 102,
-                    name: "إمارة منطقة مكة المكرمة",
-                    slug: "em_makkah",
-                    logo: "{{ url_for('static', filename='img/sectors/em_makkah.png') }}"
-                }, {
-                    id: 103,
-                    name: "إمارة منطقة المدينة المنورة",
-                    slug: "em_madinah",
-                    logo: "{{ url_for('static', filename='img/sectors/em_madinah.png') }}"
-                }, {
-                    id: 104,
-                    name: "إمارة منطقة القصيم",
-                    slug: "em_qassim",
-                    logo: "{{ url_for('static', filename='img/sectors/em_qassim.svg') }}"
-                }, {
-                    id: 105,
-                    name: "إمارة منطقة المنطقة الشرقية",
-                    slug: "em_eastern",
-                    logo: "{{ url_for('static', filename='img/sectors/em_eastern.png') }}"
-                }, {
-                    id: 106,
-                    name: "إمارة منطقة عسير",
-                    slug: "em_aseer",
-                    logo: "{{ url_for('static', filename='img/sectors/em_aseer.png') }}"
-                }, {
-                    id: 107,
-                    name: "إمارة منطقة تبوك",
-                    slug: "em_tabuk",
-                    logo: "{{ url_for('static', filename='img/sectors/em_tabuk.png') }}"
-                }, {
-                    id: 108,
-                    name: "إمارة منطقة حائل",
-                    slug: "em_hail",
-                    logo: "{{ url_for('static', filename='img/sectors/em_hail.png') }}"
-                }, {
-                    id: 109,
-                    name: "إمارة منطقة الحدود الشمالية",
-                    slug: "em_northern",
-                    logo: "{{ url_for('static', filename='img/sectors/em_northern.svg') }}"
-                }, {
-                    id: 110,
-                    name: "إمارة منطقة جازان",
-                    slug: "em_jazan",
-                    logo: "{{ url_for('static', filename='img/sectors/em_jazan.png') }}"
-                }, {
-                    id: 111,
-                    name: "إمارة منطقة نجران",
-                    slug: "em_najran",
-                    logo: "{{ url_for('static', filename='img/sectors/em_najran.png') }}"
-                }, {
-                    id: 112,
-                    name: "إمارة منطقة الباحة",
-                    slug: "em_bahah",
-                    logo: "{{ url_for('static', filename='img/sectors/em_bahah.png') }}"
-                }, {
-                    id: 113,
-                    name: "إمارة منطقة الجوف",
-                    slug: "em_jouf",
-                    logo: "{{ url_for('static', filename='img/sectors/em_jouf.png') }}"
-                }
+            // ───────── إمارات المناطق ─────────
+            {
+                id: 101,
+                name: "إمارة منطقة الرياض",
+                slug: "em_riyadh",
+                logo: "{{ url_for('static', filename='img/sectors/em_riyadh.png') }}"
+            }, {
+                id: 102,
+                name: "إمارة منطقة مكة المكرمة",
+                slug: "em_makkah",
+                logo: "{{ url_for('static', filename='img/sectors/em_makkah.png') }}"
+            }, {
+                id: 103,
+                name: "إمارة منطقة المدينة المنورة",
+                slug: "em_madinah",
+                logo: "{{ url_for('static', filename='img/sectors/em_madinah.png') }}"
+            }, {
+                id: 104,
+                name: "إمارة منطقة القصيم",
+                slug: "em_qassim",
+                logo: "{{ url_for('static', filename='img/sectors/em_qassim.svg') }}"
+            }, {
+                id: 105,
+                name: "إمارة منطقة المنطقة الشرقية",
+                slug: "em_eastern",
+                logo: "{{ url_for('static', filename='img/sectors/em_eastern.png') }}"
+            }, {
+                id: 106,
+                name: "إمارة منطقة عسير",
+                slug: "em_aseer",
+                logo: "{{ url_for('static', filename='img/sectors/em_aseer.png') }}"
+            }, {
+                id: 107,
+                name: "إمارة منطقة تبوك",
+                slug: "em_tabuk",
+                logo: "{{ url_for('static', filename='img/sectors/em_tabuk.png') }}"
+            }, {
+                id: 108,
+                name: "إمارة منطقة حائل",
+                slug: "em_hail",
+                logo: "{{ url_for('static', filename='img/sectors/em_hail.png') }}"
+            }, {
+                id: 109,
+                name: "إمارة منطقة الحدود الشمالية",
+                slug: "em_northern",
+                logo: "{{ url_for('static', filename='img/sectors/em_northern.svg') }}"
+            }, {
+                id: 110,
+                name: "إمارة منطقة جازان",
+                slug: "em_jazan",
+                logo: "{{ url_for('static', filename='img/sectors/em_jazan.png') }}"
+            }, {
+                id: 111,
+                name: "إمارة منطقة نجران",
+                slug: "em_najran",
+                logo: "{{ url_for('static', filename='img/sectors/em_najran.png') }}"
+            }, {
+                id: 112,
+                name: "إمارة منطقة الباحة",
+                slug: "em_bahah",
+                logo: "{{ url_for('static', filename='img/sectors/em_bahah.png') }}"
+            }, {
+                id: 113,
+                name: "إمارة منطقة الجوف",
+                slug: "em_jouf",
+                logo: "{{ url_for('static', filename='img/sectors/em_jouf.png') }}"
+            }
             ],
 
             items: [
@@ -1148,7 +1148,7 @@
                     label: "الورقة البحثية (PDF)",
                     kind: "PDF",
                     url: "/uploads/research/pdf_1763548036.pdf"
-                }, ],
+                },],
                 203: [{
                     label: "عرض المنصة",
                     kind: "PDF",
@@ -1188,7 +1188,7 @@
                     sector: "borderguard",
                     name: "حرس الحدود",
                     total: 18
-                }, ],
+                },],
                 byYear: [{
                     year: 2023,
                     total: 34
@@ -1198,7 +1198,7 @@
                 }, {
                     year: 2025,
                     total: 48
-                }, ],
+                },],
                 byField: [{
                     field: "ذكاء اصطناعي",
                     total: 32
@@ -1214,7 +1214,7 @@
                 }, {
                     field: "رؤية حاسوبية",
                     total: 12
-                }, ]
+                },]
             }
         };
     </script>
@@ -1234,17 +1234,21 @@
     <header class="app-header kiosk-header">
         <div class="header-logos">
             <img src="{{ url_for('static', filename='img/logo_moi.png') }}" alt="شعار الوزارة">
-            <img src="{{ url_for('static', filename='img/sectors/logo_dev_program.png') }}" alt="شعار برنامج تطوير الوزارة">
+            <img src="{{ url_for('static', filename='img/sectors/logo_dev_program.png') }}"
+                alt="شعار برنامج تطوير الوزارة">
             <img src="{{ url_for('static', filename='img/sectors/WDS.png') }}" alt="شعار معرض الدفاع">
         </div>
 
         <div class="header-title-block">
             <div class="header-title">
+                منصة معرفة
+            </div>
+            <!-- <div class="header-title">
                 منصة معرفة – البوابة الذكية للمعرفة البحثية بوزارة الداخلية
-            </div>
-            <div class="header-subtitle">
+            </div> -->
+            <!-- <div class="header-subtitle">
                 منصة موحّدة لإبراز الأبحاث والمشاريع والابتكارات في قطاعات الوزارة
-            </div>
+            </div> -->
         </div>
 
         <nav class="app-nav">
