@@ -6,37 +6,28 @@
   const canvas = document.getElementById("hero3d");
   if (canvas) canvas.style.display = "none";
 
-  const CENTER_SIZE = 160;
+  // 🔹 حجم موحّد لكل القطاعات
+  const NODE_SIZE = 110;   // كل الشعارات
+  const CENTER_SIZE = 190; // شعار الوزارة فقط أكبر
 
+  // 🔹 تقسيم: إمارات + بقية القطاعات
   const emirates = sectors.filter(s => s.slug.startsWith("em_"));
   const core = sectors.filter(s => !s.slug.startsWith("em_"));
 
   const innerCoreCount = Math.min(8, core.length);
-  const innerCore = core.slice(0, innerCoreCount);
-  const middleCore = core.slice(innerCoreCount);
+  const innerCore = core.slice(0, innerCoreCount);   // الحلقة القريبة من الشعار
+  const middleCore = core.slice(innerCoreCount);     // الحلقة الوسطى
 
   function layout() {
-    // امسح كل العقد القديمة
+    // تنظيف أي عناصر قديمة
     wrap.querySelectorAll(".hero-orbit-node").forEach(el => el.remove());
 
     const rect = wrap.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
 
-    // 🔹 حجم النود حسب العرض
-    let NODE_SIZE;
-    if (width >= 1200) {
-      NODE_SIZE = 100; // دسكتوب — زي القديم
-    } else if (width <= 480) {
-      NODE_SIZE = 68;
-    } else if (width <= 768) {
-      NODE_SIZE = 80;
-    } else {
-      NODE_SIZE = 90;
-    }
-
     const cx = width / 2;
-    const cy = height * 0.49;
+    const cy = height * 0.49;   // ننزل الدائرة شوي لتحت عشان الهيدر
 
     // شعار الوزارة في الوسط
     const centerNode = document.getElementById("moi-center-node");
@@ -47,16 +38,27 @@
       centerNode.style.top = (cy - CENTER_SIZE / 2) + "px";
     }
 
-    const padding = 24;
+    // 🔹 نحسب أكبر نصف قطر ممكن بدون ما أي نود يطلع برا
+    const padding = 24; // مسافة آمنة من الحواف
     const distTop = cy;
     const distBottom = height - cy;
     const distLeft = cx;
     const distRight = width - cx;
 
-    const maxRadius =
-      Math.min(distTop, distBottom, distLeft, distRight) - (NODE_SIZE / 2) - padding;
+    const maxRadius = Math.min(distTop, distBottom, distLeft, distRight)
+      - (NODE_SIZE / 2) - padding;
 
-    if (maxRadius <= 0) return;
+    // مسافة آمنة بين الحلقات
+    const ringGap = NODE_SIZE * 1.5;
+
+    const R_OUTER = maxRadius;
+    const R_MID = R_OUTER - ringGap;
+
+    const minInner = (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 7;
+    let R_INNER = R_MID - ringGap;
+    if (R_INNER < minInner) {
+      R_INNER = minInner;
+    }
 
     function drawRing(ring, radiusX, radiusY, offsetRad) {
       const n = ring.length;
@@ -66,6 +68,8 @@
 
       ring.forEach((sec, i) => {
         const angle = offsetRad + i * step;
+
+        // بيضاوي: نصف قطر أفقي (X) وعمودي (Y)
         const x = cx + radiusX * Math.cos(angle);
         const y = cy + radiusY * Math.sin(angle);
 
@@ -90,72 +94,30 @@
       });
     }
 
-    // =========================
-    // 1) وضع الدسكتوب (زي القديم)
-    // =========================
-    if (width >= 1200) {
-      const ringGap = NODE_SIZE * 1.5;
-
-      const R_OUTER = maxRadius;                 // الحلقة الخارجية
-      const R_MID = R_OUTER - ringGap;           // الوسطى
-      let R_INNER = R_MID - ringGap;             // الداخلية
-
-      const minInner = (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 7;
-      if (R_INNER < minInner) R_INNER = minInner;
-
-      // الداخلية – دائرة كاملة
-      drawRing(innerCore, R_INNER, R_INNER, -Math.PI / 2);
-
-      // الوسطى – بيضاوية خفيفة زي ما كانت
-      if (middleCore.length) {
-        const offsetMid = -Math.PI / 2 + (Math.PI / middleCore.length);
-        const middleRadiusY = R_MID * 1.65;
-        const middleRadiusX = R_MID * 1.68;
-        drawRing(middleCore, middleRadiusX, middleRadiusY, offsetMid);
-      }
-
-      // الخارجية – الإمارات
-      if (emirates.length) {
-        const outerRadiusX = R_OUTER * 1.28;
-        const outerRadiusY = R_OUTER * 1.07;
-        drawRing(emirates, outerRadiusX, outerRadiusY, -Math.PI / 2);
-      }
-
-      return; // نطلع من الفنكشن هنا — ما نطبق وضع الموبايل
-    }
-
-    // =========================
-    // 2) وضع الشاشات الأصغر (آيباد + جوال)
-    // =========================
-
-    const R_OUTER = maxRadius * 0.96;
-    const R_MID = R_OUTER * 0.72;
-
-    const minInner = (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 8;
-    let R_INNER = R_MID * 0.55;
-    if (R_INNER < minInner) R_INNER = minInner;
-
-    // الداخلية
+    // 🔸 الحلقة الداخلية – دائرية وثابتة حول الشعار
     drawRing(innerCore, R_INNER, R_INNER, -Math.PI / 2);
 
-    // الوسطى
+    // 🔸 الحلقة الوسطى – بيضاوية لكن مع ضمان مسافة ثابتة عن الداخلية
+    // 🔸 الحلقة الوسطى – بيضاوية ومتوازنة تمامًا بين الحلقتين
     if (middleCore.length) {
       const offsetMid = -Math.PI / 2 + (Math.PI / middleCore.length);
-      const middleRadiusX = R_MID * 0.98;
-      const middleRadiusY = R_MID * 0.9;
+
+      let middleRadiusY = (R_INNER + R_MID) / 2 * 1.6;   // توسعة عمودية محسوبة
+      let middleRadiusX = middleRadiusY * 1.20;           // توسعة أفقية محسوبة
+
       drawRing(middleCore, middleRadiusX, middleRadiusY, offsetMid);
     }
 
-    // الخارجية – الإمارات
+    // 🔸 الحلقة الخارجية – إمارات المناطق (بيضاوية + أوسع)
+    const outerRadiusX = R_OUTER * 1.45;
+    const outerRadiusY = R_OUTER * 1.07;
+
     if (emirates.length) {
-      const outerRadiusX = R_OUTER * 0.98;
-      const outerRadiusY = R_OUTER * 0.9;
       drawRing(emirates, outerRadiusX, outerRadiusY, -Math.PI / 2);
     }
   }
 
   layout();
-  document.body.classList.add("hero-ready");
 
   window.addEventListener("resize", () => {
     clearTimeout(window.__layoutTimer);

@@ -55,7 +55,7 @@
     "تجربة المستخدم": "bi-ui-checks-grid",
     "أنظمة معلومات صحية": "bi-hospital",
     "منصات بيانات": "bi-database",
-    "تحول رقمي": "bi-arrows-repeat"
+    "تحول رقمي": "bi-arrow-repeat"
   };
 
   // =========================

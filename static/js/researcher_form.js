@@ -44,19 +44,31 @@ document.addEventListener("DOMContentLoaded", () => {
   // -----------------------------
   // الباحثون المشاركون (دَيناميك)
   // -----------------------------
-  let authorIndex = 0;  // المشاركون يبدأون من 0
-
   const container = document.getElementById("authorsContainer");
   const template = document.getElementById("authorTemplate");
   const addBtn = document.getElementById("addAuthorBtn");
+
+  // نحسب أكبر index موجود حالياً (مهم في وضع "تعديل")
+  let authorIndex = 0;
+  if (container) {
+    const existingInputs = container.querySelectorAll("[name^='coauthors[']");
+    existingInputs.forEach((input) => {
+      const m = input.name.match(/^coauthors\[(\d+)\]\[/);
+      if (m) {
+        const idx = parseInt(m[1], 10);
+        if (!Number.isNaN(idx) && idx >= authorIndex) {
+          authorIndex = idx + 1;
+        }
+      }
+    });
+  }
 
   if (container && template && addBtn) {
     addBtn.addEventListener("click", () => {
       const clone = template.content.cloneNode(true);
 
-      // 👈 هنا التعديل المهم:
-      // استبدال __NAME__ بـ coauthors[0], coauthors[1] ...
-      clone.querySelectorAll("[name]").forEach(input => {
+      // 👈 استبدال __NAME__ بـ coauthors[0], coauthors[1] ...
+      clone.querySelectorAll("[name]").forEach((input) => {
         input.name = input.name.replace("__NAME__", `coauthors[${authorIndex}]`);
       });
 
@@ -72,17 +84,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
       container.appendChild(clone);
       authorIndex++;
+      // بعد الإضافة، نعيد تهيئة "جهة خارجية" لو احتجنا
+      initExternalSectorForAll();
     });
   }
 
+  // -----------------------------
+  // إظهار حقل "جهة خارجية" عند اختيار other
+  // -----------------------------
 
+  function initExternalSectorForAll() {
+    // نمر على كل select للمجال (sector) لضبط حالة حقل الجهة الخارجية
+    document
+      .querySelectorAll("select[name$='[sector]']")
+      .forEach((select) => {
+        const item = select.closest(".author-item");
+        if (!item) return;
+        const input = item.querySelector(".external-sector");
+        if (!input) return;
 
+        if (select.value === "other") {
+          input.style.display = "block";
+          input.required = true;
+        } else {
+          input.style.display = "none";
+          input.required = false;
+        }
+      });
+  }
+
+  // تشغيلها مبدئياً للباحثين الموجودين (في وضع تعديل)
+  initExternalSectorForAll();
+
+  // أي تغيير في الـ select
   document.addEventListener("change", function (e) {
     if (e.target.matches("select[name$='[sector]']")) {
-
-      // الحصول على الحقل النصي المقابل
-      const input = e.target.closest(".author-item")
-        .querySelector(".external-sector");
+      const item = e.target.closest(".author-item");
+      if (!item) return;
+      const input = item.querySelector(".external-sector");
+      if (!input) return;
 
       if (e.target.value === "other") {
         input.style.display = "block";
@@ -94,5 +134,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-
 });
