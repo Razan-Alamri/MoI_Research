@@ -1,4 +1,3 @@
-
 (function () {
   const wrap = document.querySelector(".hero-canvas-wrap");
   if (!wrap || !window.MOCK || !window.MOCK.sectors) return;
@@ -7,77 +6,40 @@
   const canvas = document.getElementById("hero3d");
   if (canvas) canvas.style.display = "none";
 
-  const emirates = sectors.filter(s => String(s.slug || "").startsWith("em_"));
-  const core = sectors.filter(s => !String(s.slug || "").startsWith("em_"));
+  const CENTER_SIZE = 160;
+
+  const emirates = sectors.filter(s => s.slug.startsWith("em_"));
+  const core = sectors.filter(s => !s.slug.startsWith("em_"));
 
   const innerCoreCount = Math.min(8, core.length);
   const innerCore = core.slice(0, innerCoreCount);
   const middleCore = core.slice(innerCoreCount);
 
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-
-  function ellipseCircumference(a, b) {
-    // Ramanujan approximation
-    const h = Math.pow((a - b), 2) / Math.pow((a + b), 2);
-    return Math.PI * (a + b) * (1 + (3 * h) / (10 + Math.sqrt(4 - 3 * h)));
-  }
-
   function layout() {
+    // امسح كل العقد القديمة
     wrap.querySelectorAll(".hero-orbit-node").forEach(el => el.remove());
 
     const rect = wrap.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
 
-    // ✅ مساحة احتياطية تحت للأزرار + الهينت (خصوصًا مع فوتر ثابت)
-    const ACTIONS_SPACE = 110;  // عدليها 90~130 حسب شكل الأزرار عندك
-    const TOP_SPACE = 20;
-    const usableH = Math.max(240, height - ACTIONS_SPACE - TOP_SPACE);
+    // 🔹 حجم النود حسب العرض
+    let NODE_SIZE;
+    if (width >= 1200) {
+      NODE_SIZE = 100; // دسكتوب — زي القديم
+    } else if (width <= 480) {
+      NODE_SIZE = 68;
+    } else if (width <= 768) {
+      NODE_SIZE = 80;
+    } else {
+      NODE_SIZE = 90;
+    }
 
-    // ✅ مركز أعلى شوي على الشاشات القصيرة
     const cx = width / 2;
-    const cy = TOP_SPACE + usableH * (width / height >= 1.3 ? 0.46 : 0.49);
+    const cy = height * 0.49;
 
-    // ✅ نطلع safeX/safeY بدل maxRadius واحد (عشان الإهليج ما يطلع برا)
-    const padding = 22;
-
-    const safeX = Math.max(
-      0,
-      Math.min(cx, width - cx) - padding
-    );
-
-    const safeY = Math.max(
-      0,
-      Math.min(cy, height - cy - ACTIONS_SPACE) - padding
-    );
-
-    if (safeX <= 0 || safeY <= 0) return;
-
-    // ✅ حجم النود ديناميكي حسب المساحة وعدد العناصر (هذا أهم شيء لـ ThinkPad)
-    const outerCount = emirates.length || 1;
-
-    // “أفضل” Rx/Ry للحلقة الخارجية: نخليها أعرض شوي لكن بدون تجاوز safeY
-    const outerRyBase = safeY * 0.92;
-    const outerRxBase = safeX * 0.98;
-
-    // احسب أقصى NODE_SIZE يسمح بمحيط كافي (علشان ما تتزاحم)
-    const outerC = ellipseCircumference(outerRxBase, outerRyBase);
-    const maxNodeFromOuter = (outerC / outerCount) / 1.35; // 1.35 مسافة بين النودات
-
-    // على الوسطى برضه
-    const midCount = middleCore.length || 1;
-    const midRxBase = outerRxBase * 0.72;
-    const midRyBase = outerRyBase * 0.70;
-    const midC = ellipseCircumference(midRxBase, midRyBase);
-    const maxNodeFromMid = (midC / midCount) / 1.30;
-
-    let NODE_SIZE = Math.floor(Math.min(104, maxNodeFromOuter, maxNodeFromMid));
-    NODE_SIZE = clamp(NODE_SIZE, 58, 104);
-
-    // ✅ حجم الشعار الوسطي يتناسب مع NODE_SIZE ومساحة الشاشة
+    // شعار الوزارة في الوسط
     const centerNode = document.getElementById("moi-center-node");
-    const CENTER_SIZE = clamp(Math.round(NODE_SIZE * 1.75), 130, 190);
-
     if (centerNode) {
       centerNode.style.width = CENTER_SIZE + "px";
       centerNode.style.height = CENTER_SIZE + "px";
@@ -85,19 +47,27 @@
       centerNode.style.top = (cy - CENTER_SIZE / 2) + "px";
     }
 
-    // ✅ فجوات الحلقات حسب حجم النود
-    const gap = Math.max(14, Math.round(NODE_SIZE * 0.75));
+    const padding = 24;
+    const distTop = cy;
+    const distBottom = height - cy;
+    const distLeft = cx;
+    const distRight = width - cx;
 
-    function drawRing(ring, rx, ry, offsetRad) {
+    const maxRadius =
+      Math.min(distTop, distBottom, distLeft, distRight) - (NODE_SIZE / 2) - padding;
+
+    if (maxRadius <= 0) return;
+
+    function drawRing(ring, radiusX, radiusY, offsetRad) {
       const n = ring.length;
-      if (!n || rx <= 0 || ry <= 0) return;
+      if (!n || radiusX <= 0 || radiusY <= 0) return;
 
       const step = (2 * Math.PI) / n;
 
       ring.forEach((sec, i) => {
         const angle = offsetRad + i * step;
-        const x = cx + rx * Math.cos(angle);
-        const y = cy + ry * Math.sin(angle);
+        const x = cx + radiusX * Math.cos(angle);
+        const y = cy + radiusY * Math.sin(angle);
 
         const node = document.createElement("div");
         node.className = "hero-orbit-node";
@@ -120,30 +90,67 @@
       });
     }
 
-    // ✅ حدد radii لكل حلقة بدون ما تتجاوز safeX/safeY
-    const outerRx = outerRxBase;
-    const outerRy = outerRyBase;
+    // =========================
+    // 1) وضع الدسكتوب (زي القديم)
+    // =========================
+    if (width >= 1200) {
+      const ringGap = NODE_SIZE * 1.5;
 
-    const midRx = clamp(outerRx - gap * 1.2, 0, outerRx * 0.85);
-    const midRy = clamp(outerRy - gap * 1.2, 0, outerRy * 0.85);
+      const R_OUTER = maxRadius;                 // الحلقة الخارجية
+      const R_MID = R_OUTER - ringGap;           // الوسطى
+      let R_INNER = R_MID - ringGap;             // الداخلية
 
-    const innerR = clamp(
-      Math.min(midRx, midRy) - gap * 1.15,
-      (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 10,
-      Math.min(midRx, midRy)
-    );
+      const minInner = (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 7;
+      if (R_INNER < minInner) R_INNER = minInner;
 
-    // ✅ ارسم
-    drawRing(innerCore, innerR, innerR, -Math.PI / 2);
+      // الداخلية – دائرة كاملة
+      drawRing(innerCore, R_INNER, R_INNER, -Math.PI / 2);
 
-    if (middleCore.length) {
-      // Offset بسيط عشان ما تصف فوق بعض
-      const offsetMid = -Math.PI / 2 + (Math.PI / Math.max(1, middleCore.length));
-      drawRing(middleCore, midRx, midRy, offsetMid);
+      // الوسطى – بيضاوية خفيفة زي ما كانت
+      if (middleCore.length) {
+        const offsetMid = -Math.PI / 2 + (Math.PI / middleCore.length);
+        const middleRadiusY = R_MID * 1.65;
+        const middleRadiusX = R_MID * 1.68;
+        drawRing(middleCore, middleRadiusX, middleRadiusY, offsetMid);
+      }
+
+      // الخارجية – الإمارات
+      if (emirates.length) {
+        const outerRadiusX = R_OUTER * 1.28;
+        const outerRadiusY = R_OUTER * 1.07;
+        drawRing(emirates, outerRadiusX, outerRadiusY, -Math.PI / 2);
+      }
+
+      return; // نطلع من الفنكشن هنا — ما نطبق وضع الموبايل
     }
 
+    // =========================
+    // 2) وضع الشاشات الأصغر (آيباد + جوال)
+    // =========================
+
+    const R_OUTER = maxRadius * 0.96;
+    const R_MID = R_OUTER * 0.72;
+
+    const minInner = (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 8;
+    let R_INNER = R_MID * 0.55;
+    if (R_INNER < minInner) R_INNER = minInner;
+
+    // الداخلية
+    drawRing(innerCore, R_INNER, R_INNER, -Math.PI / 2);
+
+    // الوسطى
+    if (middleCore.length) {
+      const offsetMid = -Math.PI / 2 + (Math.PI / middleCore.length);
+      const middleRadiusX = R_MID * 0.98;
+      const middleRadiusY = R_MID * 0.9;
+      drawRing(middleCore, middleRadiusX, middleRadiusY, offsetMid);
+    }
+
+    // الخارجية – الإمارات
     if (emirates.length) {
-      drawRing(emirates, outerRx, outerRy, -Math.PI / 2);
+      const outerRadiusX = R_OUTER * 0.98;
+      const outerRadiusY = R_OUTER * 0.9;
+      drawRing(emirates, outerRadiusX, outerRadiusY, -Math.PI / 2);
     }
   }
 
