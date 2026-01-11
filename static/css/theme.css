@@ -554,7 +554,7 @@ body.hero-ready .hint {
 .hero-canvas-wrap {
   position: relative;
   width: 100%;
-  /* height: calc(100vh - 160px); */
+  height: calc(100vh - 160px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2292,24 +2292,3 @@ body.login-body {
 
 /* الأرقام لازم تكون LTR حتى لو الصفحة RTL */
 #phone { direction: ltr; text-align: right; }
-:root{
-  --header-h: 100px;   /* kiosk-header عندك 100 */
-  --footer-h: 64px;    /* تقدير للفوتر الثابت */
-}
-
-/* ✅ الهيرو تاخذ كامل الشاشة بدون ما ينقصها الفوتر */
-.hero{
-  height: calc(100vh - var(--header-h) - var(--footer-h));
-  min-height: 520px;
-}
-
-/* ✅ الغلاف ياخذ نفس ارتفاع الهيرو */
-.hero-canvas-wrap{
-  height: 100%;
-  min-height: 0 !important;   /* مهم: يلغي min-height القديمة اللي كانت تخنق ThinkPad */
-}
-
-/* ✅ لو تستخدمين هيدر مختلف بصفحات ثانية عدليها بكلاس */
-body:not(.kiosk) .hero{
-  --header-h: 96px;
-}
