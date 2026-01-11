@@ -1,0 +1,173 @@
+{% extends "admin/admin_base.html" %} {% block admin_content %}
+
+<!-- هيدر مضغوط -->
+<div class="admin-card admin-compact">
+    <div class="admin-head" style="margin-bottom:0">
+        <h2 style="font-size:1.05rem">
+            <i class="bi bi-lightbulb"></i> عرض الابتكار
+        </h2>
+
+        <div class="admin-actions-inline">
+            <a class="btn-ghost btn-sm" href="{{ url_for('admin_innovations') }}">
+                <i class="bi bi-arrow-right"></i> رجوع
+            </a>
+
+            <span class="admin-pill"><i class="bi bi-hash"></i> رقم: {{ inv.id }}</span> {% if inv.status=='new' %}
+            <span class="admin-pill badge-info"><i class="bi bi-hourglass-split"></i> جديد</span> {% elif inv.status=='in_review' %}
+            <span class="admin-pill badge-warn"><i class="bi bi-search"></i> قيد المراجعة</span> {% elif inv.status=='assigned' %}
+            <span class="admin-pill"><i class="bi bi-person-check"></i> مُسند</span> {% elif inv.status=='done' %}
+            <span class="admin-pill badge-success"><i class="bi bi-check2-circle"></i> مكتمل</span> {% elif inv.status=='rejected' %}
+            <span class="admin-pill badge-danger"><i class="bi bi-x-circle"></i> مرفوض</span> {% else %}
+            <span class="admin-pill"><i class="bi bi-arrow-repeat"></i> {{ inv.status }}</span> {% endif %}
+        </div>
+    </div>
+
+    <div class="admin-muted" style="margin-top:6px;font-weight:800;font-size:.84rem">
+        <i class="bi bi-clock"></i> تاريخ الإرسال: {{ inv.created_at or '—' }} {% if inv.updated_at %} • <i class="bi bi-arrow-repeat"></i> آخر تحديث: {{ inv.updated_at }}{% endif %}
+    </div>
+</div>
+
+<div class="detail-grid compact" style="margin-top:10px">
+
+    <!-- تفاصيل الابتكار -->
+    <div class="detail-box admin-compact">
+        <div class="detail-title">
+            <h2 style="font-size:1.02rem"><i class="bi bi-card-text"></i> تفاصيل الابتكار</h2>
+
+            <div class="admin-actions-inline">
+                {% if inv.attachment %}
+                <a class="btn-ghost btn-sm" target="_blank" href="{{ url_for('uploaded_file', filename=inv.attachment) }}">
+                    <i class="bi bi-paperclip"></i> فتح المرفق
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="kv-list compact" style="margin-top:10px">
+            <div class="kv-item">
+                <div class="kv-key">التصنيف</div>
+                <div class="kv-val">{{ inv.category or '—' }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">المصدر</div>
+                <div class="kv-val">
+                    {% if inv.source=='visitor' %}زائر {% elif inv.source=='researcher' %}باحث {% elif inv.source=='admin' %}إدارة {% else %}{{ inv.source or '—' }} {% endif %}
+                </div>
+            </div>
+
+            <div class="kv-item">
+                <div class="kv-key">الأولوية</div>
+                <div class="kv-val">
+                    {% if inv.priority=='urgent' %}عاجلة {% elif inv.priority=='high' %}عالية {% elif inv.priority=='normal' %}عادية {% elif inv.priority=='low' %}منخفضة {% else %}{{ inv.priority or '—' }} {% endif %}
+                </div>
+            </div>
+
+            <div class="kv-item">
+                <div class="kv-key">الإسناد</div>
+                <div class="kv-val">{{ inv.assigned_name or 'غير مسند' }}</div>
+            </div>
+        </div>
+
+        <div style="margin-top:10px">
+            <div class="admin-muted" style="font-weight:900;margin-bottom:0px;font-size:.88rem">بيانات المُقدِّم</div>
+            <div class="text-box compact" style="font-weight:900;margin:0px; ">
+                <div><b>الاسم:</b> {{ inv.name or '—' }}</div>
+                <div><b>البريد:</b> {{ inv.email or '—' }}</div>
+                <div><b>الجوال:</b> {{ inv.phone_display or '—' }}</div>
+                <div><b>الجنسية:</b> {{ inv.nationality or '—' }}</div>
+                <div><b>القطاع:</b> {{ inv.sector_ar or (inv.sector or '—') }}</div>
+            </div>
+        </div>
+
+        <div style="margin-top:1px ">
+            <div class="admin-muted " style="font-weight:900;margin-bottom:0px;font-size:.88rem ">نص الفكرة</div>
+            <div class="text-box compact ">{{ inv.idea or '—' }}</div>
+        </div>
+
+        {% if audit and audit|length %}
+        <div style="margin-top:10px ">
+            <div class="admin-muted " style="font-weight:900;margin-bottom:0px;font-size:.88rem ">
+                آخر سجلات التدقيق
+            </div>
+            <div style="overflow:auto ">
+                <table class="admin-table ">
+                    <thead>
+                        <tr>
+                            <th style="width:160px ">الوقت</th>
+                            <th style="width:180px ">الإجراء</th>
+                            <th>تفاصيل</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for l in audit %}
+                        <tr>
+                            <td class="admin-muted ">{{ l.created_at or '—' }}</td>
+                            <td><span class="admin-pill ">{{ l.action }}</span></td>
+                            <td class="admin-muted ">{{ l.detail or l.details or '—' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- إدارة الابتكار -->
+    <div class="detail-box admin-compact ">
+        <div class="detail-title ">
+            <h2 style="font-size:1.02rem "><i class="bi bi-sliders "></i> إدارة الابتكار</h2>
+        </div>
+
+        <form method="post " action="{{ url_for( 'admin_innovation_update', inv_id=inv.id) }} " class="admin-form " style="margin-top:8px;gap:8px ">
+            <div class="form-row ">
+                <div class="form-col-12 ">
+                    <label style="font-size:.9rem ">الحالة</label>
+                    <select name="status ">
+            <option value="new " {{ 'selected' if inv.status=='new' else '' }}>جديد</option>
+            <option value="in_review " {{ 'selected' if inv.status=='in_review' else '' }}>قيد المراجعة</option>
+            <option value="assigned " {{ 'selected' if inv.status=='assigned' else '' }}>مُسند</option>
+            <option value="done " {{ 'selected' if inv.status=='done' else '' }}>مكتمل</option>
+            <option value="rejected " {{ 'selected' if inv.status=='rejected' else '' }}>مرفوض</option>
+          </select>
+                </div>
+
+                <div class="form-col-12 ">
+                    <label style="font-size:.9rem ">الأولوية</label>
+                    <select name="priority ">
+            <option value="low " {{ 'selected' if inv.priority=='low' else '' }}>منخفضة</option>
+            <option value="normal " {{ 'selected' if inv.priority=='normal' else '' }}>عادية</option>
+            <option value="high " {{ 'selected' if inv.priority=='high' else '' }}>عالية</option>
+            <option value="urgent " {{ 'selected' if inv.priority=='urgent' else '' }}>عاجلة</option>
+          </select>
+                </div>
+
+                <div class="form-col-12 ">
+                    <label style="font-size:.9rem ">إسناد إلى</label>
+                    <select name="assigned_to ">
+            <option value=" ">غير مسند</option>
+            {% for a in admins %}
+              <option value="{{ a.id }} " {{ 'selected' if inv.assigned_to==a.id else '' }}>
+                {{ a.name_ar or a.username }}
+              </option>
+            {% endfor %}
+          </select>
+                </div>
+
+                <div class="form-col-12 ">
+                    <label style="font-size:.9rem ">ملاحظات المراجعة</label>
+                    <textarea name="review_notes " placeholder="اكتبي الملاحظات... ">{{ inv.review_notes or '' }}</textarea>
+                </div>
+            </div>
+
+            <div style="display:flex;justify-content:center;margin-top:6px ">
+                <button class="btn-primary " type="submit " style="border:none;border-radius:999px;padding:9px 22px;font-size:.95rem ">
+          <i class="bi bi-save "></i> حفظ
+        </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

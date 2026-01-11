@@ -1,0 +1,84 @@
+{% extends "base.html" %} {% block topbar %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<section class="admin-topbar-light">
+    <div class="admin-topbar-left">
+        <div class="admin-title-light">
+            <span class="admin-icon-bubble"><i class="bi bi-shield-check"></i></span>
+            <div>
+                <div class="admin-title-text">لوحة الإدارة</div>
+                <div class="admin-subtext">{{ admin.name_ar or admin.username }} • {{ admin.role }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="admin-topbar-actions">
+        <a class="btn-circle btn-sm" href="{{ url_for('index') }}">
+            <i class="bi bi-house"></i> الرئيسية
+        </a>
+        <a class="btn-circle btn-sm btn-logout" href="{{ url_for('admin_logout') }}">
+            <i class="bi bi-box-arrow-left"></i> خروج
+        </a>
+    </div> -->
+</section>
+{% endblock %} {% block content %}
+<section class="admin-shell-light">
+
+    <!-- منيو يمين -->
+    <aside class="admin-menu-light">
+        <a class="admin-nav-item {% if request.path == url_for('admin_dashboard') %}active{% endif %}" href="{{ url_for('admin_dashboard') }}">
+            <span class="nav-ico"><i class="bi bi-speedometer2"></i></span>
+            <span class="nav-txt">لوحة الإحصائيات</span>
+        </a>
+
+        <a class="admin-nav-item {% if request.path.startswith('/admin/researchers') %}active{% endif %}" href="{{ url_for('admin_researchers') }}">
+            <span class="nav-ico"><i class="bi bi-person-badge"></i></span>
+            <span class="nav-txt">الباحثون</span>
+        </a>
+
+        <a class="admin-nav-item {% if request.path.startswith('/admin/innovations') %}active{% endif %}" href="{{ url_for('admin_innovations') }}">
+            <span class="nav-ico"><i class="bi bi-lightbulb"></i></span>
+            <span class="nav-txt">الابتكارات</span>
+        </a>
+
+        <a class="admin-nav-item {% if request.path.startswith('/admin/partners') %}active{% endif %}" href="{{ url_for('admin_partners') }}">
+            <span class="nav-ico"><i class="bi bi-people"></i></span>
+            <span class="nav-txt">الشراكات</span>
+        </a>
+
+        <a class="admin-nav-item {% if request.path.startswith('/admin/content') %}active{% endif %}" href="{{ url_for('admin_content') }}">
+            <span class="nav-ico"><i class="bi bi-file-earmark-check"></i></span>
+            <span class="nav-txt">اعتماد المحتوى</span>
+        </a>
+
+        <a class="admin-nav-item {% if request.path.startswith('/admin/audit') %}active{% endif %}" href="{{ url_for('admin_audit') }}">
+            <span class="nav-ico"><i class="bi bi-journal-text"></i></span>
+            <span class="nav-txt">سجل التدقيق</span>
+        </a>
+
+        <div class="admin-nav-sep"></div>
+
+        <a class="admin-nav-item danger" href="{{ url_for('admin_logout') }}">
+            <span class="nav-ico"><i class="bi bi-door-open"></i></span>
+            <span class="nav-txt">تسجيل خروج</span>
+        </a>
+    </aside>
+
+    <!-- محتوى -->
+    <div class="admin-content-light">
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+        <div class="admin-flashes">
+            {% for category, msg in messages %}
+            <div class="flash {% if category=='success' %}flash-success{% else %}flash-error{% endif %}">
+                {{ msg }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %} {% endwith %} {% block admin_content %}{% endblock %}
+    </div>
+
+</section>
+
+{% endblock %}

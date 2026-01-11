@@ -1,0 +1,118 @@
+{% extends "admin/admin_base.html" %} {% block admin_content %}
+<div class="admin-head">
+    <h2><i class="bi bi-people"></i> إدارة الشراكات</h2>
+</div>
+
+<div class="admin-card">
+
+
+    <div class="admin-grid" style="margin-top:12px">
+        <div class="admin-card col-3">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">الإجمالي</div>
+                    <div class="kpi-value">{{ kpis.total }}</div>
+                </div><span class="admin-pill"><i class="bi bi-collection"></i></span></div>
+        </div>
+        <div class="admin-card col-3">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">جديد</div>
+                    <div class="kpi-value">{{ kpis.new }}</div>
+                </div><span class="admin-pill"><i class="bi bi-hourglass-split"></i></span></div>
+        </div>
+        <div class="admin-card col-3">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">قيد المراجعة</div>
+                    <div class="kpi-value">{{ kpis.in_review }}</div>
+                </div><span class="admin-pill"><i class="bi bi-search"></i></span></div>
+        </div>
+        <div class="admin-card col-3">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">مكتمل</div>
+                    <div class="kpi-value">{{ kpis.done }}</div>
+                </div><span class="admin-pill"><i class="bi bi-check2-circle"></i></span></div>
+        </div>
+    </div>
+</div>
+
+<section class="filters" style="margin-top:14px">
+    <form id="pFilters" method="get" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%">
+        <div class="filter-group">
+            <i class="bi bi-search filter-icon"></i>
+            <input name="q" value="{{ request.args.get('q','') }}" placeholder="بحث: جهة / عنوان / تفاصيل" style="border:none;outline:none;background:transparent;font-family:inherit;font-size:13px;min-width:240px" />
+        </div>
+
+        <div class="filter-group">
+            <i class="bi bi-activity filter-icon"></i> {% set st = request.args.get('status','') %}
+            <select name="status">
+        <option value="" {{ 'selected' if st=='' else '' }}>الحالة (الكل)</option>
+        <option value="new" {{ 'selected' if st=='new' else '' }}>جديد</option>
+        <option value="in_review" {{ 'selected' if st=='in_review' else '' }}>قيد المراجعة</option>
+        <option value="assigned" {{ 'selected' if st=='assigned' else '' }}>مُسند</option>
+        <option value="done" {{ 'selected' if st=='done' else '' }}>مكتمل</option>
+        <option value="rejected" {{ 'selected' if st=='rejected' else '' }}>مرفوض</option>
+      </select>
+        </div>
+    </form>
+</section>
+
+<div class="admin-card">
+    <div style="margin-top:8px;overflow:auto">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>الجهة</th>
+                    <th>نوع الطلب</th>
+                    <th>الحالة</th>
+                    <th>الإسناد</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in rows %}
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td style="min-width:260px">
+                        <div style="font-weight:900">{{ r.org_name or '—' }}</div>
+                        <div class="admin-muted" style="font-size:.82rem">{{ r.contact_name or '—' }} • {{ r.email or '—' }}</div>
+                    </td>
+                    <td>{{ r.request_type or '—' }}</td>
+                    <td><span class="admin-pill">{{ labels.get(r.status, 'غير محدد') }}</span></td>
+                    <td class="admin-muted">{{ r.assigned_name or 'غير مُسند' }}</td>
+                    <!-- <td><a class="btn-ghost btn-sm" href="{{ url_for('admin_partner_view', req_id=r.id) }}">فتح</a></td> -->
+                    <td class="nowrap">
+                        <a class="btn-admin" href="{{ url_for('admin_partner_view', req_id=r.id) }}">
+                            <i class="bi bi-eye"></i> عرض
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="admin-muted">لا توجد طلبات.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %} {% block scripts %} {{ super() }}
+<script>
+    const form = document.getElementById("pFilters");
+    const els = form.querySelectorAll("select, input");
+    let t;
+    els.forEach(el => {
+        el.addEventListener("change", () => form.submit());
+        if (el.name === "q") {
+            el.addEventListener("input", () => {
+                clearTimeout(t);
+                t = setTimeout(() => form.submit(), 450);
+            });
+        }
+    });
+</script>
+{% endblock %}

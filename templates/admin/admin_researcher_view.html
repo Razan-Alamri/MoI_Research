@@ -1,0 +1,143 @@
+{% extends "admin/admin_base.html" %} {% block admin_content %}
+
+<!-- عنوان + رجوع -->
+<div class="admin-card">
+    <div class="admin-head">
+        <h2><i class="bi bi-person-badge"></i> ملف الباحث</h2>
+        <a class="btn-ghost btn-sm" href="{{ url_for('admin_researchers') }}">
+            <i class="bi bi-arrow-right"></i> رجوع
+        </a>
+    </div>
+</div>
+
+<!-- تفاصيل + KPIs -->
+<div class="detail-grid">
+    <div class="detail-box">
+
+        <div class="detail-title">
+            <h2><i class="bi bi-person"></i> {{ user.name_ar }}</h2>
+            <span class="admin-pill"><i class="bi bi-building"></i> {{ user.sector_ar }}</span>
+        </div>
+
+        <div class="kv-list">
+            <div class="kv-item">
+                <div class="kv-key">البريد</div>
+                <div class="kv-val">{{ user.email }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">الإدارة / الوحدة</div>
+                <div class="kv-val">{{ user.org_unit or '—' }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">الرتبة / المسمى</div>
+                <div class="kv-val">{{ user.rank_title or '—' }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">رقم التواصل</div>
+                <div class="kv-val">{{ user.phone or '—' }}</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="detail-box">
+        <div class="detail-title">
+            <h2><i class="bi bi-graph-up"></i> مؤشرات الباحث</h2>
+        </div>
+
+        <div class="admin-grid">
+            <div class="admin-card col-6">
+                <div class="admin-kpi">
+                    <div>
+                        <div class="kpi-title">إجمالي العناصر</div>
+                        <div class="kpi-value">{{ kpis.total }}</div>
+                    </div>
+                    <span class="admin-pill"><i class="bi bi-collection"></i> إجمالي</span>
+                </div>
+            </div>
+
+            <div class="admin-card col-6">
+                <div class="admin-kpi">
+                    <div>
+                        <div class="kpi-title">منشور</div>
+                        <div class="kpi-value">{{ kpis.published }}</div>
+                    </div>
+                    <span class="admin-pill badge-success"><i class="bi bi-check2-circle"></i> منشور</span>
+                </div>
+            </div>
+
+            <div class="admin-card col-6">
+                <div class="admin-kpi">
+                    <div>
+                        <div class="kpi-title">معلّق</div>
+                        <div class="kpi-value">{{ kpis.pending }}</div>
+                    </div>
+                    <span class="admin-pill badge-info"><i class="bi bi-hourglass-split"></i> معلّق</span>
+                </div>
+            </div>
+
+            <div class="admin-card col-6">
+                <div class="admin-kpi">
+                    <div>
+                        <div class="kpi-title">بحاجة لتعديلات</div>
+                        <div class="kpi-value">{{ kpis.needs_changes }}</div>
+                    </div>
+                    <span class="admin-pill badge-warn"><i class="bi bi-pencil-square"></i> تعديلات</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- آخر المحتوى -->
+<div class="admin-card" style="margin-top:12px">
+    <div class="admin-head">
+        <h3><i class="bi bi-journal-text"></i> آخر محتوى للباحث</h3>
+        <span class="admin-pill soft"><i class="bi bi-info-circle"></i> آخر 20 عنصر</span>
+    </div>
+
+    <div style="overflow:auto">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th style="width:70px">#</th>
+                    <th>العنوان</th>
+                    <th style="width:160px">النوع</th>
+                    <th style="width:120px">السنة</th>
+                    <th style="width:190px">الحالة</th>
+                    <th style="width:140px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in items %}
+                <tr>
+                    <td class="admin-muted">{{ r.id }}</td>
+                    <td>
+                        <div style="font-weight:900">{{ r.title }}</div>
+                        <div class="admin-muted" style="font-size:.85rem">{{ r.field or '—' }}</div>
+                    </td>
+                    <td>{{ r.kind or '—' }}</td>
+                    <td>{{ r.year or '—' }}</td>
+                    <td>
+                        <span class="admin-pill">
+                {% if r.workflow_status=='pending' %}معلّق{% elif r.workflow_status=='published' %}منشور{% elif r.workflow_status=='needs_changes' %}بحاجة لتعديلات{% elif r.workflow_status=='rejected' %}مرفوض{% else %}{{ r.workflow_status }}{% endif %}
+              </span>
+                    </td>
+                    <td>
+                        <a class="btn-ghost btn-sm" href="{{ url_for('admin_content_view', item_id=r.id) }}">
+                            <i class="bi bi-eye"></i> فتح
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="admin-muted">لا توجد عناصر مرتبطة بهذا الباحث.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

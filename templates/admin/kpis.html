@@ -1,0 +1,19 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+<section class="card">
+  <div class="card-head">
+    <h2>KPIs (Live)</h2>
+    <span class="muted">قيم لحظية من قاعدة البيانات</span>
+  </div>
+
+  <div class="grid">
+    {% for d in defs %}
+    <div class="card kpi">
+      <div class="kpi-title">{{ d.title_ar }}</div>
+      <div class="kpi-value">{{ live.get(d.key, '-') }}</div>
+      <div class="muted">{{ d.description or '' }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

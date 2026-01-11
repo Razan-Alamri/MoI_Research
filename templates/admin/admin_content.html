@@ -1,0 +1,134 @@
+{% extends "admin/admin_base.html" %} {% block admin_content %}
+
+<div class="admin-head">
+    <h2><i class="bi bi-file-earmark-check"></i> اعتماد المحتوى</h2>
+    <!-- <div class="admin-actions-inline">
+            <a class="btn-ghost btn-sm" href="{{ url_for('admin_researchers') }}"><i class="bi bi-x-circle"></i> إلغاء الفلاتر</a>
+        </div> -->
+</div>
+
+<div class="admin-card">
+
+    <div class="admin-grid" style="margin-top:12px">
+        <div class="admin-card col-3">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">الإجمالي</div>
+                    <div class="kpi-value">{{ kpis.total }}</div>
+                </div><span class="admin-pill"><i class="bi bi-collection"></i></span></div>
+        </div>
+        <div class="admin-card col-3">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">معلّق</div>
+                    <div class="kpi-value">{{ kpis.pending }}</div>
+                </div><span class="admin-pill"><i class="bi bi-hourglass-split"></i></span></div>
+        </div>
+        <div class="admin-card col-3">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">منشور</div>
+                    <div class="kpi-value">{{ kpis.published }}</div>
+                </div><span class="admin-pill"><i class="bi bi-check2-circle"></i></span></div>
+        </div>
+        <div class="admin-card col-3">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">تعديلات</div>
+                    <div class="kpi-value">{{ kpis.needs_changes }}</div>
+                </div><span class="admin-pill"><i class="bi bi-pencil-square"></i></span></div>
+        </div>
+    </div>
+</div>
+
+<section class="filters" style="margin-top:14px">
+    <form id="cFilters" method="get" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%">
+
+        <div class="filter-group">
+            <i class="bi bi-search filter-icon"></i>
+            <input name="q" value="{{ request.args.get('q','') }}" placeholder="بحث: عنوان / مجال / نوع" style="border:none;outline:none;background:transparent;font-family:inherit;font-size:13px;min-width:220px" />
+        </div>
+
+        <div class="filter-group">
+            <i class="bi bi-activity filter-icon"></i> {% set st = request.args.get('status','') %}
+            <select name="status">
+        <option value="" {{ 'selected' if st=='' else '' }}>الحالة (الكل)</option>
+        <option value="pending" {{ 'selected' if st=='pending' else '' }}>معلّق</option>
+        <option value="published" {{ 'selected' if st=='published' else '' }}>منشور</option>
+        <option value="needs_changes" {{ 'selected' if st=='needs_changes' else '' }}>بحاجة لتعديلات</option>
+        <option value="rejected" {{ 'selected' if st=='rejected' else '' }}>مرفوض</option>
+      </select>
+        </div>
+
+        <div class="filter-group">
+            <i class="bi bi-building filter-icon"></i> {% set sec = request.args.get('sector','') %}
+            <select name="sector">
+        <option value="" {{ 'selected' if sec=='' else '' }}>القطاع (الكل)</option>
+        {% for s in sectors %}
+          <option value="{{ s.key }}" {{ 'selected' if sec==s.key else '' }}>{{ s.label_ar }}</option>
+        {% endfor %}
+      </select>
+        </div>
+
+    </form>
+</section>
+
+<div class="admin-card">
+    <div style="margin-top:8px;overflow:auto">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>العنوان</th>
+                    <th>القطاع</th>
+                    <th>السنة</th>
+                    <th>الحالة</th>
+                    <th>آخر مراجعة</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in rows %}
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td style="min-width:260px">
+                        <div style="font-weight:900">{{ r.title }}</div>
+                        <div class="admin-muted" style="font-size:.82rem">{{ r.kind or '—' }} • {{ r.field or '—' }}</div>
+                    </td>
+                    <td>{{ r.sector or '—' }}</td>
+                    <td>{{ r.year or '—' }}</td>
+                    <td><span class="admin-pill">{{ labels.get(r.workflow_status, 'غير محدد') }}</span></td>
+                    <td class="admin-muted">{{ r.reviewed_at or '—' }}</td>
+                    <!-- <td><a class="btn-ghost btn-sm" href="{{ url_for('admin_content_view', item_id=r.id) }}">فتح</a></td> -->
+                    <td class="nowrap">
+                        <a class="btn-admin" href="{{ url_for('admin_content_view', item_id=r.id) }}">
+                            <i class="bi bi-eye"></i> عرض
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="admin-muted">لا توجد عناصر.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %} {% block scripts %} {{ super() }}
+<script>
+    const form = document.getElementById("cFilters");
+    const els = form.querySelectorAll("select, input");
+    let t;
+    els.forEach(el => {
+        el.addEventListener("change", () => form.submit());
+        if (el.name === "q") {
+            el.addEventListener("input", () => {
+                clearTimeout(t);
+                t = setTimeout(() => form.submit(), 450);
+            });
+        }
+    });
+</script>
+{% endblock %}

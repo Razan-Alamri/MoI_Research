@@ -1,0 +1,96 @@
+{% extends "admin/admin_base.html" %} {% block admin_content %}
+
+<div class="admin-head">
+    <h2><i class="bi bi-journal-text"></i> سجل التدقيق</h2>
+</div>
+
+<div class="admin-card">
+
+    <div class="admin-grid" style="margin-top:12px">
+        <div class="admin-card col-6">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">إجمالي السجلات</div>
+                    <div class="kpi-value">{{ kpis.total }}</div>
+                </div><span class="admin-pill"><i class="bi bi-collection"></i></span></div>
+        </div>
+        <div class="admin-card col-6">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">المعروض الآن</div>
+                    <div class="kpi-value">{{ kpis.shown }}</div>
+                </div><span class="admin-pill"><i class="bi bi-eye"></i></span></div>
+        </div>
+    </div>
+</div>
+
+<section class="filters" style="margin-top:14px">
+    <form id="aFilters" method="get" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%">
+
+        <div class="filter-group">
+            <i class="bi bi-search filter-icon"></i>
+            <input name="q" value="{{ request.args.get('q','') }}" placeholder="بحث: إجراء / كيان / تفاصيل / عنوان" style="border:none;outline:none;background:transparent;font-family:inherit;font-size:13px;min-width:240px" />
+        </div>
+
+        <div class="filter-group">
+            <i class="bi bi-person filter-icon"></i> {% set at = request.args.get('actor_type','') %}
+            <select name="actor_type">
+        <option value="" {{ 'selected' if at=='' else '' }}>الفاعل (الكل)</option>
+        <option value="admin" {{ 'selected' if at=='admin' else '' }}>إدارة</option>
+        <option value="researcher" {{ 'selected' if at=='researcher' else '' }}>باحث</option>
+        <option value="visitor" {{ 'selected' if at=='visitor' else '' }}>زائر</option>
+      </select>
+        </div>
+
+    </form>
+</section>
+
+<div class="admin-card">
+    <div style="margin-top:8px;overflow:auto">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>الوقت</th>
+                    <th>الفاعل</th>
+                    <th>الإجراء</th>
+                    <th>الكيان</th>
+                    <th>تفاصيل</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in rows %}
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td class="admin-muted" style="min-width:140px">{{ r.created_at }}</td>
+                    <td class="admin-muted">{{ r.actor_type }} {{ r.actor_id or '' }}</td>
+                    <td><span class="admin-pill">{{ r.action }}</span></td>
+                    <td class="admin-muted">{{ r.entity_type }} {{ r.entity_id or '' }}</td>
+                    <td class="admin-muted" style="min-width:260px">{{ r.details or '—' }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="admin-muted">لا توجد سجلات.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %} {% block scripts %} {{ super() }}
+<script>
+    const form = document.getElementById("aFilters");
+    const els = form.querySelectorAll("select, input");
+    let t;
+    els.forEach(el => {
+        el.addEventListener("change", () => form.submit());
+        if (el.name === "q") {
+            el.addEventListener("input", () => {
+                clearTimeout(t);
+                t = setTimeout(() => form.submit(), 450);
+            });
+        }
+    });
+</script>
+{% endblock %}

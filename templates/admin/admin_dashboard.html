@@ -1,0 +1,270 @@
+{% extends "admin/admin_base.html" %} {% block admin_content %}
+
+<div class="admin-grid">
+    <!-- KPIs -->
+    <div class="admin-card col-3">
+        <div class="admin-kpi">
+            <div>
+                <div class="kpi-title">ابتكارات جديدة</div>
+                <div class="kpi-value">{{ stats.innovations_new }}</div>
+            </div>
+            <span class="admin-pill"><i class="bi bi-lightbulb"></i></span>
+        </div>
+    </div>
+
+    <div class="admin-card col-3">
+        <div class="admin-kpi">
+            <div>
+                <div class="kpi-title">قيد المراجعة</div>
+                <div class="kpi-value">{{ stats.innovations_in_review }}</div>
+            </div>
+            <span class="admin-pill"><i class="bi bi-hourglass-split"></i></span>
+        </div>
+    </div>
+
+    <div class="admin-card col-3">
+        <div class="admin-kpi">
+            <div>
+                <div class="kpi-title">شراكات جديدة</div>
+                <div class="kpi-value">{{ stats.partner_new }}</div>
+            </div>
+            <span class="admin-pill"><i class="bi bi-people"></i></span>
+        </div>
+    </div>
+
+    <div class="admin-card col-3">
+        <div class="admin-kpi">
+            <div>
+                <div class="kpi-title">اعتماد محتوى (معلّق)</div>
+                <div class="kpi-value">{{ stats.content_pending }}</div>
+            </div>
+            <span class="admin-pill"><i class="bi bi-file-earmark-check"></i></span>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <!-- Charts in one row -->
+    <div class="admin-card col-4">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <div style="font-weight:900"><i class="bi bi-pie-chart"></i> الابتكارات حسب الحالة</div>
+            <a class="btn-ghost btn-sm" href="{{ url_for('admin_innovations') }}">عرض</a>
+        </div>
+        <div style="margin-top:10px"><canvas id="invChart" height="140"></canvas></div>
+    </div>
+
+    <div class="admin-card col-4">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <div style="font-weight:900"><i class="bi bi-bar-chart"></i> المحتوى حسب حالة الاعتماد</div>
+            <a class="btn-ghost btn-sm" href="{{ url_for('admin_content') }}">عرض</a>
+        </div>
+        <div style="margin-top:10px"><canvas id="contentChart" height="140"></canvas></div>
+    </div>
+
+    <div class="admin-card col-4">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <div style="font-weight:900"><i class="bi bi-graph-up"></i> الشراكات حسب الحالة</div>
+            <a class="btn-ghost btn-sm" href="{{ url_for('admin_partners') }}">عرض</a>
+        </div>
+        <div style="margin-top:10px"><canvas id="partnersChart" height="140"></canvas></div>
+    </div>
+
+
+    <!-- Last 8 audit -->
+    <div class="admin-card col-12">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+            <div style="font-weight:900"><i class="bi bi-journal-text"></i> آخر 8 سجلات تدقيق</div>
+            <a class="btn-ghost btn-sm" href="{{ url_for('admin_audit') }}">عرض الكل</a>
+        </div>
+
+        <div style="margin-top:12px;overflow:auto">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>الوقت</th>
+                        <th>الفاعل</th>
+                        <th>الإجراء</th>
+                        <th>الكيان</th>
+                        <th>تفاصيل</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in audit8 %}
+                    <tr>
+                        <td>{{ r.id }}</td>
+                        <td class="admin-muted" style="min-width:140px">{{ r.created_at }}</td>
+                        <td class="admin-muted">{{ r.actor_type }}:{{ r.actor_id or '' }}</td>
+                        <td><span class="admin-pill">{{ r.action }}</span></td>
+                        <td class="admin-muted">{{ r.entity_type }} #{{ r.entity_id or '' }}</td>
+                        <td class="admin-muted" style="min-width:260px">{{ r.details or '—' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="admin-muted">لا توجد سجلات.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+{% block scripts %} {{ super() }}
+<script>
+    window.addEventListener("load", () => {
+        // ✅ بيانات سليمة
+        const invData = JSON.parse('{{ inv_by_status | tojson | safe }}');
+        const cData = JSON.parse('{{ content_by_status | tojson | safe }}');
+        const pData = JSON.parse('{{ pr_by_status | tojson | safe }}');
+
+        const invMap = {
+            new: "جديد",
+            in_review: "قيد المراجعة",
+            assigned: "مُسند",
+            done: "مكتمل",
+            rejected: "مرفوض"
+        };
+        const wfMap = {
+            pending: "معلّق",
+            published: "منشور",
+            needs_changes: "بحاجة لتعديلات",
+            rejected: "مرفوض"
+        };
+        const prMap = {
+            new: "جديد",
+            in_review: "قيد المراجعة",
+            assigned: "مُسند",
+            done: "مكتمل",
+            rejected: "مرفوض"
+        };
+
+        // ✅ عناصر الـ canvas
+        const invEl = document.getElementById("invChart");
+        const cEl = document.getElementById("contentChart");
+        const pEl = document.getElementById("partnersChart");
+
+        if (!window.Chart) {
+            console.error("Chart.js not loaded");
+            return;
+        }
+        if (!invEl || !cEl || !pEl) {
+            console.error("Canvas missing");
+            return;
+        }
+
+        // ✅ ثبتي حجم واضح (حل مشكلة 0px)
+        [invEl, cEl, pEl].forEach(cv => {
+            cv.style.width = "100%";
+            cv.style.height = "220px";
+        });
+
+        const invLabels = invData.map(x => invMap[x.status] || x.status);
+        const invCounts = invData.map(x => x.c);
+
+        const cLabels = cData.map(x => wfMap[x.status] || x.status);
+        const cCounts = cData.map(x => x.c);
+
+        const pLabels = pData.map(x => prMap[x.status] || x.status);
+        const pCounts = pData.map(x => x.c);
+
+        // ألوان من الثيم (CSS Variables)
+        const css = getComputedStyle(document.documentElement);
+        const GREEN = (css.getPropertyValue("--green") || "#0b7a41").trim();
+        const GREEN2 = (css.getPropertyValue("--green2") || "#16a34a").trim();
+        const MUTED = (css.getPropertyValue("--muted") || "#6b7280").trim();
+
+        // تحويل HEX إلى RGBA مع شفافية
+        function hexToRgba(hex, a = 1) {
+            hex = hex.replace("#", "").trim();
+            if (hex.length === 3) hex = hex.split("").map(c => c + c).join("");
+            const n = parseInt(hex, 16);
+            const r = (n >> 16) & 255;
+            const g = (n >> 8) & 255;
+            const b = n & 255;
+            return `rgba(${r}, ${g}, ${b}, ${a})`;
+        }
+
+        new Chart(invEl.getContext("2d"), {
+            type: "doughnut",
+            data: {
+                labels: invLabels,
+                datasets: [{
+                    data: invCounts,
+                    backgroundColor: [
+                        hexToRgba(GREEN2, 0.95),
+                        hexToRgba(GREEN, 0.85),
+                        hexToRgba(GREEN2, 0.55),
+                        hexToRgba(GREEN, 0.45),
+                        hexToRgba(MUTED, 0.35)
+                    ],
+                    borderColor: "rgba(255,255,255,0.9)",
+                    borderWidth: 2,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: "bottom"
+                    }
+                }
+            }
+        });
+
+        new Chart(cEl.getContext("2d"), {
+            type: "bar",
+            data: {
+                labels: cLabels,
+                datasets: [{
+                    data: cCounts,
+                    backgroundColor: hexToRgba(GREEN, 0.25),
+                    borderColor: hexToRgba(GREEN, 0.85),
+                    borderWidth: 2,
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        new Chart(pEl.getContext("2d"), {
+            type: "line",
+            data: {
+                labels: pLabels,
+                datasets: [{
+                    data: pCounts,
+                    tension: 0.35,
+                    borderColor: hexToRgba(GREEN, 0.9),
+                    backgroundColor: hexToRgba(GREEN2, 0.18),
+                    fill: true,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: hexToRgba(GREEN2, 0.95),
+                    pointBorderColor: "#ffffff",
+                    pointBorderWidth: 2
+                }]
+
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %} {% endblock %}

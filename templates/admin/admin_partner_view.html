@@ -1,0 +1,111 @@
+{% extends "admin/admin_base.html" %} {% block admin_content %}
+
+<div class="admin-card admin-compact">
+    <div class="admin-head" style="margin-bottom:0">
+        <h2 style="font-size:1.05rem"><i class="bi bi-people"></i> عرض طلب الشراكة</h2>
+        <div class="admin-actions-inline">
+            <a class="btn-ghost btn-sm" href="{{ url_for('admin_partners') }}">
+                <i class="bi bi-arrow-right"></i> رجوع
+            </a>
+            <span class="admin-pill"><i class="bi bi-hash"></i> رقم: {{ req.id }}</span> {% if req.status=='new' %}
+            <span class="admin-pill badge-info"><i class="bi bi-hourglass-split"></i> جديد</span> {% elif req.status=='in_progress' %}
+            <span class="admin-pill badge-warn"><i class="bi bi-arrow-repeat"></i> تحت الإجراء</span> {% elif req.status=='done' %}
+            <span class="admin-pill badge-success"><i class="bi bi-check2-circle"></i> مكتمل</span> {% elif req.status=='rejected' %}
+            <span class="admin-pill badge-danger"><i class="bi bi-x-circle"></i> مرفوض</span> {% else %}
+            <span class="admin-pill"><i class="bi bi-arrow-repeat"></i> {{ req.status }}</span> {% endif %}
+        </div>
+    </div>
+
+    <div class="admin-muted" style="margin-top:6px;font-weight:800;font-size:.84rem">
+        <i class="bi bi-clock"></i> تاريخ الإرسال: {{ req.created_at or '—' }} {% if req.updated_at %} • <i class="bi bi-arrow-repeat"></i> آخر تحديث: {{ req.updated_at }}{% endif %}
+    </div>
+</div>
+
+<div class="detail-grid compact" style="margin-top:10px">
+
+    <!-- تفاصيل الطلب -->
+    <div class="detail-box admin-compact">
+        <div class="detail-title">
+            <h2 style="font-size:1.02rem"><i class="bi bi-card-text"></i> تفاصيل الطلب</h2>
+            {% if req.attachment %}
+            <a class="btn-ghost btn-sm" target="_blank" href="{{ url_for('uploaded_research', filename=req.attachment) }}">
+                <i class="bi bi-paperclip"></i> فتح المرفق
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="kv-list compact" style="margin-top:10px">
+            <div class="kv-item">
+                <div class="kv-key">الجهة</div>
+                <div class="kv-val">{{ req.org_name or '—' }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">الشخص</div>
+                <div class="kv-val">{{ req.contact_name or '—' }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">البريد</div>
+                <div class="kv-val">{{ req.email or '—' }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">الجوال</div>
+                <div class="kv-val">{{ req.phone_e164 or '—' }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">نوع الطلب</div>
+                <div class="kv-val">{{ req.request_type or '—' }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">الموضوع</div>
+                <div class="kv-val">{{ req.topic or '—' }}</div>
+            </div>
+        </div>
+
+        <div style="margin-top:10px">
+            <div class="admin-muted" style="font-weight:900;margin-bottom:6px;font-size:.88rem">التفاصيل</div>
+            <div class="text-box compact">{{ req.details or '—' }}</div>
+        </div>
+    </div>
+
+    <!-- إدارة الطلب -->
+    <div class="detail-box admin-compact">
+        <div class="detail-title">
+            <h2 style="font-size:1.02rem"><i class="bi bi-sliders"></i> إدارة الطلب</h2>
+        </div>
+
+        <form method="post" class="admin-form" style="margin-top:8px;gap:8px">
+            <div class="form-row">
+                <div class="form-col-12">
+                    <label style="font-size:.9rem">الحالة</label>
+                    <select name="status">
+            <option value="new" {{ 'selected' if req.status=='new' else '' }}>جديد</option>
+            <option value="in_progress" {{ 'selected' if req.status=='in_progress' else '' }}>تحت الإجراء</option>
+            <option value="done" {{ 'selected' if req.status=='done' else '' }}>مكتمل</option>
+            <option value="rejected" {{ 'selected' if req.status=='rejected' else '' }}>مرفوض</option>
+          </select>
+                </div>
+
+                <div class="form-col-12">
+                    <label style="font-size:.9rem">إسناد إلى</label>
+                    <select name="assigned_to">
+            <option value="">غير مسند</option>
+            {% for a in admins %}
+              <option value="{{ a.id }}" {{ 'selected' if req.assigned_to==a.id else '' }}>
+                {{ a.name_ar or a.username }}
+              </option>
+            {% endfor %}
+          </select>
+                </div>
+            </div>
+
+            <div style="display:flex;justify-content:center;margin-top:6px">
+                <button class="btn-primary" type="submit" style="border:none;border-radius:999px;padding:9px 22px;font-size:.95rem">
+          <i class="bi bi-save"></i> حفظ
+        </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

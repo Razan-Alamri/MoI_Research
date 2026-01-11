@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>تسجيل دخول الإدارة - منصة معرفة</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_light.css') }}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body class="login-body">
+
+    <section class="login-shell">
+        <div class="login-frame admin-login-frame">
+
+            <!-- الشعارات -->
+            <header class="login-logos">
+                <div class="logos-right">
+                    <img src="{{ url_for('static', filename='img/logo_moi.png') }}" alt="شعار وزارة الداخلية">
+                    <img src="{{ url_for('static', filename='img/sectors/logo_dev_program.png') }}" alt="شعار برنامج التطوير">
+                </div>
+                <div class="logos-left">
+                    <img src="{{ url_for('static', filename='img/sectors/WDS.png') }}" alt="شعار معرض الدفاع العالمي">
+                </div>
+            </header>
+
+            <section class="login-hero">
+                <div class="login-hero-text">
+
+                    <h1 class="login-title">
+                        <span>منصة معرفة</span>
+                        <div class="login-title-nowrap">لوحة التحكم الإدارية</div>
+                    </h1>
+
+                    <div class="login-badge-login admin-badge">
+                        <span></span> بوابة تسجيل دخول الإدارة
+                    </div>
+
+                    <p class="login-subtitle">
+                        دخول مخصص للمشرفين لاعتماد المحتوى، إدارة الابتكارات، الشراكات، وسجل التدقيق.
+                    </p>
+
+                    <form method="post" action="{{ url_for('admin_login') }}" class="login-form">
+
+                        <div class="login-box admin-login-box">
+
+                            <div class="login-header">
+                                <div>
+                                    <div class="login-header-title">
+                                        تسجيل دخول الإدارة
+                                    </div>
+                                    <div class="login-header-sub">
+                                        أدخل اسم المستخدم أو البريد وكلمة المرور للدخول إلى لوحة الإدارة.
+                                    </div>
+                                </div>
+
+                                <div class="login-header-icon admin-header-icon">
+                                    <i class="bi bi-shield-lock"></i>
+                                </div>
+                            </div>
+
+                            {% with messages = get_flashed_messages(category_filter=['error','success']) %} {% if messages %}
+                            <div class="flash {% if 'تم ' in messages[0] %}flash-success{% else %}flash-error{% endif %}">
+                                {{ messages[0] }}
+                            </div>
+                            {% endif %} {% endwith %}
+
+                            <div class="form-group">
+                                <label class="form-label" for="username">
+                  اسم المستخدم / البريد
+                  <span class="required-star">*</span>
+                </label>
+                                <div class="input-icon-wrap">
+                                    <i class="bi bi-person-badge input-icon"></i>
+                                    <input id="username" name="username" class="form-control input-with-icon" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="password">
+                  كلمة المرور
+                  <span class="required-star">*</span>
+                </label>
+                                <div class="input-icon-wrap">
+                                    <i class="bi bi-key input-icon"></i>
+                                    <input id="password" name="password" type="password" class="form-control input-with-icon" required>
+                                </div>
+                            </div>
+
+                            <div class="login-actions" style="justify-content:center;">
+                                <button type="submit" class="btn-primary login-submit">
+                  دخول لوحة الإدارة
+                  <i class="bi bi-box-arrow-in-right"></i>
+                </button>
+                            </div>
+                            <!-- 
+              <div class="admin-login-note">
+                <i class="bi bi-info-circle"></i>
+                هذه البوابة مخصصة للمصرّح لهم فقط، ويتم تسجيل جميع العمليات في سجل التدقيق.
+              </div> -->
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </section>
+
+        </div>
+    </section>
+
+</body>
+
+</html>

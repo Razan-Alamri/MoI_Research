@@ -1,0 +1,140 @@
+{% extends "admin/admin_base.html" %} {% block admin_content %}
+
+<!-- هيدر صغير -->
+<div class="admin-card admin-compact">
+    <div class="admin-head" style="margin-bottom:0">
+        <h2 style="font-size:1.05rem">
+            <i class="bi bi-file-earmark-text"></i> عرض المحتوى
+        </h2>
+
+        <div class="admin-actions-inline">
+            <a class="btn-ghost btn-sm" href="{{ url_for('admin_content') }}">
+                <i class="bi bi-arrow-right"></i> رجوع
+            </a>
+
+            <span class="admin-pill">
+        <i class="bi bi-hash"></i> رقم: {{ item.id }}
+      </span>
+
+            <span class="admin-pill {% if item.workflow_status=='published' %}badge-success{% elif item.workflow_status=='pending' %}badge-info{% elif item.workflow_status=='needs_changes' %}badge-warn{% elif item.workflow_status=='rejected' %}badge-danger{% endif %}">
+        <i class="bi bi-shield-check"></i>
+        {% if item.workflow_status=='pending' %}معلّق{% elif item.workflow_status=='published' %}منشور{% elif item.workflow_status=='needs_changes' %}بحاجة لتعديلات{% elif item.workflow_status=='rejected' %}مرفوض{% else %}{{ item.workflow_status }}{% endif %}
+      </span>
+        </div>
+    </div>
+
+    <div class="admin-muted" style="margin-top:6px;font-weight:800;font-size:.84rem">
+        <i class="bi bi-clock"></i> تاريخ الإدخال: {{ item.created_at or '—' }} {% if item.reviewed_at %} • <i class="bi bi-check2-square"></i> آخر مراجعة: {{ item.reviewed_at }}{% endif %}
+    </div>
+</div>
+
+<!-- نفس توزيع الصورة: تفاصيل يسار + اعتماد يمين -->
+<div class="detail-grid compact" style="margin-top:10px">
+
+    <!-- تفاصيل المحتوى -->
+    <div class="detail-box admin-compact">
+        <div class="detail-title">
+            <h2 style="font-size:1.02rem">
+                <i class="bi bi-card-text"></i> تفاصيل المحتوى
+            </h2>
+
+            <div class="admin-actions-inline">
+                {% if item.file_name %}
+                <a class="btn-ghost btn-sm" target="_blank" href="{{ url_for('uploaded_research', filename=item.file_name) }}">
+                    <i class="bi bi-paperclip"></i> فتح الملف
+                </a>
+                {% endif %} {% if item.link_url %}
+                <a class="btn-ghost btn-sm" target="_blank" href="{{ item.link_url }}">
+                    <i class="bi bi-link-45deg"></i> فتح الرابط
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- عنوان + وصف تعريفي -->
+        <div style="margin-top:8px">
+            <div style="font-weight:900;font-size:1.02rem;line-height:1.8">{{ item.title }}</div>
+            <div class="admin-muted" style="margin-top:4px;font-weight:800;font-size:.85rem">
+                {{ item.kind or '—' }} • {{ item.field or '—' }} • {{ item.year or '—' }} • {{ item.sector_ar or (item.sector or '—') }}
+            </div>
+        </div>
+
+        <!-- معلومات مختصرة في نفس الصندوق -->
+        <div class="kv-list compact" style="margin-top:10px">
+            <div class="kv-item">
+                <div class="kv-key">النوع</div>
+                <div class="kv-val">{{ item.kind or '—' }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">السنة</div>
+                <div class="kv-val">{{ item.year or '—' }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">القطاع</div>
+                <div class="kv-val">{{ item.sector_ar or (item.sector or '—') }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">السرية</div>
+                <div class="kv-val">{{ item.confidentiality or '—' }}</div>
+            </div>
+            <div class="kv-item">
+                <div class="kv-key">الناشر</div>
+                <div class="kv-val">{{ item.publisher or '—' }}</div>
+            </div>
+        </div>
+
+        {% if item.short %}
+        <div style="margin-top:10px">
+            <div class="admin-muted" style="font-weight:900;margin-bottom:6px;font-size:.88rem">وصف مختصر</div>
+            <div class="text-box compact">{{ item.short }}</div>
+        </div>
+        {% endif %} {% if item.abstract %}
+        <div style="margin-top:10px">
+            <div class="admin-muted" style="font-weight:900;margin-bottom:6px;font-size:.88rem">الملخص</div>
+            <div class="text-box compact">{{ item.abstract }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- إدارة الاعتماد -->
+    <div class="detail-box admin-compact">
+        <div class="detail-title">
+            <h2 style="font-size:1.02rem"><i class="bi bi-sliders"></i> إدارة الاعتماد</h2>
+        </div>
+
+        <form method="post" class="admin-form" style="margin-top:8px;gap:8px">
+
+            <div>
+                <label style="font-size:.9rem">الحالة</label>
+                <select name="workflow_status">
+          <option value="pending" {{ 'selected' if item.workflow_status=='pending' else '' }}>معلّق</option>
+          <option value="published" {{ 'selected' if item.workflow_status=='published' else '' }}>منشور</option>
+          <option value="needs_changes" {{ 'selected' if item.workflow_status=='needs_changes' else '' }}>بحاجة لتعديلات</option>
+          <option value="rejected" {{ 'selected' if item.workflow_status=='rejected' else '' }}>مرفوض</option>
+        </select>
+                <div class="admin-muted" style="margin-top:6px;font-weight:800;font-size:.82rem">
+                    تغيّر الحالة ينعكس في صفحة “اعتماد المحتوى”.
+                </div>
+            </div>
+
+            <div>
+                <label style="font-size:.9rem">آخر مُراجع</label>
+                <input value="{{ item.reviewed_by or '—' }}" disabled>
+            </div>
+
+            <div>
+                <label style="font-size:.9rem">ملاحظات المراجعة</label>
+                <textarea name="workflow_notes" placeholder="اكتبي الملاحظات...">{{ item.workflow_notes or '' }}</textarea>
+            </div>
+
+            <div style="display:flex;justify-content:center;margin-top:6px">
+                <button class="btn-primary" type="submit" style="border:none;border-radius:999px;padding:9px 22px;font-size:.95rem">
+          <i class="bi bi-check2-circle"></i> حفظ
+        </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

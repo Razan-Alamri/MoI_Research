@@ -1,0 +1,129 @@
+{% extends "admin/admin_base.html" %} {% block admin_content %}
+
+<div class="admin-head">
+    <h2>><i class="bi bi-diagram-3"></i> إدارة التصنيفات: {{ title_ar }}</h2>
+</div>
+
+<div class="admin-card">
+    <div class="admin-grid" style="margin-top:12px">
+        <div class="admin-card col-4">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">الإجمالي</div>
+                    <div class="kpi-value">{{ kpis.total }}</div>
+                </div>
+                <span class="admin-pill"><i class="bi bi-collection"></i> عناصر</span>
+            </div>
+        </div>
+        <div class="admin-card col-4">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">مفعّل</div>
+                    <div class="kpi-value">{{ kpis.active }}</div>
+                </div>
+                <span class="admin-pill"><i class="bi bi-check2-circle"></i> مفعّل</span>
+            </div>
+        </div>
+        <div class="admin-card col-4">
+            <div class="admin-kpi">
+                <div>
+                    <div class="kpi-title">غير مفعّل</div>
+                    <div class="kpi-value">{{ kpis.inactive }}</div>
+                </div>
+                <span class="admin-pill"><i class="bi bi-x-circle"></i> غير مفعّل</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- فلاتر بنفس الرئيسية -->
+<section class="filters" style="margin-top:14px">
+    <form id="taxFilters" method="get" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%">
+        <div class="filter-group">
+            <i class="bi bi-layers filter-icon"></i>
+            <select name="type" id="type">
+        {% for k,v in types_ar.items() %}
+          <option value="{{ k }}" {{ 'selected' if t==k else '' }}>{{ v }}</option>
+        {% endfor %}
+      </select>
+        </div>
+    </form>
+</section>
+
+<div class="admin-card">
+    <div class="admin-head" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0"><i class="bi bi-list-ul"></i> عناصر التصنيف</h2>
+    </div>
+
+    <div class="admin-table">
+        <div class="admin-row head">
+            <div>الرمز</div>
+            <div>الاسم</div>
+            <div>الترتيب</div>
+            <div>الحالة</div>
+        </div>
+
+        {% for r in rows %}
+        <div class="admin-row">
+            <div class="muted">{{ r.key }}</div>
+            <div style="font-weight:900;color:#111827">{{ r.label_ar }}</div>
+            <div class="muted">{{ r.sort_order }}</div>
+            <div>
+                {% if r.is_active==1 %}
+                <span class="admin-pill success"><i class="bi bi-check2-circle"></i> مفعّل</span> {% else %}
+                <span class="admin-pill danger"><i class="bi bi-x-circle"></i> غير مفعّل</span> {% endif %}
+            </div>
+        </div>
+        {% endfor %} {% if rows|length == 0 %}
+        <div class="admin-row" style="text-align:center;">
+            <div class="muted"><i class="bi bi-inbox"></i> لا توجد عناصر.</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="admin-card" style="margin-top:14px">
+    <div class="admin-head">
+        <h2 style="margin:0"><i class="bi bi-plus-circle"></i> إضافة / تعديل</h2>
+    </div>
+
+    <form method="post" class="form" style="margin-top:10px">
+        <input type="hidden" name="type" value="{{ t }}">
+
+        <div class="two-col">
+            <div>
+                <label>الرمز (فريد)</label>
+                <input name="key" required placeholder="مثال: prisons">
+            </div>
+            <div>
+                <label>الاسم بالعربي</label>
+                <input name="label_ar" required placeholder="مثال: المديرية العامة للسجون">
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div>
+                <label>الترتيب</label>
+                <input name="sort_order" type="number" value="0">
+            </div>
+            <div>
+                <label>الحالة</label>
+                <select name="is_active">
+          <option value="1" selected>مفعّل</option>
+          <option value="0">غير مفعّل</option>
+        </select>
+            </div>
+        </div>
+
+        <button class="btn-primary" type="submit"><i class="bi bi-check-circle"></i> حفظ</button>
+    </form>
+</div>
+
+{% endblock %} {% block scripts %} {{ super() }}
+<script>
+    // فلتر تلقائي
+    document.getElementById("type").addEventListener("change", () => {
+        document.getElementById("taxFilters").submit();
+    });
+</script>
+{% endblock %}

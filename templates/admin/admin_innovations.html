@@ -1,0 +1,175 @@
+{% extends "admin/admin_base.html" %} {% block admin_content %}
+<div class="admin-head">
+    <h2><i class="bi bi-lightbulb"></i> إدارة الابتكارات</h2>
+    <div class="admin-actions-inline">
+    </div>
+</div>
+<!-- KPIs أعلى الصفحة -->
+<div class="page-kpis">
+    <div class="admin-card kpi-card">
+        <div class="admin-kpi">
+            <div>
+                <div class="kpi-title">إجمالي الابتكارات</div>
+                <div class="kpi-value">{{ kpis.total }}</div>
+            </div>
+            <span class="admin-pill"><i class="bi bi-collection"></i></span>
+        </div>
+    </div>
+
+    <div class="admin-card kpi-card">
+        <div class="admin-kpi">
+            <div>
+                <div class="kpi-title">ابتكارات جديدة</div>
+                <div class="kpi-value">{{ kpis.new }}</div>
+            </div>
+            <span class="admin-pill badge-warn"><i class="bi bi-hourglass-split"></i></span>
+        </div>
+    </div>
+
+    <div class="admin-card kpi-card">
+        <div class="admin-kpi">
+            <div>
+                <div class="kpi-title">قيد المراجعة</div>
+                <div class="kpi-value">{{ kpis.in_review }}</div>
+            </div>
+            <span class="admin-pill badge-info"><i class="bi bi-arrow-repeat"></i></span>
+        </div>
+    </div>
+
+    <div class="admin-card kpi-card">
+        <div class="admin-kpi">
+            <div>
+                <div class="kpi-title">مكتمل</div>
+                <div class="kpi-value">{{ kpis.done }}</div>
+            </div>
+            <span class="admin-pill badge-success"><i class="bi bi-check2-circle"></i></span>
+        </div>
+    </div>
+</div>
+
+<!-- عنوان الصفحة -->
+<div class="admin-card">
+
+    <!-- الفلاتر (نفس الرئيسية) -->
+    <form id="filtersForm" method="get" class="filters in-card">
+
+        <div class="filter-group">
+            <i class="bi bi-search filter-icon"></i>
+            <select name="status" onchange="this.form.submit()">
+        {% set st = request.args.get('status','') %}
+        <option value="" {{ 'selected' if st=='' else '' }}>الحالة (الكل)</option>
+        <option value="new" {{ 'selected' if st=='new' else '' }}>جديد</option>
+        <option value="in_review" {{ 'selected' if st=='in_review' else '' }}>قيد المراجعة</option>
+        <option value="assigned" {{ 'selected' if st=='assigned' else '' }}>مُسند</option>
+        <option value="done" {{ 'selected' if st=='done' else '' }}>مكتمل</option>
+        <option value="rejected" {{ 'selected' if st=='rejected' else '' }}>مرفوض</option>
+      </select>
+        </div>
+
+        {% set src = request.args.get('source','') %}
+        <div class="filter-group">
+            <i class="bi bi-box-arrow-in-down filter-icon"></i>
+            <select name="source" onchange="this.form.submit()">
+        <option value="" {{ 'selected' if src=='' else '' }}>المصدر (الكل)</option>
+        <option value="visitor" {{ 'selected' if src=='visitor' else '' }}>زائر</option>
+        <option value="researcher" {{ 'selected' if src=='researcher' else '' }}>باحث</option>
+        <option value="admin" {{ 'selected' if src=='admin' else '' }}>إدارة</option>
+      </select>
+        </div>
+
+        {% set pr = request.args.get('priority','') %}
+        <div class="filter-group">
+            <i class="bi bi-flag filter-icon"></i>
+            <select name="priority" onchange="this.form.submit()">
+        <option value="" {{ 'selected' if pr=='' else '' }}>الأولوية (الكل)</option>
+        <option value="low" {{ 'selected' if pr=='low' else '' }}>منخفضة</option>
+        <option value="normal" {{ 'selected' if pr=='normal' else '' }}>عادية</option>
+        <option value="high" {{ 'selected' if pr=='high' else '' }}>عالية</option>
+        <option value="urgent" {{ 'selected' if pr=='urgent' else '' }}>عاجلة</option>
+      </select>
+        </div>
+
+        {% set cat = request.args.get('category','') %}
+        <div class="filter-group">
+            <i class="bi bi-tag filter-icon"></i>
+            <select name="category" onchange="this.form.submit()">
+        <option value="" {{ 'selected' if cat=='' else '' }}>التصنيف (الكل)</option>
+        {% for c in categories %}
+          <option value="{{ c }}" {{ 'selected' if cat==c else '' }}>{{ c }}</option>
+        {% endfor %}
+      </select>
+        </div>
+
+        <div class="filter-group" style="min-width:280px">
+            <i class="bi bi-search filter-icon"></i>
+            <input type="text" name="q" value="{{ request.args.get('q','') }}" placeholder="بحث بالاسم أو البريد أو الفكرة..." oninput="clearTimeout(window.__t); window.__t=setTimeout(()=>this.form.submit(), 350);" style="border:none;background:transparent;outline:none;font-family:inherit;font-size:13px;padding:4px 6px;width:100%;">
+        </div>
+
+        <!-- زر إلغاء الفلاتر (اختياري) -->
+        <!-- <a class="btn-ghost btn-sm" href="{{ url_for('admin_innovations') }}">
+            <i class="bi bi-x-circle"></i> عرض الكل
+        </a> -->
+    </form>
+</div>
+
+<!-- جدول النتائج -->
+<div class="admin-card">
+    <div class="admin-head">
+        <h3><i class="bi bi-list-ul"></i> النتائج</h3>
+        <span class="admin-muted">اضغطي على “عرض” لفتح تفاصيل الابتكار</span>
+    </div>
+
+    <div class="table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th class="nowrap">#</th>
+                    <th>المُقدِّم</th>
+                    <th>التصنيف</th>
+                    <th class="nowrap">الحالة</th>
+                    <th class="nowrap">الأولوية</th>
+                    <th class="nowrap"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in innovations %}
+                <tr>
+                    <td class="admin-muted nowrap">#{{ i.id }}</td>
+
+                    <td class="minw-260">
+                        <div class="text-strong"><i class="bi bi-person"></i> {{ i.name or '—' }}</div>
+                        <div class="admin-muted">
+                            <i class="bi bi-envelope"></i> {{ i.email }} {% if i.phone_display %} • <i class="bi bi-telephone"></i> {{ i.phone_display }}{% endif %}
+                        </div>
+                    </td>
+
+                    <td class="minw-220">
+                        <span class="admin-pill"><i class="bi bi-tag"></i> {{ i.category or '—' }}</span>
+                        <span class="admin-pill"><i class="bi bi-box-arrow-in-down"></i> {{ i.source_ar }}</span>
+                    </td>
+
+                    <td>
+                        <span class="admin-pill {{ i.status_badge }}">{{ i.status_ar }}</span>
+                    </td>
+
+                    <td>
+                        <span class="admin-pill {{ i.priority_badge }}">{{ i.priority_ar }}</span>
+                    </td>
+
+                    <td class="nowrap">
+                        <a class="btn-admin" href="{{ url_for('admin_innovation_view', inv_id=i.id) }}">
+                            <i class="bi bi-eye"></i> عرض
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="admin-muted">لا توجد نتائج.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
