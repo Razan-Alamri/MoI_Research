@@ -1,39 +1,278 @@
-{% extends "base.html" %}
+<!doctype html>
+<html lang="ar" dir="rtl">
 
-{% block title %}منصة معرفة - البوابة البحثية{% endblock %}
-{% block body_class %}landing-page{% endblock %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>منصة معرفة</title>
 
-{% block content %}
-<section class="landing-hero">
-  <div class="landing-hero-inner">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <div class="landing-logo-circle">
-      <img src="{{ url_for('static', filename='img/sectors/logo_dev_program.png') }}" alt="شعار وزارة الداخلية">
+  <style>
+    :root {
+      --primary: #0b7a41;
+      --primary-soft: rgba(11, 122, 65, 0.08);
+      --fg: #0f172a;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: "Tajawal", sans-serif;
+      background:
+        radial-gradient(circle at 50% 15%, #f5f8f6 0%, #e6eee8 35%, #dbe4de 100%);
+    }
+
+    /* ========= مركز الصفحة ========= */
+    .landing-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 18px;
+      padding: 20px;
+      animation: fadeIn 1.4s ease forwards;
+    }
+
+    /* ========= دائرة الشعار ========= */
+    .logo-circle {
+      position: relative;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 24px 55px rgba(0, 0, 0, 0.20),
+        0 0 0 1px rgba(148, 163, 184, 0.35);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .logo-circle::before {
+      content: "";
+      position: absolute;
+      inset: -22px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(22, 163, 74, 0.22), transparent 60%);
+      opacity: 0.75;
+      filter: blur(4px);
+      z-index: -1;
+    }
+
+    .logo-circle img {
+      width: 70%;
+    }
+
+    /* ========= العنوان الرئيسي (محسّن) ========= */
+    .landing-title {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #0b7a41;
+      /* أخضر وزارة الداخلية */
+      margin: 0;
+      letter-spacing: -0.7px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    }
+
+
+    /* ========= العنوان الفرعي الطويل ========= */
+    .landing-subtitle-long {
+      font-size: 1.22rem;
+      font-weight: 600;
+      color: #1f3d2b;
+      /* أخضر داكن رسمي */
+      margin-top: -6px;
+      margin-bottom: 10px;
+      line-height: 1.6;
+      opacity: 0.95;
+    }
+
+
+    /* ========= الجملة الوصفية ========= */
+    .landing-desc {
+      font-size: 1.05rem;
+      color: #4b5563;
+      line-height: 1.7;
+      max-width: 500px;
+      margin: -4px auto 12px;
+    }
+
+    /* ========= زر الاستعراض ========= */
+    .landing-btn {
+      margin-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 26px 12px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--fg);
+      font-size: 1rem;
+      text-decoration: none;
+      font-weight: 500;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
+      backdrop-filter: blur(8px);
+      transition: .25s ease;
+    }
+
+    .landing-btn-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      box-shadow: 0 8px 20px rgba(11, 122, 65, 0.45);
+      transition: .25s ease;
+    }
+
+    .landing-btn:hover {
+      transform: translateY(-3px);
+      background: #ffffff;
+      border-color: rgba(0, 0, 0, 0.18);
+      box-shadow: 0 16px 38px rgba(15, 23, 42, 0.18);
+    }
+
+    .landing-btn:hover .landing-btn-icon {
+      transform: translateX(-4px);
+      background: #0d8e4c;
+    }
+
+    /* ========= شعارات أسفل الصفحة ========= */
+    .landing-footer-logos {
+      position: absolute;
+      bottom: 22px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      opacity: 0.85;
+    }
+
+    .landing-footer-logos img {
+      height: 54px;
+      opacity: 0.92;
+      transition: .25s ease;
+    }
+
+    .landing-footer-logos img:hover {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+
+    .divider {
+      width: 1px;
+      height: 34px;
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    /* ========= أنيميشن ========= */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(10px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes titleFade {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes subtitleFade {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="landing-center">
+
+    <!-- دائرة الشعار -->
+    <div class="logo-circle">
+      <img src="{{ url_for('static', filename='img/sectors/logo_dev_program.png') }}" alt="شعار برنامج التطوير">
     </div>
 
-    <h1 class="landing-title">
-      <span>منصة معرفة</span>
-    </h1>
+    <!-- العنوان -->
+    <h1 class="landing-title">منصة معرفة</h1>
 
-    <p class="landing-subtitle">
+    <!-- الاسم الرسمي الطويل -->
+    <div class="landing-subtitle-long">
       البوابة الذكية للمعرفة البحثية بوزارة الداخلية
-    </p>
-
-    <p class="landing-text">
-      مساحة موحّدة لإدارة وإبراز الأبحاث والمشاريع والابتكارات في قطاعات الوزارة.
-    </p>
-
-    <div class="landing-actions">
-      <a href="{{ url_for('start') }}" class="btn-primary landing-main-btn">
-        ابدأ الاستعراض
-        <i class="bi bi-arrow-left-circle"></i>
-      </a>
-
-      <!-- <a href="{{ url_for('researcher_index') }}" class="landing-secondary-link">
-        دخول الباحثين
-      </a> -->
     </div>
+
+    <!-- الجملة الوصفية -->
+    <div class="landing-desc">
+      منصة بحثية ذكية تُمكّن منسوبي وزارة الداخلية من إدارة وإبراز أبحاثهم ومشاريعهم وابتكاراتهم في منظومة واحدة متقدمة.
+    </div>
+
+    <!-- زر الاستعراض -->
+    <a href="{{ url_for('start') }}" class="landing-btn">
+      <span>استعرض المنصة</span>
+      <span class="landing-btn-icon">
+        <i class="bi bi-arrow-left"></i>
+      </span>
+    </a>
 
   </div>
-</section>
-{% endblock %}
+
+  <!-- شعارات أسفل الصفحة -->
+  <div class="landing-footer-logos">
+    <img src="{{ url_for('static', filename='img/logo_moi.png') }}" alt="وزارة الداخلية">
+    <div class="divider"></div>
+    <img src="{{ url_for('static', filename='img/sectors/WDS.png') }}" alt="معرض الدفاع العالمي 2026">
+  </div>
+
+</body>
+
+</html>

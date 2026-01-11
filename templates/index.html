@@ -1,8 +1,20 @@
 {% extends "base.html" %}
+
+{% block topbar %}
+<!-- <section class="home-search-area">
+  <form class="global-search" action="{{ url_for('search') }}" method="get">
+    <i class="bi bi-search"></i>
+    <input type="text" name="q"
+      placeholder="ابحث في جميع الأبحاث والإبتكارات لوزارة الداخلية والقطاعات المرتبطة بها ..." required>
+  </form>
+</section> -->
+{% endblock %}
+
 {% block content %}
 <section class="hero">
   <div class="hero-canvas-wrap">
     <canvas id="hero3d"></canvas>
+
     <div class="hero-center">
       <div id="moi-center-node" class="center-node">
         <img src="{{ url_for('static', filename='img/logo_moi.png') }}" alt="شعار الوزارة">
@@ -11,13 +23,238 @@
       <div class="ticker" id="kpiTicker">
         <!-- يتم تعبئتها تلقائياً -->
       </div>
+
     </div>
+  </div>
+
+  <div class="hero-actions">
+    <button type="button" class="search-planet" id="openSearchPlanet">
+      <span class="planet-icon">
+        <i class="bi bi-search"></i>
+      </span>
+      <span class="planet-label">ابحث هنا</span>
+    </button>
+
+    <button type="button" class="innovation-planet" id="openInnovationPlanet">
+      <span class="planet-icon">
+        <i class="bi bi-lightbulb"></i>
+      </span>
+      <span class="planet-label">قدّم ابتكارك</span>
+    </button>
+  </div>
+
+  <!-- <div class="hint">اضغط على أيقونة القطاع للتنقل</div> -->
+</section>
+
+<!-- مودال البحث من كوكب البحث -->
+<div class="search-modal" id="searchModal">
+  <div class="search-modal-backdrop"></div>
+
+  <div class="search-modal-dialog">
+    <button type="button" class="search-modal-close" id="closeSearchModal">
+      <i class="bi bi-x-lg"></i>
+    </button>
+
+    <h2 class="search-modal-title">
+      ابحث في جميع الأبحاث والإبتكارات لوزارة الداخلية والقطاعات المرتبطة بها
+    </h2>
+
+    <form class="search-modal-form" action="{{ url_for('search') }}" method="get">
+      <i class="bi bi-search"></i>
+      <input type="text" name="q" placeholder="مثال: إدارة الحشود، الذكاء الاصطناعي، الأمن السيبراني..." required>
+      <button type="submit">بحث</button>
+    </form>
+
+    <p class="search-modal-hint">
+      يمكن البحث باسم القطاع، المجال، سنة النشر أو كلمات من عنوان البحث.
+    </p>
+  </div>
+</div>
+
+<div class="innovation-modal" id="innovationModal">
+  <div class="modal-bg"></div>
+  <div class="modal-box">
+
+    <h2>شاركنا فكرتك</h2>
+
+    <form action="/submit_innovation" method="POST" enctype="multipart/form-data">
+
+      <!-- الاسم -->
+      <label class="field-label">
+        <span class="field-icon"><i class="bi bi-person-circle"></i></span>
+        <span class="field-text">الاسم</span>
+      </label>
+      <input type="text" name="name">
+
+      <!-- البريد -->
+      <label class="field-label">
+        <span class="field-icon"><i class="bi bi-envelope"></i></span>
+        <span class="field-text">البريد الإلكتروني</span>
+      </label>
+      <input type="email" name="email">
+
+      <!-- الجوال الدولي -->
+      <label class="field-label" for="phone">
+        <span class="field-icon"><i class="bi bi-telephone"></i></span>
+        <span class="field-text">رقم الجوال</span>
+      </label>
+
+      <input id="phone" type="tel" name="phone_display" dir="ltr" inputmode="tel" autocomplete="tel"
+        placeholder="5xxxxxxxx" required>
+      <input type="hidden" name="phone_e164" id="phone_e164">
+
+      <!-- نوع الفكرة -->
+      <label class="field-label">
+        <span class="field-icon"><i class="bi bi-lightbulb"></i></span>
+        <span class="field-text">نوع الفكرة</span>
+      </label>
+      <select name="category">
+        <option>مقترح</option>
+        <option>مشروع</option>
+        <option>بحث</option>
+        <option>حل تقني</option>
+        <option>نموذج أولي</option>
+        <option>تجربة عالمية</option>
+        <option>أخرى</option>
+      </select>
+
+      <!-- ملخص -->
+      <label class="field-label">
+        <span class="field-icon"><i class="bi bi-pencil-square"></i></span>
+        <span class="field-text">ملخص الفكرة</span>
+      </label>
+      <textarea name="idea" required></textarea>
+
+      <!-- مرفق -->
+      <label class="field-label">
+        <span class="field-icon"><i class="bi bi-paperclip"></i></span>
+        <span class="field-text">مرفق اختياري</span>
+      </label>
+      <input type="file" name="attachment">
+
+      <!-- زر الإرسال في الوسط -->
+      <button type="submit" class="send-btn">إرسال الفكرة</button>
+    </form>
+
+    <!-- الملاحظة -->
+    <p class="form-note">
+      <i class="bi bi-shield-check"></i>
+      نؤكد أن جميع البيانات المقدّمة تُستخدم فقط لتوثيق حقوقك الفكرية والتواصل معك عند الحاجة،
+      ولن يتم مشاركتها مع أي جهة خارجية.
+    </p>
+
+    <button class="close-modal" id="closeInnovationModal">
+      <i class="bi bi-x-lg"></i>
+    </button>
 
   </div>
-  <div class="hint">اضغط على أيقونة القطاع للتنقل</div>
-</section>
+</div>
+
 {% endblock %}
+
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // كوكب البحث
+    const searchBtn = document.getElementById("openSearchPlanet");
+    const searchModal = document.getElementById("searchModal");
+    const closeSearch = document.getElementById("closeSearchModal");
+    const searchBackdrop = searchModal ? searchModal.querySelector(".search-modal-backdrop") : null;
+
+    function openSearch() {
+      if (!searchModal) return;
+      searchModal.classList.add("is-open");
+    }
+    function closeSearchFn() {
+      if (!searchModal) return;
+      searchModal.classList.remove("is-open");
+    }
+
+    if (searchBtn) searchBtn.addEventListener("click", openSearch);
+    if (closeSearch) closeSearch.addEventListener("click", closeSearchFn);
+    if (searchBackdrop) searchBackdrop.addEventListener("click", closeSearchFn);
+
+    // كوكب الابتكار
+    const innovationBtn = document.getElementById("openInnovationPlanet");
+    const innovationModal = document.getElementById("innovationModal");
+    const closeInnovation = document.getElementById("closeInnovationModal");
+    const innovationBg = innovationModal ? innovationModal.querySelector(".modal-bg") : null;
+
+    function openInnovation() {
+      if (!innovationModal) return;
+      innovationModal.classList.add("is-open");
+    }
+    function closeInnovationFn() {
+      if (!innovationModal) return;
+      innovationModal.classList.remove("is-open");
+    }
+
+    if (innovationBtn) innovationBtn.addEventListener("click", openInnovation);
+    if (closeInnovation) closeInnovation.addEventListener("click", closeInnovationFn);
+    if (innovationBg) innovationBg.addEventListener("click", closeInnovationFn);
+  });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const input  = document.querySelector("#phone");
+  const hidden = document.querySelector("#phone_e164");
+  const form   = input?.closest("form");
+  const sendBtn = form?.querySelector('button[type="submit"]');
+
+  if (!input || !form || !window.intlTelInput) return;
+
+  // فعّلي الزر بعد ما تجهز utils (عشان isValidNumber/getNumber يصير مضمون)
+  if (sendBtn) sendBtn.disabled = true;
+
+  const iti = window.intlTelInput(input, {
+    initialCountry: "sa",
+    separateDialCode: true,
+    nationalMode: true,
+    autoPlaceholder: "aggressive",
+    placeholderNumberType: "MOBILE",
+
+    // تحميل utils بالطريقة الرسمية في v25
+    loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.14.1/build/js/utils.js"),
+  });
+
+  // Promise رسميًا: ينحل بعد تحميل utils وأي عمليات async :contentReference[oaicite:4]{index=4}
+  iti.promise.then(() => {
+    if (sendBtn) sendBtn.disabled = false;
+  }).catch(() => {
+    // إذا فشل تحميل utils لأي سبب، لا نخلي الإرسال ينهار بدون رسالة واضحة
+    if (sendBtn) sendBtn.disabled = false;
+  });
+
+  form.addEventListener("submit", (e) => {
+    // تطبيع: لو المستخدم كتب 05xxxxxxxx نخليه 5xxxxxxxx (مع بريفكس السعودية المختار)
+    const raw = (input.value || "").trim();
+    if (/^05\d{8}$/.test(raw)) input.value = raw.slice(1);
+
+    // لازم utils تكون جاهزة للتحقق الصحيح
+    if (!iti.promise) {
+      e.preventDefault();
+      alert("تعذر تهيئة التحقق من رقم الجوال. أعيدي المحاولة.");
+      return;
+    }
+
+    // تحقق
+    const ok = iti.isValidNumber();
+    if (!ok) {
+      e.preventDefault();
+      alert("فضلاً أدخل رقم جوال صحيح.");
+      input.focus();
+      return;
+    }
+
+    // الأهم: خزّني رقم E.164 الصحيح (مثل +9665xxxxxxx)
+    if (hidden) hidden.value = iti.getNumber();
+  });
+});
+</script>
+
+
 {% endblock %}

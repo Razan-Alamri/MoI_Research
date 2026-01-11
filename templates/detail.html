@@ -1,6 +1,222 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{# ========== وضع 1: العنصر موجود في قاعدة البيانات ========== #}
+{% if item %}
+<section class="detail-wrapper">
+  <!-- عنوان البحث + تاقات -->
+  <header class="detail-header">
+    <div class="detail-main">
+      <h1 class="detail-title">{{ item["title"] }}</h1>
+
+      {% if item["short"] %}
+        <p class="detail-short">
+          {{ item["short"] }}
+        </p>
+      {% endif %}
+
+      <div class="detail-tags">
+        {% if item["kind"] %}
+          <span class="badge badge-type">
+            {% if item["kind"] == "Research" %}
+              بحث
+            {% elif item["kind"] == "Project" %}
+              مشروع
+            {% elif item["kind"] == "Innovation" %}
+              ابتكار
+            {% else %}
+              {{ item["kind"] }}
+            {% endif %}
+          </span>
+        {% endif %}
+
+        {% if item["confidentiality"] %}
+          <span class="badge {% if item["confidentiality"] == "conf" %}badge-conf{% else %}badge-public{% endif %}">
+            {% if item["confidentiality"] == "conf" %}
+              سري
+            {% else %}
+              عام
+            {% endif %}
+          </span>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <!-- معلومات البحث الأساسية -->
+  <section class="detail-meta">
+    <div>
+      <i class="bi bi-building"></i>
+      <span class="label">القطاع:</span>
+      <span>{{ item["sector"] or "-" }}</span>
+    </div>
+    <div>
+      <i class="bi bi-calendar3"></i>
+      <span class="label">السنة:</span>
+      <span>{{ item["year"] or "-" }}</span>
+    </div>
+    <div>
+      <i class="bi bi-diagram-3"></i>
+      <span class="label">المجال:</span>
+      <span>{{ item["field"] or "-" }}</span>
+    </div>
+    <div>
+      <i class="bi bi-journal-text"></i>
+      <span class="label">جهة النشر:</span>
+      <span>{{ item["publisher"] or "-" }}</span>
+    </div>
+  </section>
+
+  <!-- الباحثون -->
+  <section class="detail-authors">
+    <h2 class="section-title">
+      <i class="bi bi-people"></i>
+      بيانات الباحثين
+    </h2>
+    <div class="detail-authors-list">
+      {% if authors %}
+        {% for a in authors %}
+          <article class="author-card">
+            <div class="author-avatar">
+              {% if a["avatar_file"] %}
+                <img src="{{ url_for('uploaded_research', filename=a['avatar_file']) }}" alt="{{ a['name_ar'] or a['name_en'] }}">
+              {% else %}
+                <i class="bi bi-person-circle"></i>
+              {% endif %}
+            </div>
+            <div class="author-body">
+              <div class="author-name">
+                {{ a["name_ar"] or a["name_en"] or "باحث" }}
+              </div>
+              <div class="author-meta">
+                {% if a["rank_title"] %}
+                  <span>{{ a["rank_title"] }}</span> •
+                {% endif %}
+                {% if a["sector"] %}
+                  <span>{{ a["sector"] }}</span>
+                {% endif %}
+              </div>
+              <div class="author-contact">
+                {% if a["email"] %}
+                  <span><i class="bi bi-envelope"></i> {{ a["email"] }}</span>
+                {% endif %}
+                {% if a["phone"] %}
+                  <span><i class="bi bi-phone"></i> {{ a["phone"] }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      {% else %}
+        <p class="detail-empty">لم يتم إدخال بيانات الباحثين بعد.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- الملخص النصي -->
+  <section class="detail-summary">
+    <h2 class="section-title">
+      <i class="bi bi-align-start"></i>
+      ملخص البحث
+    </h2>
+    <p class="detail-summary-text">
+      {{ item["abstract"] or "لا يوجد ملخص نصي مسجّل حاليًا لهذا البحث." }}
+    </p>
+  </section>
+
+  <!-- الملخص الصوتي (ثابت حالياً) -->
+  <section class="detail-audio">
+    <h2 class="section-title">
+      <i class="bi bi-soundwave"></i>
+      ملخص صوتي
+    </h2>
+    <div class="audio-summary-card">
+      <div class="audio-icon">
+        <i class="bi bi-mic-fill"></i>
+      </div>
+      <div class="audio-text">
+        <div class="audio-title">استمع إلى ملخص البحث في حوالي ٣ دقائق</div>
+        <div class="audio-meta">
+          تم إنشاء هذا الملخص الصوتي باستخدام تقنيات الذكاء الاصطناعي وتحويل النص إلى كلام،
+          لتقديم شرح مبسّط وسريع لمحتوى البحث في مدة لا تتجاوز ٣ دقائق.
+        </div>
+      </div>
+      <button class="audio-btn" type="button">
+        <i class="bi bi-play-fill"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- الملفات + QR -->
+  <section class="detail-access">
+    <div class="detail-card detail-files-card">
+      <h2 class="section-title">
+        <i class="bi bi-link-45deg"></i>
+        الملفات والروابط
+      </h2>
+
+      <div class="detail-links-list">
+        {% if item["file_name"] %}
+          <a href="{{ url_for('uploaded_research', filename=item['file_name']) }}" class="detail-link-row">
+            <span class="detail-link-icon">
+              <i class="bi bi-file-earmark-pdf"></i>
+            </span>
+            <span class="detail-link-body">
+              <span class="detail-link-title">تحميل الملف المرفق</span>
+              <span class="detail-link-meta">
+                نسخة كاملة من الورقة أو العرض المرتبط بهذا البحث.
+              </span>
+            </span>
+          </a>
+        {% endif %}
+
+        {% if item["link_url"] %}
+          <a href="{{ item['link_url'] }}" target="_blank" class="detail-link-row">
+            <span class="detail-link-icon">
+              <i class="bi bi-box-arrow-up-right"></i>
+            </span>
+            <span class="detail-link-body">
+              <span class="detail-link-title">رابط إضافي (منصة / مجلة / مؤتمر)</span>
+              <span class="detail-link-meta">
+                فتح الرابط الخارجي المرتبط بهذا البحث.
+              </span>
+            </span>
+          </a>
+        {% endif %}
+
+        <!-- زر طلب التبني ثابت -->
+        <a href="#" class="detail-link-row">
+          <span class="detail-link-icon">
+            <i class="bi bi-hand-index-thumb"></i>
+          </span>
+          <span class="detail-link-body">
+            <span class="detail-link-title">طلب تبنّي أو تمويل هذا البحث</span>
+            <span class="detail-link-meta">
+              في حال رغبتكم بتبنّي الفكرة أو تمويل تطويرها إلى مشروع أو تطبيق داخل الجهة.
+            </span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="detail-card qr-block">
+      <h2 class="section-title">
+        <i class="bi bi-qr-code"></i>
+        الوصول السريع
+      </h2>
+
+      <div class="qr-inner">
+        <div id="qrcode"></div>
+        <small>امسح رمز QR لفتح صفحة البحث أو مشاركته مع الآخرين.</small>
+      </div>
+    </div>
+  </section>
+
+</section>
+
+{# ========== وضع 2: ما فيه item في DB → نرجع لوضع MOCK / detail.js ========== #}
+{% else %}
 <section class="detail-wrapper">
   <!-- عنوان البحث + تاقات -->
   <header class="detail-header">
@@ -47,9 +263,7 @@
       <i class="bi bi-people"></i>
       بيانات الباحثين
     </h2>
-    <div id="detailAuthors" class="detail-authors-list">
-      <!-- تعبئة تلقائية من JS -->
-    </div>
+    <div id="detailAuthors" class="detail-authors-list"></div>
   </section>
 
   <!-- الملخص النصي -->
@@ -86,10 +300,8 @@
     </div>
   </section>
 
-  <!-- ===== QR + الملفات والروابط (نفس تنسيق الصفحة الأولى) ===== -->
+  <!-- الملفات + QR -->
   <section class="detail-access">
-
-    <!-- بطاقة الملفات والروابط (يسار) -->
     <div class="detail-card detail-files-card">
       <h2 class="section-title">
         <i class="bi bi-link-45deg"></i>
@@ -97,7 +309,6 @@
       </h2>
 
       <div id="detailLinks" class="detail-links-list">
-        {# مثال افتراضي لملف PDF – يمكن لـ detail.js استبداله أو تعديله #}
         <a href="#" class="detail-link-row">
           <span class="detail-link-icon">
             <i class="bi bi-file-earmark-pdf"></i>
@@ -110,7 +321,6 @@
           </span>
         </a>
 
-        {# زر ثابت لطلب التبنّي أو التمويل – يظهر دائمًا لكل الأبحاث #}
         <a href="#" class="detail-link-row">
           <span class="detail-link-icon">
             <i class="bi bi-hand-index-thumb"></i>
@@ -125,7 +335,6 @@
       </div>
     </div>
 
-    <!-- بطاقة QR (يمين) -->
     <div class="detail-card qr-block">
       <h2 class="section-title">
         <i class="bi bi-qr-code"></i>
@@ -137,15 +346,23 @@
         <small>امسح رمز QR لفتح صفحة البحث أو مشاركته مع الآخرين.</small>
       </div>
     </div>
-
   </section>
 
 </section>
+{% endif %}
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-  window.PAGE = { id: {{ item_id }} };
+  window.PAGE = {
+    id: {{ item_id }},
+    source: "{{ detail_source }}",
+    dbItem: {{ detail_item|tojson if detail_item else 'null' }},
+    dbAuthors: {{ detail_authors|tojson }}
+  };
 </script>
 <script src="{{ url_for('static', filename='js/detail.js') }}" defer></script>
 {% endblock %}
+
+

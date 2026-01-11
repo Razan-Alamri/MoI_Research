@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="sector-wrapper">
+
+  <!-- هيدر بسيط للبحث -->
+  <section class="sector-header">
+    <div class="sector-title-block">
+      <h1>نتائج البحث</h1>
+      {% if q %}
+      <p style="margin-top:4px; color:var(--muted); font-size:0.9rem;">
+        عرض النتائج المطابقة لعبارة: <strong>"{{ q }}"</strong>
+      </p>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- هنا نستخدم نفس grid البطاقات بالضبط -->
+  <section class="cards" id="cardsWrap">
+    <!-- سيتم تعبئتها من search.js -->
+  </section>
+
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // نمرّر نص البحث + نتائج قاعدة البيانات للـ JS
+  window.SEARCH_QUERY = "{{ q|e }}";
+  window.SEARCH_DB_RESULTS = {{ results|tojson }};
+  // prefix لرابط التفاصيل (نفس اللي استخدمناه قبل)
+  window.DETAIL_URL_PREFIX = "{{ url_for('detail', item_id=0).rsplit('/', 1)[0] }}/";
+</script>
+<script src="{{ url_for('static', filename='js/search.js') }}" defer></script>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block topbar %}
+<!-- <section class="home-search-area">
+  <form class="global-search" action="{{ url_for('search') }}" method="get">
+    <i class="bi bi-search"></i>
+    <input type="text" name="q"
+      placeholder="ابحث في جميع الأبحاث والإبتكارات لوزارة الداخلية والقطاعات المرتبطة بها ..." required>
+  </form>
+</section> -->
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-canvas-wrap">
+    <canvas id="hero3d"></canvas>
+
+    <div class="hero-center">
+      <div id="moi-center-node" class="center-node">
+        <img src="{{ url_for('static', filename='img/logo_moi.png') }}" alt="شعار الوزارة">
+      </div>
+
+      <div class="ticker" id="kpiTicker">
+        <!-- يتم تعبئتها تلقائياً -->
+      </div>
+
+      <!-- 🔍 كوكب البحث -->
+      <button type="button" class="search-planet" id="openSearchPlanet">
+        <span class="planet-icon">
+          <i class="bi bi-search"></i>
+        </span>
+        <span class="planet-label">ابحث في جميع الأبحاث</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="hint">اضغط على أيقونة القطاع للتنقل</div>
+</section>
+
+<!-- مودال البحث من كوكب البحث -->
+<div class="search-modal" id="searchModal">
+  <div class="search-modal-backdrop"></div>
+
+  <div class="search-modal-dialog">
+    <button type="button" class="search-modal-close" id="closeSearchModal">
+      <i class="bi bi-x-lg"></i>
+    </button>
+
+    <h2 class="search-modal-title">
+      ابحث في جميع الأبحاث والمشاريع والابتكارات
+    </h2>
+
+    <form class="search-modal-form" action="{{ url_for('search') }}" method="get">
+      <i class="bi bi-search"></i>
+      <input type="text" name="q" placeholder="مثال: إدارة الحشود، الذكاء الاصطناعي، الأمن السيبراني..." required>
+      <button type="submit">بحث</button>
+    </form>
+
+    <p class="search-modal-hint">
+      يمكن البحث باسم القطاع، المجال، سنة النشر أو كلمات من عنوان البحث.
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const openBtn  = document.getElementById("openSearchPlanet");
+  const modal    = document.getElementById("searchModal");
+  const closeBtn = document.getElementById("closeSearchModal");
+  const backdrop = modal ? modal.querySelector(".search-modal-backdrop") : null;
+  const input    = modal ? modal.querySelector("input[name='q']") : null;
+
+  if (!openBtn || !modal) {
+    return;
+  }
+
+  function openModal() {
+    modal.classList.add("is-open");
+    if (input) {
+      setTimeout(() => input.focus(), 60);
+    }
+  }
+
+  function closeModal() {
+    modal.classList.remove("is-open");
+  }
+
+  openBtn.addEventListener("click", openModal);
+  if (closeBtn)  closeBtn.addEventListener("click", closeModal);
+  if (backdrop)  backdrop.addEventListener("click", closeModal);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      closeModal();
+    }
+  });
+});
+</script>
+{% endblock %}
+

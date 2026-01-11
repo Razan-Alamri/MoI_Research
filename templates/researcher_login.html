@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>تسجيل دخول الباحثين - منصة معرفة</title>
+  <title>بوابة الباحثين - منصة معرفة</title>
 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 </head>
 
 <body class="login-body">
@@ -50,19 +51,41 @@
 
           <!-- الوصف -->
           <p class="login-subtitle">
-            منصة مخصّصة لمنسوبي وزارة الداخلية لإدارة أبحاثهم ومشاريعهم وابتكاراتهم من مكان واحد.
+            منصة مخصصة لمنسوبي وزارة الداخلية لإدارة أبحاثهم ومشاريعهم وابتكاراتهم من مكان واحد.
           </p>
 
-          <!-- صندوق تسجيل الدخول -->
-          <form method="post" action="{{ url_for('researcher_login') }}" class="login-form">
+          <!-- الفورم -->
+          <form method="post" action="{{ url_for('researcher_login') }}" class="login-form"
+            enctype="multipart/form-data">
+
+            <!-- وضع الفورم (دخول / تسجيل جديد) -->
+            <input type="hidden" name="mode" id="loginModeField" value="login">
 
             <div class="login-box">
+
+              <!-- التبويب -->
+              <div class="login-tabs-wrap">
+                <div class="login-tabs">
+                  <button type="button" class="login-tab active" data-mode="login">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>تسجيل الدخول</span>
+                  </button>
+                  <button type="button" class="login-tab" data-mode="register">
+                    <i class="bi bi-person-plus"></i>
+                    <span>إنشاء حساب جديد</span>
+                  </button>
+                </div>
+              </div>
 
               <!-- عنوان الصندوق -->
               <div class="login-header">
                 <div>
-                  <div class="login-header-title">
+                  <div class="login-header-title" id="loginHeaderTitle">
                     تسجيل الدخول
+                  </div>
+                  <div class="login-header-sub" id="loginHeaderSub"
+                    style="font-size:0.8rem; color:#6b7280; margin-top:2px;">
+                    أدخل بريدك أو رقم الهوية وكلمة المرور للدخول إلى بوابة الباحثين.
                   </div>
                 </div>
 
@@ -71,42 +94,247 @@
                 </div>
               </div>
 
-              {% with messages = get_flashed_messages(category_filter=['error']) %}
+              {% with messages = get_flashed_messages(category_filter=['error','success']) %}
               {% if messages %}
-              <div class="flash flash-error">
+              <div class="flash {% if 'تم ' in messages[0] %}flash-success{% else %}flash-error{% endif %}">
                 {{ messages[0] }}
               </div>
               {% endif %}
               {% endwith %}
 
-              <!-- الحقول -->
-              <div class="form-group">
-                <label class="form-label" for="username">
-                  البريد الإلكتروني أو رقم الهوية *
-                </label>
-                <input id="username" name="username" class="form-control" required>
+              <!-- ================== وضع تسجيل الدخول ================== -->
+              <div class="login-mode" id="loginPanel" style="display:block;">
+
+                <div class="form-group">
+                  <label class="form-label" for="username">
+                    البريد الإلكتروني أو رقم الهوية
+                    <span class="required-star">*</span>
+                  </label>
+                  <div class="input-icon-wrap">
+                    <i class="bi bi-person-vcard input-icon"></i>
+                    <input id="username" name="username" class="form-control input-with-icon" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="password">
+                    كلمة المرور
+                    <span class="required-star">*</span>
+                  </label>
+                  <div class="input-icon-wrap">
+                    <i class="bi bi-shield-lock input-icon"></i>
+                    <input id="password" name="password" type="password" class="form-control input-with-icon" required>
+                  </div>
+                </div>
+
+                <div class="login-actions">
+                  <a href="#" class="login-forgot">
+                    نسيت كلمة المرور؟
+                  </a>
+
+                  <button type="submit" class="btn-primary login-submit">
+                    تسجيل الدخول
+                    <i class="bi bi-box-arrow-in-right"></i>
+                  </button>
+                </div>
               </div>
 
-              <div class="form-group">
-                <label class="form-label" for="password">
-                  كلمة المرور *
-                </label>
-                <input id="password" name="password" type="password" class="form-control" required>
-              </div>
 
-              <!-- الأزرار -->
-              <div class="login-actions">
-                <a href="#" class="login-forgot">
-                  نسيت كلمة المرور؟
-                </a>
+              <!-- ================== وضع إنشاء حساب جديد ================== -->
+              <div class="login-mode" id="registerPanel" style="display:none;">
 
-                <button type="submit" class="btn-primary login-submit">
-                  دخول
-                  <i class="bi bi-box-arrow-in-right"></i>
-                </button>
-              </div>
+                <!-- سطر 1: الاسم عربي + إنجليزي + رقم الهوية -->
+                <div class="form-grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="reg_name_ar">
+                      الاسم الثلاثي (بالعربي)
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-icon-wrap">
+                      <i class="bi bi-person-lines-fill input-icon"></i>
+                      <input id="reg_name_ar" name="reg_name_ar" class="form-control input-with-icon" required>
+                    </div>
+                  </div>
 
-            </div>
+                  <div class="form-group">
+                    <label class="form-label" for="reg_name_en">الاسم الثلاثي (بالإنجليزي)
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-icon-wrap">
+                      <i class="bi bi-person input-icon"></i>
+                      <input id="reg_name_en" name="reg_name_en" class="form-control input-with-icon">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+
+                    <label class="form-label" for="reg_national_id">
+                      رقم الهوية
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-icon-wrap">
+                      <i class="bi bi-credit-card-2-front input-icon"></i>
+                      <input id="reg_national_id" name="reg_national_id" class="form-control input-with-icon" required>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- سطر 2: البريد + القطاع + الإدارة -->
+                <div class="form-grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="reg_email">
+                      البريد الإلكتروني
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-icon-wrap">
+                      <i class="bi bi-envelope input-icon"></i>
+                      <input id="reg_email" name="reg_email" type="email" class="form-control input-with-icon" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="reg_sector">
+                      القطاع التابع له
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-icon-wrap">
+                      <i class="bi bi-building input-icon"></i>
+                      <select id="reg_sector" name="reg_sector" class="form-control input-with-icon" required>
+                        <option value="">اختر القطاع</option>
+
+                        <optgroup label="قطاعات وزارة الداخلية">
+                          <option value="prisons">المديرية العامة للسجون</option>
+                          <option value="psd">الأمن العام</option>
+                          <option value="civildef">الدفاع المدني</option>
+                          <option value="passports">المديرية العامة للجوازات</option>
+                          <option value="borderguard">المديرية العامة لحرس الحدود</option>
+                          <option value="gdnc">المديرية العامة لمكافحة المخدرات</option>
+                          <option value="fsf">قوات أمن المنشآت</option>
+                          <option value="fsp">القوات الخاصة للأمن والحماية</option>
+                          <option value="environment-sec">القوات الخاصة للأمن البيئي</option>
+                          <option value="ahwal">الأحوال المدنية</option>
+                          <option value="kfsc">كلية الملك فهد الأمنية</option>
+                          <option value="mujahideen">الإدارة العامة للمجاهدين</option>
+                          <option value="clubs">أندية منسوبي وزارة الداخلية</option>
+                          <option value="911">المركز الوطني للعمليات الأمنية</option>
+                          <option value="med-services">الإدارة العامة للخدمات الطبية</option>
+                          <option value="diwan">ديوان وزارة الداخلية</option>
+                          <option value="nic">مركز المعلومات الوطني</option>
+                        </optgroup>
+
+                        <optgroup label="إمارات المناطق">
+                          <option value="em_riyadh">إمارة منطقة الرياض</option>
+                          <option value="em_makkah">إمارة منطقة مكة المكرمة</option>
+                          <option value="em_madinah">إمارة منطقة المدينة المنورة</option>
+                          <option value="em_qassim">إمارة منطقة القصيم</option>
+                          <option value="em_eastern">إمارة المنطقة الشرقية</option>
+                          <option value="em_aseer">إمارة منطقة عسير</option>
+                          <option value="em_tabuk">إمارة منطقة تبوك</option>
+                          <option value="em_hail">إمارة منطقة حائل</option>
+                          <option value="em_northern">إمارة منطقة الحدود الشمالية</option>
+                          <option value="em_jazan">إمارة منطقة جازان</option>
+                          <option value="em_najran">إمارة منطقة نجران</option>
+                          <option value="em_bahah">إمارة منطقة الباحة</option>
+                          <option value="em_jouf">إمارة منطقة الجوف</option>
+                        </optgroup>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="reg_org_unit">
+                      الإدارة / الوحدة
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-icon-wrap">
+                      <i class="bi bi-diagram-3 input-icon"></i>
+                      <input id="reg_org_unit" name="reg_org_unit" class="form-control input-with-icon" required>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- سطر 3: المسمى + الجوال + حقل فاضي للموازنة -->
+                <div class="form-grid-3">
+                  <div class="form-group">
+                    <label class="form-label" for="reg_rank_title">
+                      الرتبة / المسمى الوظيفي
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-icon-wrap">
+                      <i class="bi bi-mortarboard input-icon"></i>
+                      <input id="reg_rank_title" name="reg_rank_title" class="form-control input-with-icon" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="reg_phone">
+                      رقم التواصل
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-icon-wrap">
+                      <i class="bi bi-phone input-icon"></i>
+                      <input id="reg_phone" name="reg_phone" class="form-control input-with-icon" required>
+                    </div>
+                  </div>
+
+                  <!-- الصورة -->
+                  <div class="form-group">
+                    <label class="form-label" for="reg_avatar">
+                      الصورة الشخصية (اختياري)
+                    </label>
+                    <div class="input-icon-wrap">
+                      <i class="bi bi-image input-icon"></i>
+                      <input type="file" id="reg_avatar" name="reg_avatar"
+                        class="form-control file-input input-with-icon" accept="image/*">
+
+                    </div>
+                    <!-- <span class="field-hint">
+                      في حال عدم رفع صورة، سيتم استخدام أيقونة افتراضية للباحث.
+                    </span> -->
+                  </div>
+                </div>
+
+                <!-- سطر 4: كلمة المرور + التأكيد + حقل فاضي -->
+                <div class="form-grid-3">
+                  <div class="form-group">
+
+                    <label class="form-label" for="reg_password">
+                      كلمة المرور
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-icon-wrap">
+                      <i class="bi bi-shield-lock input-icon"></i>
+                      <input id="reg_password" name="reg_password" type="password" class="form-control input-with-icon"
+                        required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="reg_password2">
+                      تأكيد كلمة المرور
+                      <span class="required-star">*</span>
+                    </label>
+                    <div class="input-icon-wrap">
+                      <i class="bi bi-shield-check input-icon"></i>
+                      <input id="reg_password2" name="reg_password2" type="password"
+                        class="form-control input-with-icon" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group"></div>
+                </div>
+
+                <div class="login-actions" style="margin-top:4px;">
+                  <span></span>
+                  <button type="submit" class="btn-primary login-submit">
+                    إنشاء حساب
+                    <i class="bi bi-check-circle"></i>
+                  </button>
+                </div>
+
+              </div> <!-- /registerPanel -->
+
+            </div> <!-- /login-box -->
 
           </form>
 
@@ -114,6 +342,76 @@
       </section>
     </div>
   </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const modeField = document.getElementById("loginModeField");
+      const tabs = document.querySelectorAll(".login-tab");
+      const loginPanel = document.getElementById("loginPanel");
+      const registerPanel = document.getElementById("registerPanel");
+      const titleEl = document.getElementById("loginHeaderTitle");
+      const subEl = document.getElementById("loginHeaderSub");
+
+      // كل الحقول داخل كل وضع
+      const loginInputs = loginPanel.querySelectorAll("input, select, textarea");
+      const registerInputs = registerPanel.querySelectorAll("input, select, textarea");
+
+      function setMode(mode) {
+        modeField.value = mode;
+
+        const loginBox = document.querySelector(".login-box");
+
+        if (mode === "login") {
+          // إظهار تبويب الدخول
+          loginPanel.style.display = "block";
+          registerPanel.style.display = "none";
+          titleEl.textContent = "تسجيل الدخول";
+          subEl.textContent = "أدخل بريدك أو رقم الهوية وكلمة المرور للدخول إلى بوابة الباحثين.";
+          loginBox.classList.remove("wide-box");
+
+          // ✅ فعّل حقول الدخول وعطّل حقول التسجيل
+          loginInputs.forEach(el => {
+            el.disabled = false;
+          });
+          registerInputs.forEach(el => {
+            el.disabled = true;
+            el.required = false; // لا تجبر المتصفح يتحقق منها
+          });
+
+        } else {
+          // إظهار تبويب التسجيل
+          loginPanel.style.display = "none";
+          registerPanel.style.display = "block";
+          titleEl.textContent = "إنشاء حساب جديد";
+          subEl.textContent = "سجل كباحث جديد لتمكينك من إضافة أبحاثك ومشاريعك وابتكاراتك العلمية.";
+          loginBox.classList.add("wide-box");
+
+          // ✅ فعّل حقول التسجيل وعطّل حقول الدخول
+          registerInputs.forEach(el => {
+            el.disabled = false;
+            // الـ required أصلاً موجود في الـ HTML، خليه عادي
+          });
+          loginInputs.forEach(el => {
+            el.disabled = true;
+            // ما نحتاج نلعب في required هنا
+          });
+        }
+
+        tabs.forEach(btn => {
+          btn.classList.toggle("active", btn.dataset.mode === mode);
+        });
+      }
+
+      tabs.forEach(btn => {
+        btn.addEventListener("click", () => {
+          setMode(btn.dataset.mode);
+        });
+      });
+
+      // الوضع الافتراضي
+      setMode("login");
+    });
+  </script>
 
 </body>
 

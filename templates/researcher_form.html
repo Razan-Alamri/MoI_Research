@@ -1,20 +1,38 @@
 {% extends "base.html" %}
+
 {% block content %}
+{% set is_edit = (mode == 'edit') %}
+
 <section class="submission-page">
 
+  <!-- الهيدر -->
   <div class="submission-header">
-    <h1 class="submission-title">إضافة بحث / مشروع / ابتكار جديد</h1>
+    <h1 class="submission-title">
+      {% if is_edit %}
+        تعديل بحث / مشروع / ابتكار
+      {% else %}
+        إضافة بحث / مشروع / ابتكار جديد
+      {% endif %}
+    </h1>
     <p class="submission-subtitle">
-      الرجاء تعبئة الحقول بدقّة، حيث سيتم استخدام البيانات في بناء بطاقة البحث في منصة معرفة.
+      {% if is_edit %}
+        يمكنك تحديث بيانات البحث والباحثين، وسيتم عكس التعديلات في منصة معرفة.
+      {% else %}
+        الرجاء تعبئة الحقول بدقّة، حيث سيتم استخدام البيانات في بناء بطاقة البحث في منصة معرفة.
+      {% endif %}
     </p>
   </div>
 
-  <form class="submission-layout" id="researcherForm" method="post" action="{{ url_for('researcher_new') }}"
-    enctype="multipart/form-data">
+  <!-- الفورم الرئيسي -->
+  <form class="submission-layout"
+        id="researcherForm"
+        method="post"
+        action="{% if is_edit %}{{ url_for('researcher_edit', item_id=item.id) }}{% else %}{{ url_for('researcher_new') }}{% endif %}"
+        enctype="multipart/form-data">
 
-    {# {{ csrf_token() }} لو كنتِ تستخدمين Flask-WTF خليها #}
-
-    <!--  أولاً: معلومات البحث / المشروع -->
+    <!-- =========================
+         أولاً: معلومات البحث / المشروع
+         ========================= -->
     <section class="submission-card card">
       <div class="section-title">
         <span><i class="bi bi-journal-text" style="margin-left:4px;"></i> أولاً:</span>
@@ -26,8 +44,16 @@
         <label for="title" class="form-label">العنوان *</label>
         <div class="input-icon-wrap">
           <i class="bi bi-journal-text input-icon"></i>
-          <input type="text" id="title" name="title" class="form-control input-with-icon" required maxlength="250"
-            placeholder="مثال: نموذج ذكاء اصطناعي للتنبؤ بمؤشر العود للسجناء">
+          <input
+            type="text"
+            id="title"
+            name="title"
+            class="form-control input-with-icon"
+            required
+            maxlength="250"
+            placeholder="مثال: نموذج ذكاء اصطناعي للتنبؤ بمؤشر العود للسجناء"
+            value="{{ item.title if is_edit else '' }}"
+          >
         </div>
       </div>
 
@@ -36,10 +62,20 @@
         <label for="short_desc" class="form-label">الوصف المختصر *</label>
         <div class="input-icon-wrap">
           <i class="bi bi-card-text input-icon"></i>
-          <input type="text" id="short_desc" name="short_desc" class="form-control input-with-icon" required
-            maxlength="220" placeholder="وصف موجز يوضح فكرة البحث أو المشروع في سطر واحد">
+          <input
+            type="text"
+            id="short_desc"
+            name="short_desc"
+            class="form-control input-with-icon"
+            required
+            maxlength="220"
+            placeholder="وصف موجز يوضح فكرة البحث أو المشروع في سطر واحد"
+            value="{{ item.short if is_edit else '' }}"
+          >
         </div>
-        <small id="shortCounter" class="field-hint">0 / 220 حرف</small>
+        <small id="shortCounter" class="field-hint">
+          0 / 220 حرف
+        </small>
       </div>
 
       <!-- الملخص -->
@@ -47,10 +83,18 @@
         <label for="abstract" class="form-label">الملخص (150–250 كلمة تقريباً) *</label>
         <div class="input-icon-wrap">
           <i class="bi bi-file-richtext input-icon"></i>
-          <textarea id="abstract" name="abstract" class="form-control textarea input-with-icon" rows="6" required
-            placeholder="اكتب ملخصاً واضحاً يشرح الهدف، المنهجية، وأهم النتائج المتوقعة."></textarea>
+          <textarea
+            id="abstract"
+            name="abstract"
+            class="form-control textarea input-with-icon"
+            rows="6"
+            required
+            placeholder="اكتب ملخصاً واضحاً يشرح الهدف، المنهجية، وأهم النتائج المتوقعة."
+          >{{ item.abstract if is_edit else '' }}</textarea>
         </div>
-        <small id="abstractCounter" class="field-hint">0 حرف</small>
+        <small id="abstractCounter" class="field-hint">
+          0 حرف
+        </small>
       </div>
 
       <div class="form-grid-3">
@@ -61,9 +105,9 @@
             <i class="bi bi-layers input-icon"></i>
             <select id="kind" name="kind" class="form-control input-with-icon" required>
               <option value="">اختر النوع</option>
-              <option value="Research">بحث</option>
-              <option value="Project">مشروع</option>
-              <option value="Innovation">ابتكار</option>
+              <option value="Research"   {% if is_edit and item.kind == 'Research' %}selected{% endif %}>بحث</option>
+              <option value="Project"    {% if is_edit and item.kind == 'Project' %}selected{% endif %}>مشروع</option>
+              <option value="Innovation" {% if is_edit and item.kind == 'Innovation' %}selected{% endif %}>ابتكار</option>
             </select>
           </div>
         </div>
@@ -76,7 +120,10 @@
             <select id="year" name="year" class="form-control input-with-icon" required>
               <option value="">اختر السنة</option>
               {% for y in range(2022, 2031) %}
-              <option value="{{ y }}">{{ y }}</option>
+                <option value="{{ y }}"
+                        {% if is_edit and item.year == y %}selected{% endif %}>
+                  {{ y }}
+                </option>
               {% endfor %}
             </select>
           </div>
@@ -88,8 +135,8 @@
           <div class="input-icon-wrap">
             <i class="bi bi-shield-lock input-icon"></i>
             <select id="conf" name="conf" class="form-control input-with-icon" required>
-              <option value="public">عام</option>
-              <option value="conf">سري</option>
+              <option value="public" {% if is_edit and item.confidentiality == 'public' %}selected{% endif %}>عام</option>
+              <option value="conf"   {% if is_edit and item.confidentiality == 'conf' %}selected{% endif %}>سري</option>
             </select>
           </div>
         </div>
@@ -103,18 +150,18 @@
             <i class="bi bi-cpu input-icon"></i>
             <select id="field" name="field" class="form-control input-with-icon" required>
               <option value="">اختر المجال</option>
-              <option>ذكاء اصطناعي</option>
-              <option>أمن سيبراني</option>
-              <option>أنظمة معلومات</option>
-              <option>تحليلات تشغيلية</option>
-              <option>رؤية حاسوبية</option>
-              <option>روبوتات</option>
-              <option>درونز</option>
-              <option>استشعار عن بعد</option>
-              <option>تجربة المستخدم</option>
-              <option>أنظمة معلومات صحية</option>
-              <option>منصات بيانات</option>
-              <option>تحول رقمي</option>
+              <option {% if is_edit and item.field == 'ذكاء اصطناعي' %}selected{% endif %}>ذكاء اصطناعي</option>
+              <option {% if is_edit and item.field == 'أمن سيبراني' %}selected{% endif %}>أمن سيبراني</option>
+              <option {% if is_edit and item.field == 'أنظمة معلومات' %}selected{% endif %}>أنظمة معلومات</option>
+              <option {% if is_edit and item.field == 'تحليلات تشغيلية' %}selected{% endif %}>تحليلات تشغيلية</option>
+              <option {% if is_edit and item.field == 'رؤية حاسوبية' %}selected{% endif %}>رؤية حاسوبية</option>
+              <option {% if is_edit and item.field == 'روبوتات' %}selected{% endif %}>روبوتات</option>
+              <option {% if is_edit and item.field == 'درونز' %}selected{% endif %}>درونز</option>
+              <option {% if is_edit and item.field == 'استشعار عن بعد' %}selected{% endif %}>استشعار عن بعد</option>
+              <option {% if is_edit and item.field == 'تجربة المستخدم' %}selected{% endif %}>تجربة المستخدم</option>
+              <option {% if is_edit and item.field == 'أنظمة معلومات صحية' %}selected{% endif %}>أنظمة معلومات صحية</option>
+              <option {% if is_edit and item.field == 'منصات بيانات' %}selected{% endif %}>منصات بيانات</option>
+              <option {% if is_edit and item.field == 'تحول رقمي' %}selected{% endif %}>تحول رقمي</option>
             </select>
           </div>
         </div>
@@ -131,54 +178,59 @@
 
               <!-- ─────── قطاعات وزارة الداخلية ─────── -->
               <optgroup label="قطاعات وزارة الداخلية">
-                <option value="prisons">المديرية العامة للسجون</option>
-                <option value="psd">الأمن العام</option>
-                <option value="civildef">الدفاع المدني</option>
-                <option value="passports">المديرية العامة للجوازات</option>
-                <option value="borderguard">المديرية العامة لحرس الحدود</option>
-                <option value="gdnc">المديرية العامة لمكافحة المخدرات</option>
-                <option value="fsf">قوات أمن المنشآت</option>
-                <option value="fsp">القوات الخاصة للأمن والحماية</option>
-                <option value="environment-sec">القوات الخاصة للأمن البيئي</option>
-                <option value="ahwal">الأحوال المدنية</option>
-                <option value="kfsc">كلية الملك فهد الأمنية</option>
-                <option value="mujahideen">الإدارة العامة للمجاهدين</option>
-                <option value="clubs">أندية منسوبي وزارة الداخلية</option>
-                <option value="911">المركز الوطني للعمليات الأمنية</option>
-                <option value="med-services">الإدارة العامة للخدمات الطبية</option>
-                <option value="diwan">ديوان وزارة الداخلية</option>
-                <option value="nic">مركز المعلومات الوطني</option>
+                <option value="prisons"      {% if is_edit and item.sector == 'prisons' %}selected{% endif %}>المديرية العامة للسجون</option>
+                <option value="psd"          {% if is_edit and item.sector == 'psd' %}selected{% endif %}>الأمن العام</option>
+                <option value="civildef"     {% if is_edit and item.sector == 'civildef' %}selected{% endif %}>الدفاع المدني</option>
+                <option value="passports"    {% if is_edit and item.sector == 'passports' %}selected{% endif %}>المديرية العامة للجوازات</option>
+                <option value="borderguard"  {% if is_edit and item.sector == 'borderguard' %}selected{% endif %}>المديرية العامة لحرس الحدود</option>
+                <option value="gdnc"         {% if is_edit and item.sector == 'gdnc' %}selected{% endif %}>المديرية العامة لمكافحة المخدرات</option>
+                <option value="fsf"          {% if is_edit and item.sector == 'fsf' %}selected{% endif %}>قوات أمن المنشآت</option>
+                <option value="fsp"          {% if is_edit and item.sector == 'fsp' %}selected{% endif %}>القوات الخاصة للأمن والحماية</option>
+                <option value="environment-sec" {% if is_edit and item.sector == 'environment-sec' %}selected{% endif %}>القوات الخاصة للأمن البيئي</option>
+                <option value="ahwal"        {% if is_edit and item.sector == 'ahwal' %}selected{% endif %}>الأحوال المدنية</option>
+                <option value="kfsc"         {% if is_edit and item.sector == 'kfsc' %}selected{% endif %}>كلية الملك فهد الأمنية</option>
+                <option value="mujahideen"   {% if is_edit and item.sector == 'mujahideen' %}selected{% endif %}>الإدارة العامة للمجاهدين</option>
+                <option value="clubs"        {% if is_edit and item.sector == 'clubs' %}selected{% endif %}>أندية منسوبي وزارة الداخلية</option>
+                <option value="911"          {% if is_edit and item.sector == '911' %}selected{% endif %}>المركز الوطني للعمليات الأمنية</option>
+                <option value="med-services" {% if is_edit and item.sector == 'med-services' %}selected{% endif %}>الإدارة العامة للخدمات الطبية</option>
+                <option value="diwan"        {% if is_edit and item.sector == 'diwan' %}selected{% endif %}>ديوان وزارة الداخلية</option>
+                <option value="nic"          {% if is_edit and item.sector == 'nic' %}selected{% endif %}>مركز المعلومات الوطني</option>
               </optgroup>
 
               <!-- ─────── إمارات المناطق ─────── -->
               <optgroup label="إمارات المناطق">
-                <option value="em_riyadh">إمارة منطقة الرياض</option>
-                <option value="em_makkah">إمارة منطقة مكة المكرمة</option>
-                <option value="em_madinah">إمارة منطقة المدينة المنورة</option>
-                <option value="em_qassim">إمارة منطقة القصيم</option>
-                <option value="em_eastern">إمارة المنطقة الشرقية</option>
-                <option value="em_aseer">إمارة منطقة عسير</option>
-                <option value="em_tabuk">إمارة منطقة تبوك</option>
-                <option value="em_hail">إمارة منطقة حائل</option>
-                <option value="em_northern">إمارة منطقة الحدود الشمالية</option>
-                <option value="em_jazan">إمارة منطقة جازان</option>
-                <option value="em_najran">إمارة منطقة نجران</option>
-                <option value="em_bahah">إمارة منطقة الباحة</option>
-                <option value="em_jouf">إمارة منطقة الجوف</option>
+                <option value="em_riyadh"   {% if is_edit and item.sector == 'em_riyadh' %}selected{% endif %}>إمارة منطقة الرياض</option>
+                <option value="em_makkah"   {% if is_edit and item.sector == 'em_makkah' %}selected{% endif %}>إمارة منطقة مكة المكرمة</option>
+                <option value="em_madinah"  {% if is_edit and item.sector == 'em_madinah' %}selected{% endif %}>إمارة منطقة المدينة المنورة</option>
+                <option value="em_qassim"   {% if is_edit and item.sector == 'em_qassim' %}selected{% endif %}>إمارة منطقة القصيم</option>
+                <option value="em_eastern"  {% if is_edit and item.sector == 'em_eastern' %}selected{% endif %}>إمارة المنطقة الشرقية</option>
+                <option value="em_aseer"    {% if is_edit and item.sector == 'em_aseer' %}selected{% endif %}>إمارة منطقة عسير</option>
+                <option value="em_tabuk"    {% if is_edit and item.sector == 'em_tabuk' %}selected{% endif %}>إمارة منطقة تبوك</option>
+                <option value="em_hail"     {% if is_edit and item.sector == 'em_hail' %}selected{% endif %}>إمارة منطقة حائل</option>
+                <option value="em_northern" {% if is_edit and item.sector == 'em_northern' %}selected{% endif %}>إمارة منطقة الحدود الشمالية</option>
+                <option value="em_jazan"    {% if is_edit and item.sector == 'em_jazan' %}selected{% endif %}>إمارة منطقة جازان</option>
+                <option value="em_najran"   {% if is_edit and item.sector == 'em_najran' %}selected{% endif %}>إمارة منطقة نجران</option>
+                <option value="em_bahah"    {% if is_edit and item.sector == 'em_bahah' %}selected{% endif %}>إمارة منطقة الباحة</option>
+                <option value="em_jouf"     {% if is_edit and item.sector == 'em_jouf' %}selected{% endif %}>إمارة منطقة الجوف</option>
               </optgroup>
 
             </select>
           </div>
         </div>
 
-
         <!-- جهة النشر -->
         <div class="form-group">
           <label for="publisher" class="form-label">جهة النشر / الجهة الراعية (إن وجدت)</label>
           <div class="input-icon-wrap">
             <i class="bi bi-megaphone input-icon"></i>
-            <input type="text" id="publisher" name="publisher" class="form-control input-with-icon"
-              placeholder="مثال: مجلة الأمن والحياة، مؤتمر الدفاع العالمي ...">
+            <input
+              type="text"
+              id="publisher"
+              name="publisher"
+              class="form-control input-with-icon"
+              placeholder="مثال: مجلة الأمن والحياة، مؤتمر الدفاع العالمي ..."
+              value="{{ item.publisher if is_edit else '' }}"
+            >
           </div>
         </div>
       </div>
@@ -188,8 +240,14 @@
         <label for="link" class="form-label">رابط البحث / المشروع (اختياري)</label>
         <div class="input-icon-wrap">
           <i class="bi bi-link-45deg input-icon"></i>
-          <input type="url" id="link" name="link" class="form-control input-with-icon"
-            placeholder="https://example.com/paper-or-project">
+          <input
+            type="url"
+            id="link"
+            name="link"
+            class="form-control input-with-icon"
+            placeholder="https://example.com/paper-or-project"
+            value="{{ item.link_url if is_edit else '' }}"
+          >
         </div>
       </div>
 
@@ -201,26 +259,39 @@
         </label>
         <div class="input-icon-wrap">
           <i class="bi bi-file-earmark-arrow-up input-icon"></i>
-          <input type="file" id="file_upload" name="file_upload" class="form-control file-input input-with-icon"
-            accept=".pdf,.doc,.docx,.ppt,.pptx">
+          <input
+            type="file"
+            id="file_upload"
+            name="file_upload"
+            class="form-control file-input input-with-icon"
+            accept=".pdf,.doc,.docx,.ppt,.pptx"
+          >
         </div>
         <small class="field-hint">
           يمكن إرفاق رابط، أو رفع ملف، أو كلاهما حسب المتوفر.
         </small>
+
+        {% if is_edit and item.file_name %}
+          <small class="field-hint">
+            يوجد ملف مرفق حاليًا لهذا البحث.
+          </small>
+        {% endif %}
       </div>
     </section>
 
-    <!--  ثانياً: معلومات الباحثين -->
+    <!-- =========================
+         ثانياً: معلومات الباحثين
+         ========================= -->
     <section class="submission-card card">
       <div class="section-title">
         <span><i class="bi bi-people-fill" style="margin-left:4px;"></i> ثانياً:</span>
         معلومات الباحثين
       </div>
 
-      <!--  الباحث الرئيسي -->
+      <!-- الباحث الرئيسي -->
       <div class="author-main-block" style="margin-bottom: 18px;">
         <div class="form-label"
-          style="font-weight:700; margin-bottom:8px; color:var(--primary); display:flex; align-items:center; gap:6px;">
+             style="font-weight:700; margin-bottom:8px; color:var(--primary); display:flex; align-items:center; gap:6px;">
           <i class="bi bi-person-badge"></i>
           الباحث الرئيسي
         </div>
@@ -229,8 +300,15 @@
           <label for="author_name_ar" class="form-label">الاسم الثلاثي (بالعربي) *</label>
           <div class="input-icon-wrap">
             <i class="bi bi-person-lines-fill input-icon"></i>
-            <input type="text" id="author_name_ar" name="author_name_ar" class="form-control input-with-icon" required
-              placeholder="مثال: حمد سعود الذيابي">
+            <input
+              type="text"
+              id="author_name_ar"
+              name="author_name_ar"
+              class="form-control input-with-icon"
+              required
+              placeholder="مثال: حمد سعود الذيابي"
+              value="{{ main_author.name_ar if is_edit and main_author else '' }}"
+            >
           </div>
         </div>
 
@@ -238,8 +316,15 @@
           <label for="author_name_en" class="form-label">الاسم الثلاثي (بالإنجليزي) *</label>
           <div class="input-icon-wrap">
             <i class="bi bi-person input-icon"></i>
-            <input type="text" id="author_name_en" name="author_name_en" class="form-control input-with-icon" required
-              placeholder="مثال: Hamad Saud Al-thiabi">
+            <input
+              type="text"
+              id="author_name_en"
+              name="author_name_en"
+              class="form-control input-with-icon"
+              required
+              placeholder="مثال: Hamad Saud Al-thiabi"
+              value="{{ main_author.name_en if is_edit and main_author else '' }}"
+            >
           </div>
         </div>
 
@@ -249,8 +334,15 @@
           </label>
           <div class="input-icon-wrap">
             <i class="bi bi-award input-icon"></i>
-            <input type="text" id="author_rank" name="author_rank" class="form-control input-with-icon" required
-              placeholder="مثال: مهندس تعلم عميق، باحث أمني، أستاذ مشارك ...">
+            <input
+              type="text"
+              id="author_rank"
+              name="author_rank"
+              class="form-control input-with-icon"
+              required
+              placeholder="مثال: مهندس تعلم عميق، باحث أمني، أستاذ مشارك ..."
+              value="{{ main_author.rank_title if is_edit and main_author else '' }}"
+            >
           </div>
         </div>
 
@@ -265,52 +357,57 @@
 
                 <!-- ─────── قطاعات وزارة الداخلية ─────── -->
                 <optgroup label="قطاعات وزارة الداخلية">
-                  <option value="prisons">المديرية العامة للسجون</option>
-                  <option value="psd">الأمن العام</option>
-                  <option value="civildef">الدفاع المدني</option>
-                  <option value="passports">المديرية العامة للجوازات</option>
-                  <option value="borderguard">المديرية العامة لحرس الحدود</option>
-                  <option value="gdnc">المديرية العامة لمكافحة المخدرات</option>
-                  <option value="fsf">قوات أمن المنشآت</option>
-                  <option value="fsp">القوات الخاصة للأمن والحماية</option>
-                  <option value="environment-sec">القوات الخاصة للأمن البيئي</option>
-                  <option value="ahwal">الأحوال المدنية</option>
-                  <option value="kfsc">كلية الملك فهد الأمنية</option>
-                  <option value="mujahideen">الإدارة العامة للمجاهدين</option>
-                  <option value="clubs">أندية منسوبي وزارة الداخلية</option>
-                  <option value="911">المركز الوطني للعمليات الأمنية</option>
-                  <option value="med-services">الإدارة العامة للخدمات الطبية</option>
-                  <option value="diwan">ديوان وزارة الداخلية</option>
-                  <option value="nic">مركز المعلومات الوطني</option>
+                  <option value="prisons"      {% if is_edit and main_author and main_author.sector == 'prisons' %}selected{% endif %}>المديرية العامة للسجون</option>
+                  <option value="psd"          {% if is_edit and main_author and main_author.sector == 'psd' %}selected{% endif %}>الأمن العام</option>
+                  <option value="civildef"     {% if is_edit and main_author and main_author.sector == 'civildef' %}selected{% endif %}>الدفاع المدني</option>
+                  <option value="passports"    {% if is_edit and main_author and main_author.sector == 'passports' %}selected{% endif %}>المديرية العامة للجوازات</option>
+                  <option value="borderguard"  {% if is_edit and main_author and main_author.sector == 'borderguard' %}selected{% endif %}>المديرية العامة لحرس الحدود</option>
+                  <option value="gdnc"         {% if is_edit and main_author and main_author.sector == 'gdnc' %}selected{% endif %}>المديرية العامة لمكافحة المخدرات</option>
+                  <option value="fsf"          {% if is_edit and main_author and main_author.sector == 'fsf' %}selected{% endif %}>قوات أمن المنشآت</option>
+                  <option value="fsp"          {% if is_edit and main_author and main_author.sector == 'fsp' %}selected{% endif %}>القوات الخاصة للأمن والحماية</option>
+                  <option value="environment-sec" {% if is_edit and main_author and main_author.sector == 'environment-sec' %}selected{% endif %}>القوات الخاصة للأمن البيئي</option>
+                  <option value="ahwal"        {% if is_edit and main_author and main_author.sector == 'ahwal' %}selected{% endif %}>الأحوال المدنية</option>
+                  <option value="kfsc"         {% if is_edit and main_author and main_author.sector == 'kfsc' %}selected{% endif %}>كلية الملك فهد الأمنية</option>
+                  <option value="mujahideen"   {% if is_edit and main_author and main_author.sector == 'mujahideen' %}selected{% endif %}>الإدارة العامة للمجاهدين</option>
+                  <option value="clubs"        {% if is_edit and main_author and main_author.sector == 'clubs' %}selected{% endif %}>أندية منسوبي وزارة الداخلية</option>
+                  <option value="911"          {% if is_edit and main_author and main_author.sector == '911' %}selected{% endif %}>المركز الوطني للعمليات الأمنية</option>
+                  <option value="med-services" {% if is_edit and main_author and main_author.sector == 'med-services' %}selected{% endif %}>الإدارة العامة للخدمات الطبية</option>
+                  <option value="diwan"        {% if is_edit and main_author and main_author.sector == 'diwan' %}selected{% endif %}>ديوان وزارة الداخلية</option>
+                  <option value="nic"          {% if is_edit and main_author and main_author.sector == 'nic' %}selected{% endif %}>مركز المعلومات الوطني</option>
                 </optgroup>
 
                 <!-- ─────── إمارات المناطق ─────── -->
                 <optgroup label="إمارات المناطق">
-                  <option value="em_riyadh">إمارة منطقة الرياض</option>
-                  <option value="em_makkah">إمارة منطقة مكة المكرمة</option>
-                  <option value="em_madinah">إمارة منطقة المدينة المنورة</option>
-                  <option value="em_qassim">إمارة منطقة القصيم</option>
-                  <option value="em_eastern">إمارة المنطقة الشرقية</option>
-                  <option value="em_aseer">إمارة منطقة عسير</option>
-                  <option value="em_tabuk">إمارة منطقة تبوك</option>
-                  <option value="em_hail">إمارة منطقة حائل</option>
-                  <option value="em_northern">إمارة منطقة الحدود الشمالية</option>
-                  <option value="em_jazan">إمارة منطقة جازان</option>
-                  <option value="em_najran">إمارة منطقة نجران</option>
-                  <option value="em_bahah">إمارة منطقة الباحة</option>
-                  <option value="em_jouf">إمارة منطقة الجوف</option>
+                  <option value="em_riyadh"   {% if is_edit and main_author and main_author.sector == 'em_riyadh' %}selected{% endif %}>إمارة منطقة الرياض</option>
+                  <option value="em_makkah"   {% if is_edit and main_author and main_author.sector == 'em_makkah' %}selected{% endif %}>إمارة منطقة مكة المكرمة</option>
+                  <option value="em_madinah"  {% if is_edit and main_author and main_author.sector == 'em_madinah' %}selected{% endif %}>إمارة منطقة المدينة المنورة</option>
+                  <option value="em_qassim"   {% if is_edit and main_author and main_author.sector == 'em_qassim' %}selected{% endif %}>إمارة منطقة القصيم</option>
+                  <option value="em_eastern"  {% if is_edit and main_author and main_author.sector == 'em_eastern' %}selected{% endif %}>إمارة المنطقة الشرقية</option>
+                  <option value="em_aseer"    {% if is_edit and main_author and main_author.sector == 'em_aseer' %}selected{% endif %}>إمارة منطقة عسير</option>
+                  <option value="em_tabuk"    {% if is_edit and main_author and main_author.sector == 'em_tabuk' %}selected{% endif %}>إمارة منطقة تبوك</option>
+                  <option value="em_hail"     {% if is_edit and main_author and main_author.sector == 'em_hail' %}selected{% endif %}>إمارة منطقة حائل</option>
+                  <option value="em_northern" {% if is_edit and main_author and main_author.sector == 'em_northern' %}selected{% endif %}>إمارة منطقة الحدود الشمالية</option>
+                  <option value="em_jazan"    {% if is_edit and main_author and main_author.sector == 'em_jazan' %}selected{% endif %}>إمارة منطقة جازان</option>
+                  <option value="em_najran"   {% if is_edit and main_author and main_author.sector == 'em_najran' %}selected{% endif %}>إمارة منطقة نجران</option>
+                  <option value="em_bahah"    {% if is_edit and main_author and main_author.sector == 'em_bahah' %}selected{% endif %}>إمارة منطقة الباحة</option>
+                  <option value="em_jouf"     {% if is_edit and main_author and main_author.sector == 'em_jouf' %}selected{% endif %}>إمارة منطقة الجوف</option>
                 </optgroup>
               </select>
             </div>
           </div>
 
-
           <div class="form-group">
             <label for="author_dept" class="form-label">الإدارة / الوحدة</label>
             <div class="input-icon-wrap">
               <i class="bi bi-diagram-3 input-icon"></i>
-              <input type="text" id="author_dept" name="author_dept" class="form-control input-with-icon"
-                placeholder="مثال: إدارة الذكاء الاصطناعي، إدارة تقنية المعلومات ...">
+              <input
+                type="text"
+                id="author_dept"
+                name="author_dept"
+                class="form-control input-with-icon"
+                placeholder="مثال: إدارة الذكاء الاصطناعي، إدارة تقنية المعلومات ..."
+                value="{{ main_author.org_unit if is_edit and main_author else '' }}"
+              >
             </div>
           </div>
         </div>
@@ -320,8 +417,15 @@
             <label for="author_email" class="form-label">البريد الإلكتروني الرسمي *</label>
             <div class="input-icon-wrap">
               <i class="bi bi-envelope-at input-icon"></i>
-              <input type="email" id="author_email" name="author_email" class="form-control input-with-icon" required
-                placeholder="name@moi.gov.sa">
+              <input
+                type="email"
+                id="author_email"
+                name="author_email"
+                class="form-control input-with-icon"
+                required
+                placeholder="name@moi.gov.sa"
+                value="{{ main_author.email if is_edit and main_author else '' }}"
+              >
             </div>
           </div>
 
@@ -329,8 +433,14 @@
             <label for="author_phone" class="form-label">رقم التواصل</label>
             <div class="input-icon-wrap">
               <i class="bi bi-telephone input-icon"></i>
-              <input type="tel" id="author_phone" name="author_phone" class="form-control input-with-icon"
-                placeholder="05xxxxxxxx">
+              <input
+                type="tel"
+                id="author_phone"
+                name="author_phone"
+                class="form-control input-with-icon"
+                placeholder="05xxxxxxxx"
+                value="{{ main_author.phone if is_edit and main_author else '' }}"
+              >
             </div>
           </div>
         </div>
@@ -341,8 +451,8 @@
             <div class="input-icon-wrap">
               <i class="bi bi-gender-ambiguous input-icon"></i>
               <select id="author_gender" name="author_gender" class="form-control input-with-icon" required>
-                <option value="male">ذكر</option>
-                <option value="female">أنثى</option>
+                <option value="male"   {% if is_edit and main_author and main_author.gender == 'male' %}selected{% endif %}>ذكر</option>
+                <option value="female" {% if is_edit and main_author and main_author.gender == 'female' %}selected{% endif %}>أنثى</option>
               </select>
             </div>
           </div>
@@ -354,37 +464,247 @@
             </label>
             <div class="input-icon-wrap">
               <i class="bi bi-image input-icon"></i>
-              <input type="file" id="author_photo" name="author_photo" class="form-control file-input input-with-icon"
-                accept="image/*">
+              <input
+                type="file"
+                id="author_photo"
+                name="author_photo"
+                class="form-control file-input input-with-icon"
+                accept="image/*"
+              >
             </div>
             <small class="field-hint">
               في حال عدم رفع صورة، سيظهر رمز أيقونة افتراضية (للرجال أو النساء).
             </small>
+
+            {% if is_edit and main_author and main_author.avatar_file %}
+              <small class="field-hint">
+                الصورة الحالية:
+                <a href="{{ url_for('uploaded_avatar', filename=main_author.avatar_file) }}" target="_blank">
+                  عرض الصورة
+                </a>
+              </small>
+            {% endif %}
           </div>
         </div>
       </div>
 
       <hr style="margin: 10px 0 14px; border-color:#e5e7eb;">
 
-      <!--  الباحثون المشاركون -->
+      <!-- الباحثون المشاركون (في وضع التعديل نعرض الموجودين) -->
       <div class="form-label" style="font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
         <i class="bi bi-people"></i>
         الباحثون المشاركون (اختياري)
       </div>
 
-      <div id="authorsContainer"></div>
+      <div id="authorsContainer">
+        {% if is_edit and coauthors %}
+          {% for co in coauthors %}
+            <div class="author-item" style="border-top:1px solid #e5e7eb; padding-top:12px; margin-top:14px;">
+              <div class="form-label"
+                   style="font-weight:600; margin-bottom:6px; color:var(--muted); display:flex; align-items:center; gap:6px;">
+                <i class="bi bi-person-plus"></i>
+                باحث مشارك
+              </div>
 
+              <div class="form-group">
+                <label class="form-label">الاسم الثلاثي (بالعربي) *</label>
+                <div class="input-icon-wrap">
+                  <i class="bi bi-person-lines-fill input-icon"></i>
+                  <input
+                    type="text"
+                    class="form-control input-with-icon"
+                    name="coauthors[{{ loop.index0 }}][name_ar]"
+                    required
+                    value="{{ co.name_ar }}"
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">الاسم الثلاثي (بالإنجليزي) *</label>
+                <div class="input-icon-wrap">
+                  <i class="bi bi-person input-icon"></i>
+                  <input
+                    type="text"
+                    class="form-control input-with-icon"
+                    name="coauthors[{{ loop.index0 }}][name_en]"
+                    required
+                    value="{{ co.name_en }}"
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">الرتبة / المرتبة / المسمى الوظيفي *</label>
+                <div class="input-icon-wrap">
+                  <i class="bi bi-award input-icon"></i>
+                  <input
+                    type="text"
+                    class="form-control input-with-icon"
+                    name="coauthors[{{ loop.index0 }}][rank]"
+                    required
+                    value="{{ co.rank_title }}"
+                  >
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">القطاع التابع له *</label>
+                  <div class="input-icon-wrap">
+                    <i class="bi bi-building input-icon"></i>
+
+                    <select class="form-control input-with-icon"
+                            name="coauthors[{{ loop.index0 }}][sector]"
+                            required>
+                      <option value="">اختر القطاع</option>
+
+                      <optgroup label="قطاعات وزارة الداخلية">
+                        <option value="prisons"      {% if co.sector == 'prisons' %}selected{% endif %}>المديرية العامة للسجون</option>
+                        <option value="psd"          {% if co.sector == 'psd' %}selected{% endif %}>الأمن العام</option>
+                        <option value="civildef"     {% if co.sector == 'civildef' %}selected{% endif %}>الدفاع المدني</option>
+                        <option value="passports"    {% if co.sector == 'passports' %}selected{% endif %}>المديرية العامة للجوازات</option>
+                        <option value="borderguard"  {% if co.sector == 'borderguard' %}selected{% endif %}>المديرية العامة لحرس الحدود</option>
+                        <option value="gdnc"         {% if co.sector == 'gdnc' %}selected{% endif %}>المديرية العامة لمكافحة المخدرات</option>
+                        <option value="fsf"          {% if co.sector == 'fsf' %}selected{% endif %}>قوات أمن المنشآت</option>
+                        <option value="fsp"          {% if co.sector == 'fsp' %}selected{% endif %}>القوات الخاصة للأمن والحماية</option>
+                        <option value="environment-sec" {% if co.sector == 'environment-sec' %}selected{% endif %}>القوات الخاصة للأمن البيئي</option>
+                        <option value="ahwal"        {% if co.sector == 'ahwal' %}selected{% endif %}>الأحوال المدنية</option>
+                        <option value="kfsc"         {% if co.sector == 'kfsc' %}selected{% endif %}>كلية الملك فهد الأمنية</option>
+                        <option value="mujahideen"   {% if co.sector == 'mujahideen' %}selected{% endif %}>الإدارة العامة للمجاهدين</option>
+                        <option value="clubs"        {% if co.sector == 'clubs' %}selected{% endif %}>أندية منسوبي وزارة الداخلية</option>
+                        <option value="911"          {% if co.sector == '911' %}selected{% endif %}>المركز الوطني للعمليات الأمنية</option>
+                        <option value="med-services" {% if co.sector == 'med-services' %}selected{% endif %}>الإدارة العامة للخدمات الطبية</option>
+                        <option value="diwan"        {% if co.sector == 'diwan' %}selected{% endif %}>ديوان وزارة الداخلية</option>
+                        <option value="nic"          {% if co.sector == 'nic' %}selected{% endif %}>مركز المعلومات الوطني</option>
+                      </optgroup>
+
+                      <optgroup label="إمارات المناطق">
+                        <option value="em_riyadh"   {% if co.sector == 'em_riyadh' %}selected{% endif %}>إمارة منطقة الرياض</option>
+                        <option value="em_makkah"   {% if co.sector == 'em_makkah' %}selected{% endif %}>إمارة منطقة مكة المكرمة</option>
+                        <option value="em_madinah"  {% if co.sector == 'em_madinah' %}selected{% endif %}>إمارة منطقة المدينة المنورة</option>
+                        <option value="em_qassim"   {% if co.sector == 'em_qassim' %}selected{% endif %}>إمارة منطقة القصيم</option>
+                        <option value="em_eastern"  {% if co.sector == 'em_eastern' %}selected{% endif %}>إمارة المنطقة الشرقية</option>
+                        <option value="em_aseer"    {% if co.sector == 'em_aseer' %}selected{% endif %}>إمارة منطقة عسير</option>
+                        <option value="em_tabuk"    {% if co.sector == 'em_tabuk' %}selected{% endif %}>إمارة منطقة تبوك</option>
+                        <option value="em_hail"     {% if co.sector == 'em_hail' %}selected{% endif %}>إمارة منطقة حائل</option>
+                        <option value="em_northern" {% if co.sector == 'em_northern' %}selected{% endif %}>إمارة منطقة الحدود الشمالية</option>
+                        <option value="em_jazan"    {% if co.sector == 'em_jazan' %}selected{% endif %}>إمارة منطقة جازان</option>
+                        <option value="em_najran"   {% if co.sector == 'em_najran' %}selected{% endif %}>إمارة منطقة نجران</option>
+                        <option value="em_bahah"    {% if co.sector == 'em_bahah' %}selected{% endif %}>إمارة منطقة الباحة</option>
+                        <option value="em_jouf"     {% if co.sector == 'em_jouf' %}selected{% endif %}>إمارة منطقة الجوف</option>
+                      </optgroup>
+
+                      <option value="other" {% if co.sector == 'other' %}selected{% endif %}>جهة خارجية</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">الإدارة / الوحدة</label>
+                  <div class="input-icon-wrap">
+                    <i class="bi bi-diagram-3 input-icon"></i>
+                    <input
+                      type="text"
+                      class="form-control input-with-icon"
+                      name="coauthors[{{ loop.index0 }}][dept]"
+                      value="{{ co.org_unit }}"
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-icon-wrap">
+                  <i class="bi bi-building-add input-icon"></i>
+                  <input
+                    type="text"
+                    class="form-control external-sector input-with-icon"
+                    name="coauthors[{{ loop.index0 }}][external_sector]"
+                    placeholder="اكتب اسم الجهة الخارجية"
+                    style="margin-top:6px; display:none;"
+                  >
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">البريد الإلكتروني *</label>
+                  <div class="input-icon-wrap">
+                    <i class="bi bi-envelope-at input-icon"></i>
+                    <input
+                      type="email"
+                      class="form-control input-with-icon"
+                      name="coauthors[{{ loop.index0 }}][email]"
+                      required
+                      value="{{ co.email }}"
+                    >
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">رقم التواصل</label>
+                  <div class="input-icon-wrap">
+                    <i class="bi bi-telephone input-icon"></i>
+                    <input
+                      type="tel"
+                      class="form-control input-with-icon"
+                      name="coauthors[{{ loop.index0 }}][phone]"
+                      value="{{ co.phone }}"
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">الجنس *</label>
+                  <div class="input-icon-wrap">
+                    <i class="bi bi-gender-ambiguous input-icon"></i>
+                    <select class="form-control input-with-icon"
+                            name="coauthors[{{ loop.index0 }}][gender]"
+                            required>
+                      <option value="male"   {% if co.gender == 'male' %}selected{% endif %}>ذكر</option>
+                      <option value="female" {% if co.gender == 'female' %}selected{% endif %}>أنثى</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">صورة شخصية (اختياري)</label>
+                  <div class="input-icon-wrap">
+                    <i class="bi bi-image input-icon"></i>
+                    <input
+                      type="file"
+                      class="form-control file-input input-with-icon"
+                      name="coauthors[{{ loop.index0 }}][photo]"
+                      accept="image/*"
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" class="btn-ghost removeAuthorBtn" style="margin-top:4px;">
+                <i class="bi bi-x-circle"></i>
+                إزالة هذا الباحث
+              </button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <!-- زر إضافة باحث مشارك -->
       <button type="button" id="addAuthorBtn" class="btn-primary" style="margin-top: 10px;">
         <i class="bi bi-person-plus"></i>
         إضافة باحث مشارك
       </button>
 
-      <!-- قالب الباحث المشارك -->
+      <!-- قالب الباحث المشارك (يستخدمه الجافاسكربت) -->
       <template id="authorTemplate">
         <div class="author-item" style="border-top:1px solid #e5e7eb; padding-top:12px; margin-top:14px;">
 
           <div class="form-label"
-            style="font-weight:600; margin-bottom:6px; color:var(--muted); display:flex; align-items:center; gap:6px;">
+               style="font-weight:600; margin-bottom:6px; color:var(--muted); display:flex; align-items:center; gap:6px;">
             <i class="bi bi-person-plus"></i>
             باحث مشارك
           </div>
@@ -422,7 +742,6 @@
                 <select class="form-control input-with-icon" name="__NAME__[sector]" required>
                   <option value="">اختر القطاع</option>
 
-                  <!-- ─────── قطاعات وزارة الداخلية ─────── -->
                   <optgroup label="قطاعات وزارة الداخلية">
                     <option value="prisons">المديرية العامة للسجون</option>
                     <option value="psd">الأمن العام</option>
@@ -443,7 +762,6 @@
                     <option value="nic">مركز المعلومات الوطني</option>
                   </optgroup>
 
-                  <!-- ─────── إمارات المناطق ─────── -->
                   <optgroup label="إمارات المناطق">
                     <option value="em_riyadh">إمارة منطقة الرياض</option>
                     <option value="em_makkah">إمارة منطقة مكة المكرمة</option>
@@ -460,13 +778,11 @@
                     <option value="em_jouf">إمارة منطقة الجوف</option>
                   </optgroup>
 
-                  <!-- جهات أخرى -->
                   <option value="other">جهة خارجية</option>
 
                 </select>
               </div>
             </div>
-
 
             <div class="form-group">
               <label class="form-label">الإدارة / الوحدة</label>
@@ -480,8 +796,13 @@
           <div class="form-group">
             <div class="input-icon-wrap">
               <i class="bi bi-building-add input-icon"></i>
-              <input type="text" class="form-control external-sector input-with-icon" name="__NAME__[external_sector]"
-                placeholder="اكتب اسم الجهة الخارجية" style="margin-top:6px; display:none;">
+              <input
+                type="text"
+                class="form-control external-sector input-with-icon"
+                name="__NAME__[external_sector]"
+                placeholder="اكتب اسم الجهة الخارجية"
+                style="margin-top:6px; display:none;"
+              >
             </div>
           </div>
 
@@ -519,8 +840,12 @@
               <label class="form-label">صورة شخصية (اختياري)</label>
               <div class="input-icon-wrap">
                 <i class="bi bi-image input-icon"></i>
-                <input type="file" class="form-control file-input input-with-icon" name="__NAME__[photo]"
-                  accept="image/*">
+                <input
+                  type="file"
+                  class="form-control file-input input-with-icon"
+                  name="__NAME__[photo]"
+                  accept="image/*"
+                >
               </div>
             </div>
           </div>
@@ -534,13 +859,14 @@
 
     </section>
 
+    <!-- الأزرار النهائية -->
     <div class="submission-actions">
-      <a href="{{ url_for('researcher_index') }}" class="btn-ghost">
+      <a href="{{ url_for('researcher_dashboard') }}" class="btn-ghost">
         إلغاء والعودة
       </a>
       <button type="submit" class="btn-primary">
         <i class="bi bi-check-circle"></i>
-        حفظ البيانات
+        {% if is_edit %}تحديث البيانات{% else %}حفظ البيانات{% endif %}
       </button>
     </div>
 
