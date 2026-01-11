@@ -15,6 +15,8 @@
   const innerCore = core.slice(0, innerCoreCount);
   const middleCore = core.slice(innerCoreCount);
 
+  function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+
   function layout() {
     // امسح كل العقد القديمة
     wrap.querySelectorAll(".hero-orbit-node").forEach(el => el.remove());
@@ -22,18 +24,23 @@
     const rect = wrap.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
+    if (width < 50 || height < 50) return;
 
-    // 🔹 حجم النود حسب العرض
-    let NODE_SIZE;
-    if (width >= 1200) {
-      NODE_SIZE = 100; // دسكتوب — زي القديم
-    } else if (width <= 480) {
-      NODE_SIZE = 68;
-    } else if (width <= 768) {
-      NODE_SIZE = 80;
-    } else {
-      NODE_SIZE = 90;
-    }
+    const aspect = width / height; // >1 يعني عرض
+
+    // 🔹 حجم النود ديناميكي + مضبوط لشاشات لابتوب
+    // ThinkPad عادة 1366x768 / 1920x1080 / 1920x1200 => نبي مقاس مريح
+    let NODE_SIZE = 92;
+    if (width >= 1500) NODE_SIZE = 102;
+    else if (width >= 1200) NODE_SIZE = 96;
+    else if (width >= 992) NODE_SIZE = 90;
+    else if (width >= 768) NODE_SIZE = 82;
+    else NODE_SIZE = 70;
+
+    // إذا عدد العقد كبير جدًا، صغّري شوي
+    const totalNodes = innerCore.length + middleCore.length + emirates.length;
+    if (totalNodes >= 24) NODE_SIZE = Math.max(66, NODE_SIZE - 10);
+    if (totalNodes >= 32) NODE_SIZE = Math.max(62, NODE_SIZE - 8);
 
     const cx = width / 2;
     const cy = height * 0.49;
@@ -47,27 +54,68 @@
       centerNode.style.top = (cy - CENTER_SIZE / 2) + "px";
     }
 
-    const padding = 24;
-    const distTop = cy;
-    const distBottom = height - cy;
-    const distLeft = cx;
-    const distRight = width - cx;
+    // ✅ المساحة المتاحة يمين/يسار/فوق/تحت
+    const padding = 22;
+    const halfW = (width / 2) - (NODE_SIZE / 2) - padding;
+    const halfH = (height / 2) - (NODE_SIZE / 2) - padding;
 
-    const maxRadius =
-      Math.min(distTop, distBottom, distLeft, distRight) - (NODE_SIZE / 2) - padding;
+    if (halfW <= 0 || halfH <= 0) return;
 
-    if (maxRadius <= 0) return;
+    // ✅ فجوة الحلقات تعتمد على NODE_SIZE
+    const ringGap = Math.max(16, Math.round(NODE_SIZE * 0.55));
 
-    function drawRing(ring, radiusX, radiusY, offsetRad) {
+    // ✅ داخلية/وسطى/خارجية: نحددها كنِسَب مع ضمان عدم التصادم مع المركز
+    const minInner = (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 10;
+
+    // نصف قطر “مبدئي” للحلقة الخارجية داخل حدود الشاشة (Ellipse rx/ry منفصل)
+    // نستخدم 0.96 عشان ما نكسر الأطراف
+    const outerRxMax = halfW * 0.96;
+    const outerRyMax = halfH * 0.96;
+
+    // ✅ عوامل بيضاويّة ذكية:
+    // - إذا الشاشة عريضة: خلي rx أكبر و ry أصغر شوي (عشان ما تنزل تحت/فوق)
+    // - إذا الشاشة طولية: العكس
+    const rxFactor = clamp(1.0 + (aspect - 1) * 0.22, 0.92, 1.18); // ThinkPad: تقريبًا 1.05~1.12
+    const ryFactor = clamp(1.0 - (aspect - 1) * 0.14, 0.82, 1.02);
+
+    // الحلقة الخارجية (الإمارات)
+    const R_OUT_RX = outerRxMax * rxFactor;
+    const R_OUT_RY = outerRyMax * ryFactor;
+
+    // الحلقة الوسطى (باقي القطاعات) أصغر بمقدار ringGap
+    const R_MID_RX = Math.max(minInner, R_OUT_RX - ringGap - NODE_SIZE * 0.25);
+    const R_MID_RY = Math.max(minInner, R_OUT_RY - ringGap - NODE_SIZE * 0.25);
+
+    // الحلقة الداخلية أصغر مرة ثانية
+    const R_IN_RX = Math.max(minInner, R_MID_RX - ringGap - NODE_SIZE * 0.18);
+    const R_IN_RY = Math.max(minInner, R_MID_RY - ringGap - NODE_SIZE * 0.18);
+
+    // ✅ تحكم إضافي لمنع التزاحم:
+    // إذا عدد الحلقة كبير، كبّري نصف قطرها قليل ضمن الحدود
+    function adjustForCount(rx, ry, count) {
+      if (!count) return { rx, ry };
+      // تقريب بسيط: كل ما زاد العدد نحتاج محيط أكبر
+      const need = Math.min(1.12, 1 + (count / 18) * 0.05);
+      const outRx = Math.min(rx * need, outerRxMax);
+      const outRy = Math.min(ry * need, outerRyMax);
+      return { rx: outRx, ry: outRy };
+    }
+
+    const innerAdj = adjustForCount(R_IN_RX, R_IN_RY, innerCore.length);
+    const midAdj   = adjustForCount(R_MID_RX, R_MID_RY, middleCore.length);
+    const outAdj   = adjustForCount(R_OUT_RX, R_OUT_RY, emirates.length);
+
+    function drawRing(ring, rx, ry, offsetRad) {
       const n = ring.length;
-      if (!n || radiusX <= 0 || radiusY <= 0) return;
+      if (!n || rx <= 0 || ry <= 0) return;
 
+      // خطوة الزاوية
       const step = (2 * Math.PI) / n;
 
       ring.forEach((sec, i) => {
         const angle = offsetRad + i * step;
-        const x = cx + radiusX * Math.cos(angle);
-        const y = cy + radiusY * Math.sin(angle);
+        const x = cx + rx * Math.cos(angle);
+        const y = cy + ry * Math.sin(angle);
 
         const node = document.createElement("div");
         node.className = "hero-orbit-node";
@@ -90,75 +138,23 @@
       });
     }
 
-    // =========================
-    // 1) وضع الدسكتوب (زي القديم)
-    // =========================
-    if (width >= 1200) {
-      const ringGap = NODE_SIZE * 1.5;
+    // ✅ زوايا البداية (توزيع أجمل + يقلل تكدّس أعلى الصفحة)
+    const startInner = -Math.PI / 2;
+    const startMid   = -Math.PI / 2 + (middleCore.length ? (Math.PI / middleCore.length) : 0);
+    const startOuter = -Math.PI / 2;
 
-      const R_OUTER = maxRadius;                 // الحلقة الخارجية
-      const R_MID = R_OUTER - ringGap;           // الوسطى
-      let R_INNER = R_MID - ringGap;             // الداخلية
-
-      const minInner = (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 7;
-      if (R_INNER < minInner) R_INNER = minInner;
-
-      // الداخلية – دائرة كاملة
-      drawRing(innerCore, R_INNER, R_INNER, -Math.PI / 2);
-
-      // الوسطى – بيضاوية خفيفة زي ما كانت
-      if (middleCore.length) {
-        const offsetMid = -Math.PI / 2 + (Math.PI / middleCore.length);
-        const middleRadiusY = R_MID * 1.65;
-        const middleRadiusX = R_MID * 1.68;
-        drawRing(middleCore, middleRadiusX, middleRadiusY, offsetMid);
-      }
-
-      // الخارجية – الإمارات
-      if (emirates.length) {
-        const outerRadiusX = R_OUTER * 1.28;
-        const outerRadiusY = R_OUTER * 1.07;
-        drawRing(emirates, outerRadiusX, outerRadiusY, -Math.PI / 2);
-      }
-
-      return; // نطلع من الفنكشن هنا — ما نطبق وضع الموبايل
-    }
-
-    // =========================
-    // 2) وضع الشاشات الأصغر (آيباد + جوال)
-    // =========================
-
-    const R_OUTER = maxRadius * 0.96;
-    const R_MID = R_OUTER * 0.72;
-
-    const minInner = (CENTER_SIZE / 2) + (NODE_SIZE / 2) + 8;
-    let R_INNER = R_MID * 0.55;
-    if (R_INNER < minInner) R_INNER = minInner;
-
-    // الداخلية
-    drawRing(innerCore, R_INNER, R_INNER, -Math.PI / 2);
-
-    // الوسطى
-    if (middleCore.length) {
-      const offsetMid = -Math.PI / 2 + (Math.PI / middleCore.length);
-      const middleRadiusX = R_MID * 0.98;
-      const middleRadiusY = R_MID * 0.9;
-      drawRing(middleCore, middleRadiusX, middleRadiusY, offsetMid);
-    }
-
-    // الخارجية – الإمارات
-    if (emirates.length) {
-      const outerRadiusX = R_OUTER * 0.98;
-      const outerRadiusY = R_OUTER * 0.9;
-      drawRing(emirates, outerRadiusX, outerRadiusY, -Math.PI / 2);
-    }
+    drawRing(innerCore, innerAdj.rx, innerAdj.ry, startInner);
+    if (middleCore.length) drawRing(middleCore, midAdj.rx, midAdj.ry, startMid);
+    if (emirates.length) drawRing(emirates, outAdj.rx, outAdj.ry, startOuter);
   }
 
   layout();
   document.body.classList.add("hero-ready");
 
-  window.addEventListener("resize", () => {
+  // ✅ أدق من resize (خصوصًا لو الصفحة داخل layout يتغير)
+  const ro = new ResizeObserver(() => {
     clearTimeout(window.__layoutTimer);
     window.__layoutTimer = setTimeout(layout, 120);
   });
+  ro.observe(wrap);
 })();
