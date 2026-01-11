@@ -2094,3 +2094,21 @@ body.hero-ready .hint {
     font-size: 12px;
   }
 }
+
+.icon-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #e8f3ed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 34px;
+  box-shadow: 0 0 0 2px #fff inset;
+}
+
+.icon-avatar.female {
+  background: #fce7f3; /* وردي خفيف */
+  color: #be185d;      /* وردي غامق */
+}

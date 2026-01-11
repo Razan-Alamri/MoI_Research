@@ -1,0 +1,1047 @@
+/* ===================== ADMIN (LIGHT) — matches base.html classes ===================== */
+
+:root {
+    --bg: #e7f0ea;
+    --bg2: #f3f6f4;
+    --card: #ffffff;
+    --card2: #f8fafc;
+    --text: #0f172a;
+    --muted: #6b7280;
+    --line: rgba(148, 163, 184, .35);
+    --line2: rgba(226, 232, 240, .95);
+    --green: #0b7a41;
+    --green2: #16a34a;
+    --danger: #b91c1c;
+    --warn: #b45309;
+    --shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+    --shadow2: 0 14px 32px rgba(15, 23, 42, 0.06);
+    --r22: 22px;
+    --r18: 18px;
+    --r14: 14px;
+    --r12: 12px;
+}
+
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%
+}
+
+body.admin-page {
+    margin: 0;
+    font-family: "Tajawal", system-ui, -apple-system, Segoe UI, Arial;
+    color: var(--text);
+    background: radial-gradient(circle at 0% 0%, #eaf2e0, transparent 55%), radial-gradient(circle at 100% 100%, #eaf2e0, transparent 30%), var(--bg);
+}
+
+a {
+    color: inherit;
+    text-decoration: none
+}
+
+img {
+    max-width: 100%;
+    display: block
+}
+
+
+/* ===================== Topbar ===================== */
+
+.admin-topbar-light {
+    max-width: 1500px;
+    margin: 14px auto 0;
+    padding: 10px 14px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .92);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-title-light {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-icon-bubble {
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(11, 122, 65, .10);
+    color: var(--green);
+    box-shadow: 0 10px 22px rgba(11, 122, 65, .12);
+    font-size: 1.15rem;
+}
+
+.admin-title-text {
+    font-weight: 900;
+    color: var(--text);
+}
+
+.admin-subtext {
+    font-size: .82rem;
+    color: var(--muted);
+    margin-top: 2px;
+    font-weight: 700;
+}
+
+
+/* topbar actions */
+
+.admin-topbar-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap
+}
+
+
+/* ===================== Buttons ===================== */
+
+.btn-circle {
+    border: 1px solid var(--line2);
+    background: #fff;
+    color: var(--text);
+    border-radius: 999px;
+    padding: 10px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 900;
+    transition: .18s ease;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, .06);
+}
+
+.btn-circle i {
+    color: var(--green);
+}
+
+.btn-circle:hover {
+    transform: translateY(-1px);
+    border-color: rgba(11, 122, 65, .55);
+    box-shadow: 0 14px 32px rgba(148, 163, 184, .30);
+}
+
+.btn-sm {
+    padding: 8px 12px;
+    font-size: .92rem;
+}
+
+.btn-logout {
+    background: #fff5f5;
+    border-color: #fcdada;
+    color: var(--danger);
+}
+
+.btn-logout i {
+    color: var(--danger);
+}
+
+
+/* ===================== Shell layout ===================== */
+
+.admin-shell-light {
+    max-width: 1500px;
+    margin: 12px auto 18px;
+    padding: 0 14px;
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 12px;
+}
+
+@media (max-width: 992px) {
+    .admin-shell-light {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ===================== Right menu ===================== */
+
+.admin-menu-light {
+    background: rgba(255, 255, 255, .92);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 10px;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 14px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+@media (max-width: 992px) {
+    .admin-menu-light {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+}
+
+.admin-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    text-decoration: none;
+    background: rgba(249, 250, 251, .95);
+    border: 1px solid var(--line2);
+    color: var(--text);
+    transition: .18s ease;
+    font-weight: 900;
+}
+
+.admin-nav-item .nav-ico {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(11, 122, 65, .10);
+    color: var(--green);
+    font-size: 1.05rem;
+}
+
+.admin-nav-item:hover {
+    transform: translateY(-1px);
+    border-color: rgba(11, 122, 65, .55);
+    box-shadow: 0 14px 32px rgba(148, 163, 184, 0.30);
+}
+
+.admin-nav-item.active {
+    background: rgba(11, 122, 65, .08);
+    border-color: rgba(11, 122, 65, .55);
+}
+
+.admin-nav-item.danger {
+    background: #fff5f5;
+    border-color: #fcdada;
+    color: var(--danger);
+}
+
+.admin-nav-item.danger .nav-ico {
+    background: rgba(185, 28, 28, .10);
+    color: var(--danger);
+}
+
+.admin-nav-sep {
+    height: 1px;
+    background: var(--line2);
+    margin: 6px 4px;
+}
+
+
+/* ===================== Content box ===================== */
+
+.admin-content-light {
+    background: rgba(255, 255, 255, .92);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 12px;
+    box-shadow: var(--shadow);
+    min-height: 420px;
+}
+
+
+/* ===================== Flash messages ===================== */
+
+.admin-flashes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.flash {
+    border-radius: 14px;
+    padding: 10px 12px;
+    border: 1px solid var(--line2);
+    background: #fff;
+    font-weight: 900;
+    box-shadow: var(--shadow2);
+}
+
+.flash-success {
+    border-color: rgba(22, 163, 74, .35);
+    background: rgba(22, 163, 74, .08);
+    color: #166534;
+}
+
+.flash-error {
+    border-color: rgba(239, 68, 68, .35);
+    background: rgba(239, 68, 68, .10);
+    color: #991b1b;
+}
+
+
+/* ===================== Admin cards / sections helpers ===================== */
+
+.admin-card {
+    background: #fff;
+    border: 1px solid var(--line2);
+    border-radius: 18px;
+    padding: 12px;
+    box-shadow: var(--shadow2);
+}
+
+.admin-card+.admin-card {
+    margin-top: 12px;
+}
+
+.admin-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.admin-head h2,
+.admin-head h3 {
+    margin: 0;
+    font-weight: 900;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-head h2 i,
+.admin-head h3 i {
+    color: var(--green);
+}
+
+
+/* grid helpers */
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.col-3 {
+    grid-column: span 3;
+}
+
+.col-4 {
+    grid-column: span 4;
+}
+
+.col-6 {
+    grid-column: span 6;
+}
+
+.col-12 {
+    grid-column: span 12;
+}
+
+@media (max-width: 992px) {
+    .col-3,
+    .col-4,
+    .col-6 {
+        grid-column: span 12;
+    }
+}
+
+
+/* KPI */
+
+.admin-kpi {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.kpi-title {
+    font-size: .86rem;
+    color: var(--muted);
+    font-weight: 900;
+}
+
+.kpi-value {
+    font-size: 1.65rem;
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.1;
+}
+
+
+/* pills */
+
+.admin-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: .82rem;
+    border: 1px solid var(--line2);
+    color: var(--muted);
+    background: rgba(249, 250, 251, .95);
+    font-weight: 900;
+}
+
+.admin-pill i {
+    color: var(--green);
+}
+
+.badge-success {
+    background: rgba(22, 163, 74, .08);
+    border-color: rgba(22, 163, 74, .35);
+    color: #166534;
+}
+
+.badge-warn {
+    background: rgba(245, 158, 11, .10);
+    border-color: rgba(245, 158, 11, .35);
+    color: #92400e;
+}
+
+.badge-danger {
+    background: rgba(239, 68, 68, .10);
+    border-color: rgba(239, 68, 68, .35);
+    color: #991b1b;
+}
+
+.badge-info {
+    background: rgba(59, 130, 246, .10);
+    border-color: rgba(59, 130, 246, .28);
+    color: #1e40af;
+}
+
+
+/* ===================== Forms ===================== */
+
+.admin-form {
+    display: grid;
+    gap: 10px;
+}
+
+label {
+    font-weight: 900;
+    color: #374151;
+    display: block;
+    margin: 0 0 6px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid rgba(209, 213, 219, .95);
+    padding: 10px 12px;
+    font-family: "Tajawal", system-ui;
+    background: #fff;
+    color: var(--text);
+    outline: none;
+    transition: .15s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: rgba(11, 122, 65, .55);
+    box-shadow: 0 0 0 4px rgba(11, 122, 65, .10);
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.form-col-6 {
+    grid-column: span 6;
+}
+
+.form-col-4 {
+    grid-column: span 4;
+}
+
+.form-col-3 {
+    grid-column: span 3;
+}
+
+.form-col-12 {
+    grid-column: span 12;
+}
+
+@media(max-width: 992px) {
+    .form-col-6,
+    .form-col-4,
+    .form-col-3 {
+        grid-column: span 12;
+    }
+}
+
+
+/* ===================== Tables ===================== */
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid var(--line2);
+    background: #fff;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--line2);
+    text-align: right;
+    vertical-align: top;
+    color: var(--text);
+    font-size: .92rem;
+}
+
+.admin-table th {
+    color: var(--muted);
+    font-weight: 900;
+    font-size: .85rem;
+    background: rgba(241, 245, 249, .85);
+}
+
+.admin-table tr:hover td {
+    background: rgba(249, 250, 251, .85);
+}
+
+
+/* ===================== Simple buttons (optional) ===================== */
+
+.btn-primary,
+.btn-ghost,
+.btn-danger,
+.btn-warn {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 900;
+    border-radius: 14px;
+    padding: 10px 14px;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    transition: .18s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(180deg, var(--green2), var(--green));
+    color: #fff;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.02);
+}
+
+.btn-ghost {
+    background: #fff;
+    border: 1px solid var(--line2);
+    color: var(--text);
+}
+
+.btn-ghost:hover {
+    transform: translateY(-1px);
+    border-color: rgba(11, 122, 65, .55);
+    color: var(--green);
+}
+
+.btn-danger {
+    background: #fff5f5;
+    border: 1px solid #fcdada;
+    color: var(--danger);
+}
+
+.btn-warn {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: var(--warn);
+}
+
+
+/* ===================== Dropdown Filters ===================== */
+
+.filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.filters .field {
+    min-width: 240px;
+}
+
+.filters .field small {
+    display: block;
+    color: var(--muted);
+    font-weight: 900;
+    margin: 0 0 6px;
+}
+
+
+/* ===================== Canvas / chart container ===================== */
+
+.chart-box {
+    background: #fff;
+    border: 1px solid var(--line2);
+    border-radius: 18px;
+    box-shadow: var(--shadow2);
+    padding: 12px;
+}
+
+
+/* فلاتر – نفس الرئيسية */
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 26px auto 24px;
+    padding: 12px 16px;
+    max-width: 995px;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 18px;
+    border: 1px solid rgba(148, 163, 184, .35);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, .04);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f9fafb;
+    border-radius: 999px;
+    padding: 4px 10px;
+    border: 1px solid rgba(148, 163, 184, .30);
+}
+
+.filter-icon {
+    font-size: 15px;
+    color: #0b7a41;
+}
+
+.filter-group select {
+    font-family: inherit;
+    font-size: 13px;
+    color: #111827;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 4px 4px;
+}
+
+
+/* ===================== FIX: missing helpers used in templates ===================== */
+
+
+/* رأس الكرت (بديل/مكمل لـ admin-head) */
+
+.admin-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.admin-card-head h2 {
+    margin: 0;
+    font-weight: 900;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-card-head h2 i {
+    color: var(--green);
+}
+
+
+/* صف إجراءات inline */
+
+.admin-actions-inline {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+
+/* زر إداري (إذا القالب يستخدم btn-admin) */
+
+.btn-admin {
+    border: 1px solid var(--line2);
+    background: #fff;
+    color: var(--text);
+    border-radius: 999px;
+    padding: 10px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 900;
+    transition: .18s ease;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, .06);
+}
+
+.btn-admin i {
+    color: var(--green);
+}
+
+.btn-admin:hover {
+    transform: translateY(-1px);
+    border-color: rgba(11, 122, 65, .55);
+    box-shadow: 0 14px 32px rgba(148, 163, 184, .30);
+}
+
+.btn-admin.danger {
+    background: #fff5f5;
+    border-color: #fcdada;
+    color: var(--danger);
+}
+
+.btn-admin.danger i {
+    color: var(--danger);
+}
+
+
+/* مساعدات نص */
+
+.admin-muted {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.text-strong {
+    font-weight: 900;
+    color: var(--text);
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.minw-220 {
+    min-width: 220px;
+}
+
+.minw-260 {
+    min-width: 260px;
+}
+
+
+/* تحسين وضوح النص داخل الجداول */
+
+.admin-table td .admin-muted {
+    font-weight: 700;
+    font-size: .82rem;
+    margin-top: 4px;
+}
+
+.admin-table td {
+    line-height: 1.6;
+}
+
+
+/* ===================== Innovation / Researchers tables specific ===================== */
+
+.table-wrap {
+    margin-top: 12px;
+    overflow: auto;
+    border-radius: 14px;
+}
+
+
+/* كرت KPI أعلى الصفحة (لو حطيتي KPIs) */
+
+.page-kpis {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+@media (max-width:992px) {
+    .page-kpis {
+        grid-template-columns: 1fr;
+    }
+}
+
+.kpi-card {
+    grid-column: span 3;
+}
+
+@media (max-width:992px) {
+    .kpi-card {
+        grid-column: span 12;
+    }
+}
+
+
+/* تحسين الفلاتر لتكون داخل كرت admin-card بدون كسر التصميم */
+
+.filters.in-card {
+    margin: 0 auto 12px;
+}
+
+
+/* ===================== Details pages (view) ===================== */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
+    gap: 12px;
+}
+
+@media(max-width:992px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.detail-box {
+    background: #fff;
+    border: 1px solid var(--line2);
+    border-radius: 18px;
+    padding: 12px;
+    box-shadow: var(--shadow2);
+}
+
+.detail-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.detail-title h2 {
+    margin: 0;
+    font-weight: 900;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.detail-title h2 i {
+    color: var(--green);
+}
+
+.kv-list {
+    display: grid;
+    gap: 10px;
+}
+
+.kv-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px dashed rgba(148, 163, 184, .35);
+}
+
+.kv-item:last-child {
+    border-bottom: none;
+}
+
+.kv-key {
+    color: var(--muted);
+    font-weight: 900;
+}
+
+.kv-val {
+    color: var(--text);
+    font-weight: 900;
+    text-align: left;
+}
+
+.text-box {
+    background: rgba(249, 250, 251, .95);
+    border: 1px solid var(--line2);
+    border-radius: 14px;
+    padding: 12px;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    color: var(--text);
+}
+
+
+/* تحسين عناوين صفحات العرض */
+
+.detail-title .admin-actions-inline .btn-ghost.btn-sm {
+    border-radius: 999px;
+    padding: 8px 12px;
+}
+
+.text-box b {
+    font-weight: 900;
+}
+
+.text-box {
+    color: var(--text);
+}
+
+
+/* ===== Compact view pages ===== */
+
+.admin-actions-inline {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap
+}
+
+.admin-compact {
+    padding: 10px
+}
+
+.admin-compact .admin-head {
+    margin-bottom: 8px
+}
+
+.admin-compact h2 {
+    margin: 0;
+    font-weight: 900
+}
+
+.admin-compact .btn-sm {
+    padding: 7px 11px;
+    font-size: .9rem
+}
+
+.admin-compact .admin-pill {
+    padding: 4px 10px;
+    font-size: .78rem
+}
+
+.detail-grid.compact {
+    display: grid;
+    grid-template-columns: 1.4fr .9fr;
+    gap: 10px;
+}
+
+@media (max-width: 992px) {
+    .detail-grid.compact {
+        grid-template-columns: 1fr
+    }
+}
+
+.detail-box {
+    background: #fff;
+    border: 1px solid var(--line2);
+    border-radius: 18px;
+    box-shadow: var(--shadow2);
+    padding: 12px
+}
+
+.detail-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap
+}
+
+.kv-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.kv-list.compact {
+    margin-top: 10px
+}
+
+@media (max-width: 650px) {
+    .kv-list {
+        grid-template-columns: 1fr
+    }
+}
+
+.kv-item {
+    border: 1px solid var(--line2);
+    background: rgba(249, 250, 251, .95);
+    border-radius: 14px;
+    padding: 8px 10px;
+}
+
+.kv-key {
+    font-size: .78rem;
+    color: var(--muted);
+    font-weight: 900;
+    margin-bottom: 2px
+}
+
+.kv-val {
+    font-size: .92rem;
+    color: var(--text);
+    font-weight: 900
+}
+
+.text-box.compact {
+    border: 1px solid var(--line2);
+    background: #fff;
+    border-radius: 14px;
+    padding: 10px 12px;
+    line-height: 1.9;
+    font-size: .92rem;
+    color: var(--text);
+}
+
+.admin-form textarea {
+    min-height: 110px
+}
+
+
+/* كروت view تكون أضيق */
+
+.admin-compact {
+    padding: 10px !important;
+}
+
+.detail-box.admin-compact {
+    padding: 12px !important;
+}
+
+.detail-title h2 {
+    margin: 0;
+    font-weight: 900;
+}
+
+.detail-title {
+    margin-bottom: 6px;
+}
+
+.admin-muted {
+    font-size: .86rem;
+}

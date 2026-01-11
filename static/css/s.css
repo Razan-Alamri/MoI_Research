@@ -497,20 +497,17 @@ body.about-body {
 
 /* نقلل الفراغ حول الكرت */
 .about-shell {
-  padding: 30px 16px 24px;
-  /* بدل 60px 16px 40px */
+  padding: 30px 16px 24px;  /* بدل 60px 16px 40px */
 }
 
 /* نقلل البادينق داخل الكرت الأبيض نفسه */
 .about-frame {
-  padding: 16px 32px 20px;
-  /* بدل 24px 40px 30px */
+  padding: 16px 32px 20px;  /* بدل 24px 40px 30px */
 }
 
 /* نصغّر الشعارات شوي عشان ما تاخذ ارتفاع كبير */
 .about-logos img {
-  height: 90px;
-  /* بدل 120px */
+  height: 90px;  /* بدل 120px */
 }
 
 /* نقلل الفراغ فوق الأهداف */
@@ -841,6 +838,272 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
   box-shadow: 0 4px 12px rgba(185, 28, 28, 0.15);
 }
 
+/* =======================================================
+   صفحة تسجيل دخول الباحثين – login.html
+   ======================================================= */
+
+   body.login-body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 0% 0%, #eaf2e0, transparent 55%),
+    radial-gradient(circle at 100% 100%, #eaf2e0, transparent 30%),
+    #e7f0ea;
+}
+
+/* الحاوية الأساسية */
+.login-shell {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 60px 16px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* دوائر خفيفة في الخلفية */
+.login-orbit {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(40px);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* الإطار الأبيض الرئيسي */
+.login-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1500px;
+  /* توسيع الإطار */
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 28px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.25);
+  padding: 24px 40px 30px;
+}
+
+/* الشعارات في أعلى الإطار */
+.login-logos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-logos .logos-left,
+.login-logos .logos-right {
+  display: flex;
+  align-items: center;
+}
+
+.login-logos img {
+  height: 120px;
+}
+
+/* الإطار الأبيض */
+.login-frame {
+  max-width: 760px;
+  max-height: 760px;
+  width: 100%;
+  border-radius: 28px;
+  padding: 50px 36px 34px;
+  background: #ffffff;
+  margin: auto;
+}
+
+/* الشعارات */
+.login-logos {
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.login-logos .logos-right img:first-child {
+  height: 84px;
+}
+
+.login-logos .logos-right img:last-child {
+  height: 94px;
+}
+
+.login-logos .logos-left img {
+  height: 84px;
+}
+
+/* كتلة النص */
+
+.login-hero-text {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.login-hero-text {
+  max-width: 500px;
+  margin: -22px auto 0;
+  text-align: center;
+}
+
+/* العنوان */
+/* العنوان الرئيسي */
+.login-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 5px;
+  line-height: 1.35;
+}
+
+.login-title span {
+  color: #0b7a41;
+}
+.login-title {
+  font-size: 2.25rem;
+  margin: 0px 0 10px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.login-title-nowrap {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin-top: 6px;
+}
+
+/* الشارة */
+.login-badge-login,
+.login-hero .badge-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  background: rgba(11, 122, 65, 0.06);
+  color: #0b7a41;
+  font-size: 0.82rem;
+}
+
+.login-badge-login span,
+.badge-login span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #16a34a;
+}
+
+/* وصف الصفحة */
+.login-subtitle {
+  font-size: 0.98rem;
+  color: #6b7280;
+  max-width: 620px;
+  margin: 16px auto 24px;
+}
+
+.login-subtitle {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  color: #6b7280;
+  line-height: 1.7;
+}
+
+/* صندوق تسجيل الدخول */
+.login-box {
+  background: #f9fafb;
+  border-radius: 22px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  padding: 24px 22px 20px;
+  text-align: right;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+}
+
+/* عنوان الصندوق */
+.login-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.login-header-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.login-header-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0f2f1;
+  color: #0b7a41;
+  font-size: 1.25rem;
+}
+
+/* الحقول */
+.login-form .form-group {
+  margin-bottom: 14px;
+}
+
+.login-form .form-label {
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  display: inline-block;
+}
+
+.login-form .form-control {
+  height: 42px;
+  font-size: 0.95rem;
+}
+
+/* الروابط والأسفل */
+.login-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.login-forgot {
+  font-size: 0.82rem;
+  color: #6b7280;
+  text-decoration: none;
+}
+
+.login-submit.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 22px;
+  font-size: 0.95rem;
+  border-radius: 999px;
+  font-family:'Tajawal', sans-serif !important;
+}
+
+/* تحسين بسيط للصفحة على الشاشات الصغيرة */
+@media (max-width: 640px) {
+  .login-frame {
+    padding: 22px 20px;
+  }
+
+  .login-title {
+    font-size: 2rem;
+  }
+
+  .login-submit.btn-primary {
+    padding: 8px 18px;
+  }
+}
+
+
 
 /* =========================
    صفحة الهبوط الجديدة
@@ -867,8 +1130,7 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
 
 /* الهيرو في صفحة الهبوط */
 .landing-hero {
-  min-height: calc(100vh - 220px);
-  /* بعد طرح الهيدر والفوتر تقريباً */
+  min-height: calc(100vh - 220px); /* بعد طرح الهيدر والفوتر تقريباً */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -946,134 +1208,6 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
   color: var(--primary);
 }
 
-/* =============================
-   هيرو محسّن – أكثر احترافية
-============================= */
-
-/* خلفية تأثير دوائر */
-.landing-bg-orbits {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(11, 122, 65, 0.18), transparent 60%),
-    radial-gradient(circle at 80% 70%, rgba(11, 122, 65, 0.12), transparent 55%);
-  z-index: 0;
-}
-
-/* الحاوية */
-.landing-hero {
-  position: relative;
-  overflow: hidden;
-}
-
-/* دائرة الشعار – تأثير 3D بسيط */
-.landing-logo-circle {
-  width: 260px;
-  height: 260px;
-  border-radius: 999px;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-  box-shadow:
-    0 10px 20px rgba(0, 0, 0, 0.05),
-    0 25px 45px rgba(0, 0, 0, 0.08);
-  transform: translateY(0);
-  animation: float 3.8s ease-in-out infinite;
-}
-
-/* حركة طافية */
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-12px);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
-}
-
-/* نص الهيرو */
-.landing-title {
-  font-size: 2.6rem;
-  font-weight: 900;
-  margin-bottom: 10px;
-  color: #0f172a;
-}
-
-.landing-title span {
-  color: var(--primary);
-}
-
-/* زر CTA */
-.landing-main-btn {
-  padding-inline: 30px;
-  padding-block: 12px;
-  border-radius: 999px;
-  font-size: 1rem;
-  font-weight: 700;
-  display: inline-flex;
-  gap: 6px;
-  align-items: center;
-}
-
-/* تأثير الدخول (Fade & Slide) */
-.fade-in {
-  animation: fadeIn 0.8s ease forwards;
-  opacity: 0;
-}
-
-.slide-up {
-  animation: slideUp 0.9s ease forwards;
-  opacity: 0;
-}
-
-.slide-up-delay-1 {
-  animation: slideUp 1s 0.15s ease forwards;
-  opacity: 0;
-}
-
-.slide-up-delay-2 {
-  animation: slideUp 1s 0.3s ease forwards;
-  opacity: 0;
-}
-
-.slide-up-delay-3 {
-  animation: slideUp 1s 0.45s ease forwards;
-  opacity: 0;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* =======================================
    تحسين الاستجابة لكل الصفحات (PC / iPad / جوال)
    ضعي هذا في آخر الملف
@@ -1081,17 +1215,14 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
 
 /* شاشات أقل من 1200px (لابتوبات متوسطة + آيباد أفقي) */
 @media (max-width: 1200px) {
-
   /* صفحة عن معرفة */
   .about-shell {
     padding: 36px 16px 26px;
   }
-
   .about-frame {
     max-width: 1100px;
     padding: 18px 28px 20px;
   }
-
   .about-logos img {
     height: 80px;
   }
@@ -1103,13 +1234,20 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
     padding-inline: 24px;
   }
 
+  /* صفحة دخول الباحثين */
+  .login-shell {
+    padding: 40px 16px 26px;
+  }
+  .login-frame {
+    max-width: 640px;
+    padding: 32px 28px 26px;
+  }
 
   /* صفحة الهبوط الجديدة */
   .landing-hero {
     min-height: calc(100vh - 220px);
     padding: 24px 16px 32px;
   }
-
   .landing-logo-circle {
     width: 260px;
     height: 260px;
@@ -1118,26 +1256,21 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
 
 /* شاشات أقل من 992px (آيباد رأسي + أغلب التابلت) */
 @media (max-width: 992px) {
-
   /* about */
   .about-shell {
     padding: 26px 10px 22px;
   }
-
   .about-frame {
     max-width: 900px;
     padding: 16px 20px 18px;
   }
-
   .about-logos {
     flex-direction: row;
     justify-content: space-between;
   }
-
   .about-logos img {
     height: 60px;
   }
-
   .about-title {
     font-size: 2.1rem;
   }
@@ -1147,22 +1280,36 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
     min-height: calc(100vh - 150px);
     padding: 18px 18px;
   }
-
   .center-node {
     width: 170px;
     height: 170px;
+  }
+
+  /* login */
+  .login-shell {
+    padding: 30px 12px 22px;
+  }
+  .login-frame {
+    max-width: 580px;
+    padding: 26px 22px 22px;
+  }
+  .login-logos .logos-right img:first-child,
+  .login-logos .logos-right img:last-child,
+  .login-logos .logos-left img {
+    height: 64px;
+  }
+  .login-title {
+    font-size: 2rem;
   }
 
   /* landing */
   .landing-hero {
     padding: 26px 14px 32px;
   }
-
   .landing-logo-circle {
     width: 230px;
     height: 230px;
   }
-
   .landing-title {
     font-size: 2rem;
   }
@@ -1170,7 +1317,6 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
 
 /* شاشات أقل من 768px (جوالات كبيرة + بعض الآيبادات الصغيرة) */
 @media (max-width: 768px) {
-
   html,
   body {
     height: auto;
@@ -1181,21 +1327,17 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
     padding: 14px 16px 18px;
     border-radius: 22px;
   }
-
   .about-logos {
     flex-direction: column;
     gap: 8px;
     align-items: center;
   }
-
   .about-logos img {
     height: 52px;
   }
-
   .about-subtitle {
     margin: 10px auto 8px;
   }
-
   .goals-grid,
   .quick-grid,
   .about-steps {
@@ -1207,15 +1349,34 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
     padding: 18px 10px;
     min-height: calc(100vh - 140px);
   }
-
   .center-node {
     width: 150px;
     height: 150px;
   }
-
   .hint {
     font-size: 12px;
     bottom: 10px;
+  }
+
+  /* login */
+  .login-frame {
+    padding: 22px 18px 20px;
+    border-radius: 22px;
+  }
+  .login-logos {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .login-logos .logos-right img:first-child,
+  .login-logos .logos-right img:last-child,
+  .login-logos .logos-left img {
+    height: 54px;
+  }
+  .login-subtitle {
+    font-size: 0.9rem;
+  }
+  .login-box {
+    padding: 18px 16px 16px;
   }
 
   /* landing */
@@ -1223,17 +1384,14 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
     min-height: calc(100vh - 190px);
     padding: 22px 10px 30px;
   }
-
   .landing-logo-circle {
     width: 210px;
     height: 210px;
     margin-bottom: 14px;
   }
-
   .landing-title {
     font-size: 1.8rem;
   }
-
   .landing-text {
     font-size: 0.9rem;
     margin-bottom: 18px;
@@ -1242,16 +1400,13 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
 
 /* شاشات صغيرة جداً (≤ 480px – أغلب الجوالات) */
 @media (max-width: 480px) {
-
   /* about */
   .about-shell {
     padding: 18px 8px 18px;
   }
-
   .about-frame {
     padding: 14px 12px 16px;
   }
-
   .about-title {
     font-size: 1.8rem;
   }
@@ -1262,20 +1417,28 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
     height: 135px;
   }
 
+  /* login */
+  .login-frame {
+    padding: 18px 14px 16px;
+  }
+  .login-title {
+    font-size: 1.7rem;
+  }
+  .login-header-title {
+    font-size: 0.95rem;
+  }
+
   /* landing */
   .landing-logo-circle {
     width: 180px;
     height: 180px;
   }
-
   .landing-title {
     font-size: 1.6rem;
   }
-
   .landing-actions {
     gap: 6px;
   }
-
   .landing-main-btn {
     width: 100%;
     justify-content: center;
@@ -1288,9 +1451,9 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
 
 /* شاشات أعرض من 1600px */
 @media (min-width: 1600px) {
-
   /* نوسّع الإطارات عشان ما يكون المحتوى صغير وسط الشاشة */
-  .about-frame {
+  .about-frame,
+  .login-frame {
     max-width: 1200px;
   }
 
@@ -1306,7 +1469,8 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
 
 /* شاشات أعرض من 2000px (تلفزيون وغيره) */
 @media (min-width: 2000px) {
-  .about-frame {
+  .about-frame,
+  .login-frame {
     max-width: 1400px;
   }
 
@@ -1331,7 +1495,6 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
 
 /* أي شاشة ارتفاعها أقل من ~ 750px (ThinkPad, لابتوبات صغيرة) */
 @media (max-height: 750px) {
-
   /* صفحة عن معرفة */
   .about-shell {
     padding-top: 18px;
@@ -1345,6 +1508,19 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
 
   .about-logos img {
     height: 70px;
+  }
+
+  /* صفحة الدخول */
+  .login-shell {
+    padding-top: 22px;
+    padding-bottom: 16px;
+  }
+
+  .login-frame {
+    padding-top: 18px;
+    padding-bottom: 16px;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
   }
 
   /* الهيرو الدائري */
@@ -1371,9 +1547,228 @@ html[dir="rtl"] .input-icon-wrap .input-with-icon {
   }
 }
 
-/* =======================================================
-   صفحة تسجيل دخول الباحثين – login.html (النسخة النهائية)
-   ======================================================= */
+/* لو كانت الشاشة قصيرة وعريضة (لابتوب) نضغط البادينق أكثر */
+@media (max-height: 750px) and (min-width: 1024px) {
+  .about-shell,
+  .login-shell,
+  .landing-hero {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+}
+
+
+/* tabs أعلى فورم الدخول/التسجيل */
+.login-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  background: #e5edf5;
+}
+
+.login-tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #64748b;
+}
+
+.login-tab.is-active {
+  background: #ffffff;
+  color: var(--primary);
+  box-shadow: 0 0 0 1px rgba(15, 118, 110, 0.12),
+              0 6px 16px rgba(15, 118, 110, 0.18);
+}
+
+/* إخفاء وإظهار حقول كل وضع */
+.login-box .register-only {
+  display: none;
+}
+
+.login-box.mode-register .register-only {
+  display: block;
+}
+
+.login-box.mode-register .login-only {
+  display: none;
+}
+
+.login-header-sub {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+/* شبكة ثنائية الأعمدة داخل نموذج الدخول/التسجيل */
+.login-form .form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 700px) {
+  .login-form .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* شبكة ثنائية الأعمدة داخل نموذج الدخول/التسجيل */
+.login-form .form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 700px) {
+  .login-form .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* نوسّع إطار صفحة الدخول شوية عشان وضع التسجيل */
+.login-frame {
+  max-width: 980px;       /* كانت غالباً ~700، نخليها أعرض */
+}
+
+/* صندوق الفورم نفسه */
+.login-box {
+  max-width: 640px;
+  width: 100%;
+}
+
+/* شبكة عمودين في الفورم داخل صفحة الدخول */
+.login-form .form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* على الشاشات الصغيرة يتحول عمود واحد وما يطلع برة البوكس */
+@media (max-width: 768px) {
+  .login-frame {
+    max-width: 100%;
+    padding-inline: 16px;
+  }
+
+  .login-box {
+    max-width: 100%;
+  }
+
+  .login-form .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================
+   ضبط صفحة دخول/تسجيل الباحثين بدون سكرول
+   (على اللابتوب/الشاشات العريضة)
+   ========================================= */
+
+@media (min-width: 900px) {
+  /* نلغي أي max-height / scroll داخلي للكرت */
+  .login-frame {
+    max-width: 1040px;        /* نوسع العرض شوي */
+    max-height: none;
+    overflow: visible;
+    padding: 22px 34px 24px;  /* نقلل البادينق شوي */
+  }
+
+  .login-shell {
+    padding-top: 26px;
+    padding-bottom: 26px;
+  }
+
+  /* نخلي الفورم أعرض شوية عشان يقل الارتفاع */
+  .login-box {
+    max-width: 780px;
+    width: 100%;
+    padding: 18px 22px 16px;  /* تقليل البادينق الداخلي */
+  }
+
+  /* نص العنوان والوصف يكونوا مضغوطين */
+  .login-title {
+    font-size: 2.1rem;
+    margin: 0 0 6px;
+  }
+
+  .login-subtitle {
+    margin: 8px auto 16px;
+    font-size: 0.9rem;
+  }
+
+  /* تقليل المسافات بين الحقول */
+  .login-form .form-group {
+    margin-bottom: 10px;
+  }
+
+  .login-form .form-control {
+    height: 38px;
+    font-size: 0.9rem;
+  }
+
+  /* الشبكة ثنائية الأعمدة تبقى كما هي */
+  .login-form .form-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
+/* إلغاء أي max-height قديم كان يسبب سكرول داخلي – على الشاشات المتوسطة وفوق */
+@media (min-width: 768px) {
+  .login-frame {
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+/* شبكة ثلاثية الأعمدة لحقول التسجيل */
+.login-form .form-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* على الشاشات المتوسطة: عمودين */
+@media (max-width: 992px) {
+  .login-form .form-grid-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* على الجوال: عمود واحد */
+@media (max-width: 640px) {
+  .login-form .form-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* تأكد أن الـ tab المفعّل له ستايل */
+.login-tab.active {
+  background: #ffffff;
+  color: var(--primary);
+  box-shadow:
+    0 0 0 1px rgba(15, 118, 110, 0.12),
+    0 6px 16px rgba(15, 118, 110, 0.18);
+}
+/* الوضع العادي */
+.login-box {
+  max-width: 640px;
+  width: 100%;
+  transition: max-width 0.25s ease;
+}
+
+/* الوضع الموسّع —— فقط عند تسجيل جديد */
+.login-box.wide-box {
+  max-width: 860px;   /* زوديها حسب رغبتك */
+}
 
 /* خلفية عامة لصفحة الدخول */
 body.login-body {
@@ -1406,7 +1801,7 @@ body.login-body {
   padding: 24px 40px 30px;
 }
 
-/* الشعارات أعلى الكرت */
+/* الشعارات */
 .login-logos {
   display: flex;
   justify-content: space-between;
@@ -1415,18 +1810,11 @@ body.login-body {
   gap: 16px;
 }
 
-.login-logos .logos-left,
-.login-logos .logos-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .login-logos img {
   height: 90px;
 }
 
-/* كتلة النص */
+/* محتوى الهيرو */
 .login-hero-text {
   max-width: 720px;
   margin: 0 auto;
@@ -1441,11 +1829,9 @@ body.login-body {
   margin: 0 0 8px;
   line-height: 1.35;
 }
-
 .login-title span {
-  color: var(--primary);
+  color: #0b7a41;
 }
-
 .login-title-nowrap {
   font-size: 1.05rem;
   font-weight: 600;
@@ -1465,7 +1851,6 @@ body.login-body {
   color: #0b7a41;
   font-size: 0.82rem;
 }
-
 .login-badge-login span {
   width: 7px;
   height: 7px;
@@ -1496,7 +1881,7 @@ body.login-body {
   transition: max-width 0.25s ease;
 }
 
-/* توسيع الصندوق في وضع التسجيل الجديد */
+/* عند التسجيل الجديد نوسّع الصندوق */
 .login-box.wide-box {
   max-width: 860px;
 }
@@ -1508,19 +1893,16 @@ body.login-body {
   justify-content: space-between;
   margin-bottom: 14px;
 }
-
 .login-header-title {
   font-weight: 700;
   font-size: 1.05rem;
   color: #111827;
 }
-
 .login-header-sub {
   font-size: 0.8rem;
-  color: var(--muted);
+  color: #6b7280;
   margin-top: 2px;
 }
-
 .login-header-icon {
   width: 38px;
   height: 38px;
@@ -1533,7 +1915,7 @@ body.login-body {
   font-size: 1.25rem;
 }
 
-/* التبويبات (دخول / إنشاء حساب) */
+/* التبويبات */
 .login-tabs {
   display: flex;
   gap: 4px;
@@ -1542,7 +1924,6 @@ body.login-body {
   border-radius: 999px;
   background: #e5edf5;
 }
-
 .login-tab {
   flex: 1;
   border: none;
@@ -1557,10 +1938,9 @@ body.login-body {
   gap: 6px;
   color: #64748b;
 }
-
 .login-tab.active {
   background: #ffffff;
-  color: var(--primary);
+  color: #0b7a41;
   box-shadow:
     0 0 0 1px rgba(15, 118, 110, 0.12),
     0 6px 16px rgba(15, 118, 110, 0.18);
@@ -1570,55 +1950,58 @@ body.login-body {
 .login-form .form-group {
   margin-bottom: 12px;
 }
-
 .login-form .form-label {
   font-size: 0.9rem;
   margin-bottom: 6px;
   display: inline-block;
 }
-
 .login-form .form-control {
   height: 42px;
   font-size: 0.95rem;
 }
 
-/* شبكات الأعمدة */
+/* شبكة عمودين (لو احتجتيها) */
 .login-form .form-grid-2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
+/* شبكة 3 أعمدة لوضع التسجيل */
 .login-form .form-grid-3 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
-/* نستخدم input-icon-wrap العامة اللي فوق في الملف
-   (RTL / LTR) – ما نعيد تعريفها هنا */
+/* أيقونات داخل الحقول */
+.input-icon-wrap {
+  position: relative;
+}
+.input-icon-wrap .input-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #9ca3af;
+}
+.input-with-icon {
+  padding-left: 30px !important;
+}
 
-/* الأزرار أسفل الفورم */
+/* أزرار الأسفل */
 .login-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
 }
-
-.login-submit,
-.btn-primary {
-  font-family: 'Tajawal', sans-serif !important;
-  font-weight: 600;
-  /* نفس ثقل باقي الصفحة */
-}
-
 .login-forgot {
   font-size: 0.82rem;
   color: #6b7280;
   text-decoration: none;
 }
-
 .login-submit.btn-primary,
 .login-submit {
   display: inline-flex;
@@ -1636,659 +2019,46 @@ body.login-body {
   border-radius: 12px;
   font-size: 0.9rem;
 }
-
 .flash-error {
   background: #fef2f2;
   color: #b91c1c;
 }
-
 .flash-success {
   background: #ecfdf5;
   color: #15803d;
 }
 
-.flash-info {
-  background: #e5f3ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
-}
-
-/* تغليف التبويب */
-.login-tabs-wrap {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-/* شريط التبويب */
-.login-tabs {
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px;
-  border-radius: 999px;
-  background: #e5edf5;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.10);
-}
-
-/* زر التبويب */
-.login-tab {
-  flex: 1;
-  border: none;
-  background: transparent;
-  border-radius: 999px;
-  padding: 7px 16px;
-  font-size: 0.9rem;
-  font-family: inherit;
-  /* نفس خط الصفحة (Tajawal) */
-  font-weight: 600;
-  /* شوي أثقل عشان تحسيه تبويب */
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  color: #64748b;
-  transition:
-    background 0.18s ease,
-    color 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.12s ease;
-}
-
-.login-tab {
-  white-space: nowrap;
-  padding: 8px 28px;
-  min-width: 180px;
-}
-
-
-/* أيقونة داخل التبويب */
-.login-tab i {
-  font-size: 1rem;
-  margin-top: 1px;
-  /* تعديل بسيط لموازنة الأيقونة مع النص */
-}
-
-/* النص داخل التبويب */
-.login-tab span {
-  line-height: 1;
-}
-
-/* التبويب النشط */
-.login-tab.active {
-  background: #ffffff;
-  color: var(--primary);
-  box-shadow:
-    0 0 0 1px rgba(15, 118, 110, 0.12),
-    0 6px 16px rgba(15, 118, 110, 0.18);
-  transform: translateY(-1px);
-}
-
-/* هوفر بسيط */
-.login-tab:hover {
-  transform: translateY(-1px);
-}
-
-.required-star {
-  color: #dc2626;
-  /* أحمر جميل */
-  font-weight: 700;
-  margin: 0 2px;
-}
-
-.file-input {
-  height: 42px;
-  font-size: 0.9rem;
-  padding-inline-start: 32px;
-  /* مثل input-with-icon */
-}
-
-/* نضبط زر اختيار الملف (في المتصفحات المبنية على WebKit مثل كروم) */
-.file-input::-webkit-file-upload-button {
-  font-family: "Tajawal", system-ui, sans-serif;
-  border-radius: 999px;
-  border: 1px solid var(--border-soft);
-  background: #ffffff;
-  padding: 4px 12px;
-  cursor: pointer;
-}
-
-/* =========================
-   استجابة – تابلت
-   ========================= */
+/* استجابة – لابتوبات أصغر / تابلت */
 @media (max-width: 992px) {
   .login-frame {
     max-width: 720px;
     padding: 22px 24px 22px;
   }
-
   .login-box {
     max-width: 100%;
   }
-
   .login-form .form-grid-3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* =========================
-   استجابة – جوال
-   ========================= */
+/* استجابة – جوالات */
 @media (max-width: 640px) {
   .login-frame {
     max-width: 100%;
     padding: 20px 16px;
-    border-radius: 22px;
   }
-
   .login-logos {
     flex-direction: column;
   }
-
   .login-logos img {
     height: 70px;
   }
-
   .login-title {
     font-size: 2rem;
   }
-
   .login-form .form-grid-2,
   .login-form .form-grid-3 {
     grid-template-columns: 1fr;
   }
-
-  .login-box {
-    padding: 18px 16px 16px;
-  }
 }
-
-/* =========================
-   شاشات قصيرة (لابتوبات بارتفاع قليل)
-   ========================= */
-@media (max-height: 750px) and (min-width: 1024px) {
-  .login-shell {
-    padding-top: 18px;
-    padding-bottom: 18px;
-  }
-
-  .login-frame {
-    padding-top: 18px;
-    padding-bottom: 18px;
-    max-height: calc(100vh - 40px);
-    overflow-y: auto;
-  }
-}
-
-.global-search {
-  display: flex;
-  align-items: center;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  padding: 6px 12px;
-  border-radius: 999px;
-  width: 270px;
-  max-width: 100%;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
-  margin-right: 7px;
-  margin-left: 0px;
-}
-
-.global-search input {
-  border: none;
-  outline: none;
-  width: 100%;
-  font-family: "Tajawal", system-ui, sans-serif;
-  font-size: 0.9rem;
-  color: #111827;
-  background: transparent;
-}
-
-.global-search input::placeholder {
-  color: #9ca3af;
-}
-
-.global-search i {
-  color: #0b7a41;
-  margin-left: 8px;
-  font-size: 1rem;
-}
-
-/* على الشاشات الصغيرة: خليها تاخذ العرض كامل */
-@media (max-width: 768px) {
-  .global-search {
-    width: 100%;
-  }
-}
-
-.home-search-area {
-  margin: 10px 0 10px;
-  display: flex;
-  justify-content: center;
-}
-
-.global-search {
-  display: flex;
-  align-items: center;
-  background: #ffffffee;
-  border: 1px solid #d1d5db;
-  padding: 5px 14px;
-  border-radius: 999px;
-  min-width: 360px;
-  max-width: 520px;
-  width: 100%;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.12);
-  backdrop-filter: blur(8px);
-}
-
-.global-search input {
-  border: none;
-  outline: none;
-  width: 100%;
-  background: transparent;
-  font-family: "Tajawal", sans-serif;
-  font-size: 0.9rem;
-}
-
-.global-search i {
-  color: var(--primary);
-  margin-left: 10px;
-}
-
-/* نخلي الهيرو قابلة لوضع الأزرار تحتها */
-.hero {
-  position: relative;
-}
-
-/* شريط الأزرار تحت الأوربت */
-.hero-actions {
-  position: absolute;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 12px;
-  z-index: 40;
-}
-
-/* في الشاشات الصغيرة: الأزرار تحت بعض */
-@media (max-width: 768px) {
-  .hero-actions {
-    flex-direction: column;
-    align-items: center;
-    bottom: 16px;
-  }
-
-  .hero-actions .search-planet,
-  .hero-actions .innovation-planet {
-    width: 90%;
-    max-width: 360px;
-    justify-content: center;
-  }
-}
-
-/* ========= ستايل مشترك للزرّين ========= */
-.hero-actions .search-planet,
-.hero-actions .innovation-planet {
-  border: none;
-  padding: 10px 26px;
-  border-radius: 999px;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-
-  font-family: "Tajawal", sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
-  backdrop-filter: blur(10px);
-  transition: 0.22s ease;
-}
-
-.hero-actions .search-planet .planet-icon,
-.hero-actions .innovation-planet .planet-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-
-.hero-actions .search-planet .planet-label,
-.hero-actions .innovation-planet .planet-label {
-  white-space: nowrap;
-}
-
-/* ========= كوكب البحث – نفس الستايل الشفاف القديم ========= */
-.search-planet {
-  background: rgba(255, 255, 255, 0.96);
-  color: #0f172a;
-}
-
-.search-planet .planet-icon {
-  background: #0b7a41;
-  color: #fff;
-  box-shadow: 0 8px 20px rgba(11, 122, 65, 0.5);
-}
-
-.search-planet:hover {
-  transform: translateY(-3px);
-  background: rgba(255, 255, 255, 0.95);
-}
-
-/* ========= زر "قدّم ابتكارك" – نفس الشكل بألوان هادئة ========= */
-.innovation-planet {
-  background: rgba(255, 255, 255, 0.96);
-  color: #111827;
-  border: 1px solid rgba(148, 163, 184, 0.7);
-}
-
-.innovation-planet .planet-icon {
-  background: rgba(251, 191, 36, 0.16);
-  /* لمسة ذهبية خفيفة */
-  color: #b45309;
-}
-
-.innovation-planet:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.22);
-  border-color: #0b7a41;
-}
-
-/* ========= مودال البحث ========= */
-.search-modal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-}
-
-.search-modal.is-open {
-  display: flex;
-}
-
-.search-modal-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.35);
-  backdrop-filter: blur(4px);
-}
-
-.search-modal-dialog {
-  position: relative;
-  max-width: 640px;
-  width: 100%;
-  margin: 0 16px;
-  background: #f9fafb;
-  border-radius: 20px;
-  padding: 22px 22px 18px;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
-  z-index: 1;
-}
-
-.search-modal-close {
-  position: absolute;
-  top: 10px;
-  left: 12px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: #6b7280;
-}
-
-.search-modal-title {
-  font-size: 1.1rem;
-  margin: 0 0 14px;
-  color: #111827;
-}
-
-.search-modal-form {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #ffffff;
-  border-radius: 999px;
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-}
-
-.search-modal-form i {
-  color: #0b7a41;
-}
-
-.search-modal-form input {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-family: "Tajawal", sans-serif;
-  font-size: 0.9rem;
-}
-
-.search-modal-form button {
-  border: none;
-  border-radius: 999px;
-  padding: 6px 18px;
-  background: #0b7a41;
-  color: #fff;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.search-modal-form button:hover {
-  background: #0d8e4c;
-}
-
-.search-modal-hint {
-  margin-top: 8px;
-  font-size: 0.8rem;
-  color: #6b7280;
-}
-
-/* ========= مودال تقديم الابتكار ========= */
-.innovation-modal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 220;
-}
-
-.innovation-modal.is-open {
-  display: flex;
-}
-
-.innovation-modal .modal-bg {
-  position: absolute;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.35);
-  backdrop-filter: blur(6px);
-}
-
-.innovation-modal .modal-box {
-  position: relative;
-  max-width: 720px;
-  width: 100%;
-  margin: 0 16px;
-  background: #f9fafb;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 20px;
-  padding: 22px 24px 18px;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
-  z-index: 1;
-  font-family: "Tajawal", system-ui;
-  /* ✅ نفس خط الصفحة */
-}
-
-.innovation-modal .modal-box h2 {
-  margin: 0 0 12px;
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #111827;
-}
-
-/* النموذج */
-.innovation-modal form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* الليبل مع الأيقونة */
-.field-label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: #111827;
-  margin-top: 6px;
-}
-
-.field-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-  background: rgba(11, 122, 65, 0.10);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  color: #0b7a41;
-}
-
-/* الحقول */
-.innovation-modal input[type="text"],
-.innovation-modal input[type="email"],
-.innovation-modal input[type="tel"],
-.innovation-modal select,
-.innovation-modal textarea,
-.innovation-modal input[type="file"] {
-  width: 100%;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  padding: 10px 12px;
-  font-family: "Tajawal", system-ui;
-  font-size: 0.95rem;
-  background: #ffffff;
-  color: #111827;
-  outline: none;
-  transition: border-color .15s ease, box-shadow .15s ease;
-}
-
-.innovation-modal input[type="tel"]{
-  text-align: right;
-}
-
-.innovation-modal textarea {
-  min-height: 120px;
-  resize: vertical;
-}
-
-.innovation-modal input::placeholder,
-.innovation-modal textarea::placeholder {
-  color: #9ca3af;
-}
-
-.innovation-modal input:focus,
-.innovation-modal select:focus,
-.innovation-modal textarea:focus {
-  border-color: rgba(11, 122, 65, 0.55);
-  box-shadow: 0 0 0 4px rgba(11, 122, 65, 0.14);
-}
-
-/* زر الإرسال */
-.innovation-modal .send-btn {
-  margin-top: 12px;
-  align-self: center;
-  border: none;
-  border-radius: 999px;
-  padding: 10px 34px;
-  background: #0b7a41;
-  color: #ffffff;
-  font-size: 0.98rem;
-  font-weight: 800;
-  font-family: "Tajawal", system-ui;
-  cursor: pointer;
-  box-shadow: 0 10px 22px rgba(11, 122, 65, 0.25);
-  transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
-}
-
-.innovation-modal .send-btn:hover {
-  background: #0d8e4c;
-  transform: translateY(-1px);
-  box-shadow: 0 14px 30px rgba(11, 122, 65, 0.30);
-}
-
-/* ملاحظة الخصوصية */
-.form-note {
-  margin-top: 10px;
-  font-size: 0.82rem;
-  color: #6b7280;
-  text-align: center;
-  line-height: 1.7;
-  font-family: "Tajawal", system-ui;
-}
-
-.form-note i {
-  color: #0b7a41;
-  /* ✅ أخضر */
-  margin-left: 6px;
-}
-
-/* زر الإغلاق */
-.innovation-modal .close-modal {
-  position: absolute;
-  top: 10px;
-  left: 12px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: #6b7280;
-  font-size: 1rem;
-}
-
-.innovation-modal .close-modal:hover {
-  color: #111827;
-}
-
-/* intl-tel-input align with your inputs */
-.iti {
-  width: 100%;
-}
-
-.iti__tel-input {
-  width: 100%;
-  border-radius: 12px !important;
-  border: 1px solid #e5e7eb !important;
-  padding: 10px 12px !important;
-  font-family: "Tajawal", system-ui !important;
-  font-size: 0.95rem !important;
-}
-
-.iti__selected-country {
-  border-radius: 10px;
-}
-
-/* لازم: عرض الحقل كامل */
-.iti { width: 100%; } /* موصى به رسميًا */  /* :contentReference[oaicite:2]{index=2} */
-
-/* أهم سطرين لحل لخبطة/اختفاء الأعلام: حددي مسار صور الأعلام */
-.iti {
-  --iti-path-flags: "https://cdn.jsdelivr.net/npm/intl-tel-input@25.14.1/build/img/";
-  --iti-path-globe: "https://cdn.jsdelivr.net/npm/intl-tel-input@25.14.1/build/img/";
-}
-
-/* داخل المودال: خلي قائمة الدول تطلع فوق كل شيء */
-.iti__country-list { z-index: 999999 !important; }
-
-/* الأرقام لازم تكون LTR حتى لو الصفحة RTL */
-#phone { direction: ltr; text-align: right; }
